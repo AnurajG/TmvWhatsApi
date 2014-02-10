@@ -27,6 +27,14 @@ class NodeFactory
                 $node = Success::fromArray($data, $this);
                 break;
 
+            case 'iq':
+                $node = Iq::fromArray($data, $this);
+                break;
+
+            case 'stream:features':
+                $node = StreamFeatures::fromArray($data, $this);
+                break;
+
             default:
                 $node = Node::fromArray($data, $this);
                 break;
