@@ -38,14 +38,6 @@ class MessageReceived extends AbstractAction
     }
 
     /**
-     * @param Client $client
-     */
-    public function send(Client $client)
-    {
-        $client->sendNode($this->getNode());
-    }
-
-    /**
      * @return \WhatsAPI\Message\Node\NodeInterface
      */
     public function getNode()

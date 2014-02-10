@@ -46,14 +46,6 @@ class ClearDirty extends AbstractAction
     }
 
     /**
-     * @param Client $client
-     */
-    public function send(Client $client)
-    {
-        $client->sendNode($this->getNode($client));
-    }
-
-    /**
      * @return \WhatsAPI\Message\Node\NodeInterface
      */
     public function getNode()
