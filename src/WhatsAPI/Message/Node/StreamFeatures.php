@@ -19,12 +19,13 @@ class StreamFeatures extends AbstractNode
     public function addProfileSubscribe()
     {
         if (!$this->hasProfileSubscribe()) {
-            $this->getNodeFactory()->fromArray(
+            $node = $this->getNodeFactory()->fromArray(
                 array(
                     'name'       => 'w:profile:picture',
                     'attributes' => array("type" => "all")
                 )
             );
+            $this->addChild($node);
         }
 
         return $this;
