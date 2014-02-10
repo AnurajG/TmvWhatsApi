@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/thomasvargiu/WhatsAPI.png?branch=master)](https://travis-ci.org/thomasvargiu/WhatsAPI)
+
 # WhatsAPI
 
 **Status: development**
