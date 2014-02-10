@@ -1,4 +1,4 @@
 <?php
 
 require __DIR__ . '/../vendor/autoload.php';
-require __DIR__ . '/unit/WhatsAPITestCase.php';
+require __DIR__ . '/unit/WhatsApiTestCase.php';

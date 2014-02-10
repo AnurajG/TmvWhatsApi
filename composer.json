@@ -10,8 +10,8 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "WhatsAPI\\": ["src/", "tests/unit/"]
+        "psr-4": {
+            "Tmv\\WhatsApi\\": ["src/Tmv/WhatsApi/", "tests/unit/Tmv/WhatsApi/"]
         }
     },
     "require": {

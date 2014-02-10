@@ -1,6 +1,6 @@
 <?php
 
-class WhatsAPITestCase extends PHPUnit_Framework_TestCase
+class WhatsApiTestCase extends PHPUnit_Framework_TestCase
 {
 
     /**
