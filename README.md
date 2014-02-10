@@ -35,9 +35,9 @@ $token    = ''; // token
 $nickname = ''; // your name
 $password = ''; // your password
 
-$client = new \WhatsAPI\Client\Client($number, $token, $nickname);
+$client = new \Tmv\WhatsApi\Client\Client($number, $token, $nickname);
 $client->getEventManager()->attach('*', function (\Zend\EventManager\EventInterface $e) {
-        if ($e instanceof \WhatsAPI\Message\Event\NodeEvent) {
+        if ($e instanceof \Tmv\WhatsApi\Message\Event\NodeEvent) {
             echo $e->getName() . PHP_EOL;
             echo $e->getNode() . PHP_EOL;
             return;
