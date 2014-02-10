@@ -2,8 +2,6 @@
 
 namespace WhatsAPI\Message\Action;
 
-use \Mockery as m;
-
 class MessageReceivedTest extends \WhatsAPITestCase
 {
     /**
@@ -26,10 +24,4 @@ class MessageReceivedTest extends \WhatsAPITestCase
         $this->assertEquals(1, $this->object->getId());
         $this->assertEquals('response', $this->object->getResponse());
     }
-
-    protected function tearDown()
-    {
-        m::close();
-    }
-
 }

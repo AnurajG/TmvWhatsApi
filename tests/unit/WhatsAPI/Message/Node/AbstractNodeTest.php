@@ -157,7 +157,7 @@ class AbstractNodeTest extends \WhatsAPITestCase
         $this->object->setAttributes($attributes);
         $this->object->setChildren(array($childMock));
 
-        $string = $this->object->toString();
+        $string = "" . $this->object;
         $nodeString = <<<TXT
 <nodename foo="baz" baz="foo">
   <child></child>
@@ -165,12 +165,36 @@ class AbstractNodeTest extends \WhatsAPITestCase
 TXT;
 
         $this->assertEquals($nodeString, $string);
+    }
 
+    public function testToStringMethod2()
+    {
+        $this->object->setName('nodename');
+
+        $dataString = str_repeat('-', 1024);
+        $this->object->setData($dataString);
+
+        $string = $this->object->toString();
+        $nodeString = <<<TXT
+<nodename>{$dataString}</nodename>
+TXT;
+
+        $this->assertEquals($nodeString, $string);
+
+        $dataString = str_repeat('-', 1025);
+        $this->object->setData($dataString);
+
+        $string = $this->object->toString();
+        $dataString = ' ' . strlen($dataString) . ' byte data';
+        $nodeString = <<<TXT
+<nodename>{$dataString}</nodename>
+TXT;
+
+        $this->assertEquals($nodeString, $string);
     }
 
     protected function tearDown()
     {
         m::close();
     }
-
 }
