@@ -4,7 +4,6 @@ namespace Tmv\WhatsApi\Client;
 
 use Tmv\WhatsApi\Entity\Phone;
 use Tmv\WhatsApi\Exception\IncompleteMessageException;
-use Tmv\WhatsApi\Exception\InvalidArgumentException;
 use Tmv\WhatsApi\Exception\RuntimeException;
 use Tmv\WhatsApi\Message\Action;
 use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
@@ -21,6 +20,10 @@ use Tmv\WhatsApi\Service\LocalizationService;
 use Tmv\WhatsApi\Service\ProtocolService;
 use Zend\EventManager\EventManager;
 
+/**
+ * Class Client
+ * @package Tmv\WhatsApi\Client
+ */
 class Client
 {
 

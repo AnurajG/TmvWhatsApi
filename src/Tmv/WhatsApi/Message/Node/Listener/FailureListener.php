@@ -6,7 +6,7 @@ use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
 use Tmv\WhatsApi\Message\Node\Success;
 use Zend\EventManager\EventManagerInterface;
 
-class SuccessListener extends AbstractListener
+class FailureListener extends AbstractListener
 {
 
     /**
