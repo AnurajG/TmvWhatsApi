@@ -9,18 +9,18 @@
          stopOnFailure="false"
          syntaxCheck="false"
          bootstrap="./tests/bootstrap.php">
-       
-  <testsuites>
-    <testsuite name="WhatsAPI2 Test">
-      <directory suffix="Test.php">tests/unit/</directory>
-      <directory suffix="Test.php">tests/integration/</directory>
-    </testsuite>
-  </testsuites>
 
-  <filter>
-    <whitelist addUncoveredFilesFromWhitelist="true">
-      <directory suffix=".php">./src</directory>
-    </whitelist>
-  </filter>
+    <testsuites>
+        <testsuite name="WhatsAPI2 Test">
+            <directory suffix="Test.php">tests/unit/</directory>
+            <directory suffix="Test.php">tests/integration/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
 
 </phpunit>

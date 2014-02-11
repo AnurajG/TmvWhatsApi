@@ -2,7 +2,7 @@
 
 namespace Tmv\WhatsApi\Message\Node;
 
-class ChallengeTest extends \WhatsApiTestCase
+class ChallengeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Challenge

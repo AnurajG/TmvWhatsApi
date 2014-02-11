@@ -1,9 +1,7 @@
 <?php
 
-$file = __DIR__ . '/../vendor/autoload.php';
-if (!file_exists($file)) {
-    throw new RuntimeException('Install dependencies to run test suite. "php composer.phar install --dev"');
+if (!@include __DIR__ . '/../vendor/autoload.php') {
+    die('You must set up the project dependencies, run the following commands:
+        wget http://getcomposer.org/composer.phar
+        php composer.phar install');
 }
-
-require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/unit/WhatsApiTestCase.php';

@@ -4,7 +4,7 @@ namespace Tmv\WhatsApi\Protocol;
 
 use \Mockery as m;
 
-class KeyStreamTest extends \WhatsApiTestCase
+class KeyStreamTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var KeyStream

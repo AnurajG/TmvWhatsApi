@@ -2,7 +2,7 @@
 
 namespace Tmv\WhatsApi\Message\Node;
 
-class NodeFactoryTest extends \WhatsApiTestCase
+class NodeFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var NodeFactory

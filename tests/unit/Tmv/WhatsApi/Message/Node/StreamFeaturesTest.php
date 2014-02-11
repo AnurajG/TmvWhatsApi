@@ -4,7 +4,7 @@ namespace Tmv\WhatsApi\Message\Node;
 
 use \Mockery as m;
 
-class StreamFeaturesTest extends \WhatsApiTestCase
+class StreamFeaturesTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var StreamFeatures

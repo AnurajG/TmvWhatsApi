@@ -4,7 +4,7 @@ namespace Tmv\WhatsApi\Message\Node;
 
 use \Mockery as m;
 
-class AbstractNodeTest extends \WhatsApiTestCase
+class AbstractNodeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var AbstractNodeMock

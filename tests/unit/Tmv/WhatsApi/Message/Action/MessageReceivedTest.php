@@ -2,7 +2,7 @@
 
 namespace Tmv\WhatsApi\Message\Action;
 
-class MessageReceivedTest extends \WhatsApiTestCase
+class MessageReceivedTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var MessageReceived

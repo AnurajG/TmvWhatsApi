@@ -4,7 +4,7 @@ namespace Tmv\WhatsApi\Protocol;
 
 use \Mockery as m;
 
-class RC4Test extends \WhatsApiTestCase
+class RC4Test extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var RC4

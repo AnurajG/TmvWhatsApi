@@ -2,7 +2,7 @@
 
 namespace Tmv\WhatsApi\Message\Node;
 
-class IqTest extends \WhatsApiTestCase
+class IqTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Iq

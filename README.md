@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/thomasvargiu/WhatsAPI.png?branch=master)](https://travis-ci.org/thomasvargiu/WhatsAPI)
+[![Coverage Status](https://coveralls.io/repos/thomasvargiu/WhatsAPI/badge.png)](https://coveralls.io/r/thomasvargiu/WhatsAPI)
 
 # WhatsAPI
 

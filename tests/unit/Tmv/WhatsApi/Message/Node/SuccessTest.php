@@ -2,7 +2,7 @@
 
 namespace Tmv\WhatsApi\Message\Node;
 
-class SuccessTest extends \WhatsApiTestCase
+class SuccessTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Success
