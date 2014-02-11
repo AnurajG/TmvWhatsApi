@@ -3,10 +3,10 @@
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
-use Tmv\WhatsApi\Message\Node\Challenge;
+use Tmv\WhatsApi\Message\Node\Success;
 use Zend\EventManager\EventManagerInterface;
 
-class ChallengeListener extends AbstractListener
+class SuccessListener extends AbstractListener
 {
 
     /**
@@ -21,14 +21,15 @@ class ChallengeListener extends AbstractListener
      */
     public function attach(EventManagerInterface $events)
     {
-        $events->attach('received.node.challenge', array($this, 'onReceivedNode'));
+        $events->attach('received.node.failure', array($this, 'onReceivedNode'));
     }
 
     public function onReceivedNode(ReceivedNodeEvent $e)
     {
-        /** @var Challenge $node */
+        /** @var Success $node */
         $node = $e->getNode();
         $client = $e->getClient();
-        $client->setChallengeData($node->getData());
+
+        $client->getEventManager()->trigger('login.failed', $client, array('node' => $node));
     }
 }

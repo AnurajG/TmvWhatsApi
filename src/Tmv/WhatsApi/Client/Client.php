@@ -4,10 +4,12 @@ namespace Tmv\WhatsApi\Client;
 
 use Tmv\WhatsApi\Entity\Phone;
 use Tmv\WhatsApi\Exception\IncompleteMessageException;
+use Tmv\WhatsApi\Exception\InvalidArgumentException;
 use Tmv\WhatsApi\Exception\RuntimeException;
 use Tmv\WhatsApi\Message\Action;
 use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
-use Tmv\WhatsApi\Message\Listener\ReceivedNodeListener;
+use Tmv\WhatsApi\Message\Node\Listener\SuccessListener;
+use Tmv\WhatsApi\Message\Node\Listener\ChallengeListener;
 use Tmv\WhatsApi\Message\Node\NodeFactory;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Tmv\WhatsApi\Protocol\BinTree\NodeReader;
@@ -96,7 +98,7 @@ class Client
     protected $messageQueue = array();
     protected $messageCounter = 0;
 
-    protected $challengeDataFilepath = "nextChallenge.dat";
+    protected $challengeDataFilepath;
 
     /**
      * @var NodeFactory
@@ -142,8 +144,8 @@ class Client
     public function __construct($phone, $identity, $nickname, $debug = false)
     {
 
-        $nodeListener = new ReceivedNodeListener();
-        $this->getEventManager()->attachAggregate($nodeListener);
+        $this->getEventManager()->attachAggregate(new ChallengeListener());
+        $this->getEventManager()->attachAggregate(new SuccessListener());
 
         if (!($phone instanceof Phone)) {
             $phone = new Phone($phone);
@@ -162,8 +164,6 @@ class Client
         }
         $this->nickname = $nickname;
         $this->setConnected(false);
-
-        $this->challengeDataFilepath = __DIR__ . '/../../../data/nextChallenge.dat';
     }
 
     /**
@@ -561,12 +561,13 @@ class Client
      *
      * @param string $password         Your whatsapp password. You must already know this!
      * @param bool   $profileSubscribe Add a feature
+     * @throws RuntimeException
      */
     public function loginWithPassword($password, $profileSubscribe = false)
     {
         $this->password = $password;
-        $challengeData = file_get_contents(__DIR__ . "/../../../data/nextChallenge.dat");
-        if ($challengeData) {
+        $challengeData = $this->readChallengeData();
+        if (!empty($challengeData)) {
             $this->challengeData = $challengeData;
         }
         $this->doLogin($profileSubscribe);
@@ -972,12 +973,12 @@ class Client
     }
 
     /**
-     * @param  string $challengeDataFilepath
+     * @param  string $filePath
      * @return $this
      */
-    public function setChallengeDataFilepath($challengeDataFilepath)
+    public function setChallengeDataFilepath($filePath)
     {
-        $this->challengeDataFilepath = $challengeDataFilepath;
+        $this->challengeDataFilepath = $filePath;
 
         return $this;
     }
@@ -988,6 +989,53 @@ class Client
     public function getChallengeDataFilepath()
     {
         return $this->challengeDataFilepath;
+    }
+
+    /**
+     * @param $data
+     * @return $this
+     */
+    public function writeChallengeData($data)
+    {
+        $this->checkChallengeDataFilePermission();
+        $filepath = $this->getChallengeDataFilepath();
+        file_put_contents($filepath, $data);
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function readChallengeData()
+    {
+        $this->checkChallengeDataFilePermission();
+        $filepath = $this->getChallengeDataFilepath();
+        return file_get_contents($filepath);
+    }
+
+    /**
+     * @return bool
+     * @throws \Tmv\WhatsApi\Exception\RuntimeException
+     */
+    public function checkChallengeDataFilePermission()
+    {
+        $filePath = $this->getChallengeDataFilepath();
+        if (!$filePath) {
+            throw new RuntimeException("Filename for challenge data is not setted");
+        }
+        $baseDir = dirname($filePath);
+        if (!file_exists($baseDir)) {
+            throw new RuntimeException(sprintf("Directory '%s' doesn't exists", $baseDir));
+        } elseif (!file_exists($filePath) && !is_writable($baseDir)) {
+            throw new RuntimeException(sprintf("Directory '%s' is not writable", $baseDir));
+        } elseif (!file_exists($filePath)) {
+            touch($filePath);
+        }
+
+        if (!is_writable($filePath)) {
+            throw new RuntimeException(sprintf("File '%s' is not writable", $filePath));
+        }
+        return true;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tmv\WhatsApi\Message\Listener;
+namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
 use Tmv\WhatsApi\Message\Node\Success;
@@ -31,8 +31,9 @@ class SuccessListener extends AbstractListener
         $client = $e->getClient();
 
         $client->setConnected(true);
-        $challengeData = $node->getData();
-        file_put_contents($client->getChallengeDataFilepath(), $challengeData);
+        $client->writeChallengeData($node->getData());
         $client->getNodeWriter()->setKey($client->getOutputKey());
+
+        $client->getEventManager()->trigger('login.success', $client, array('node' => $node));
     }
 }

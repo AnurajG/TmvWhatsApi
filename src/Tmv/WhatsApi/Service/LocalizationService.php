@@ -16,7 +16,7 @@ class LocalizationService
      */
     public function dissectPhone(Phone $phone)
     {
-        if (($handle = fopen(__DIR__ . '/../../../data/countries.csv', 'rb')) !== false) {
+        if (($handle = fopen(__DIR__ . '/../../../../data/countries.csv', 'rb')) !== false) {
             while (($data = fgetcsv($handle, 1000)) !== false) {
                 if (strpos($phone->getPhoneNumber(), $data[1]) === 0) {
                     // Return the first appearance.

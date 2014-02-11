@@ -1,6 +1,6 @@
 <?php
 
-namespace Tmv\WhatsApi\Message\Listener;
+namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
