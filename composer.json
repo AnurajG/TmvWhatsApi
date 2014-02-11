@@ -16,7 +16,7 @@
         }
     },
     "require": {
-        "php": ">=5.3.3",
+        "php": ">=5.3.6",
         "zendframework/zend-eventmanager": "2.2.*",
         "zendframework/zend-stdlib": "2.2.*"
     },
