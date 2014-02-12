@@ -1,5 +1,5 @@
 {
-    "name": "thomasvargiu/whatsapp-messenger",
+    "name": "thomasvargiu/tmv-whatsapi",
     "description": "Library to communicate with WhatsApp service",
     "type": "library",
     "minimum-stability": "stable",
