@@ -1,12 +1,12 @@
 {
-    "name": "thomasvargiu/whatsapi",
+    "name": "thomasvargiu/whatsapp-messenger",
     "description": "Library to communicate with WhatsApp service",
     "type": "library",
     "minimum-stability": "stable",
     "authors": [
         {
-            "name": "Thomas Mauro Vargiu",
-            "email": "tvargiu@gmail.com",
+            "name": "Thomas Vargiu",
+            "email": "tommy@ttech.it",
             "homepage": "http://thomasvargiu.com"
         }
     ],
