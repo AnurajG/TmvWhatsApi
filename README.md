@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/thomasvargiu/TmvWhatsApi.png?branch=master)](https://travis-ci.org/thomasvargiu/TmvWhatsApi)
-[![Coverage Status](https://coveralls.io/repos/thomasvargiu/TmvWhatsApi/badge.png)](https://coveralls.io/r/thomasvargiu/TmvWhatsApi)
+[![Coverage Status](https://coveralls.io/repos/thomasvargiu/TmvWhatsApi/badge.png?branch=master)](https://coveralls.io/r/thomasvargiu/TmvWhatsApi?branch=master)
 
 # WhatsAPI
 
