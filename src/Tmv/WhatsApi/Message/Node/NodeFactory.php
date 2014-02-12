@@ -35,6 +35,10 @@ class NodeFactory
                 $node = StreamFeatures::fromArray($data, $this);
                 break;
 
+            case 'message':
+                $node = Message::fromArray($data, $this);
+                break;
+
             default:
                 $node = Node::fromArray($data, $this);
                 break;

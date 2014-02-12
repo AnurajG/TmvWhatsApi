@@ -7,9 +7,32 @@ use Tmv\WhatsApi\Message\Node\NodeFactory;
 abstract class AbstractAction implements ActionInterface
 {
     /**
+     * @var string
+     */
+    protected $id;
+
+    /**
      * @var NodeFactory
      */
     protected $nodeFactory;
+
+    /**
+     * @param string $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * @param  NodeFactory $nodeFactory

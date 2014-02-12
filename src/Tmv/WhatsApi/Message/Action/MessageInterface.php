@@ -2,21 +2,22 @@
 
 namespace Tmv\WhatsApi\Message\Action;
 
-interface ActionInterface
+interface MessageInterface extends ActionInterface
 {
-    /**
-     * @param string $id
-     * @return string
-     */
-    public function setId($id);
 
     /**
      * @return string
      */
-    public function getId();
+    public function getFromName();
+
+    /**
+     * @return string
+     */
+    public function getTo();
 
     /**
      * @return \Tmv\WhatsApi\Message\Node\NodeInterface
      */
-    public function getNode();
+    public function getSubNode();
 }
+ 

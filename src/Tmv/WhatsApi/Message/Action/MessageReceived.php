@@ -2,7 +2,8 @@
 
 namespace Tmv\WhatsApi\Message\Action;
 
-use Tmv\WhatsApi\Protocol\Node;
+use Tmv\WhatsApi\Exception\InvalidArgumentException;
+use Tmv\WhatsApi\Message\Node\Message;
 
 /**
  * Class MessageReceived
@@ -23,11 +24,27 @@ class MessageReceived extends AbstractAction
     /**
      * @var string
      */
-    protected $id;
-    /**
-     * @var string
-     */
     protected $response;
+
+    /**
+     * @param Message $message
+     * @return MessageReceived
+     * @throws \Tmv\WhatsApi\Exception\InvalidArgumentException
+     */
+    public static function fromMessageNode(Message $message)
+    {
+        $requestNode = $message->getChild("request");
+        $receivedNode = $message->getChild("received");
+        if (null !== $requestNode || null !== $receivedNode) {
+            $response = "received";
+            if (null !== $receivedNode) {
+                $response = "ack";
+            }
+
+            return new static($message->getFrom(), $message->getId(), $response);
+        }
+        throw new InvalidArgumentException("This Message node can't be used to initialize this class");
+    }
 
     public function __construct($to, $id, $response)
     {
@@ -62,25 +79,6 @@ class MessageReceived extends AbstractAction
         );
 
         return $node;
-    }
-
-    /**
-     * @param  string $id
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

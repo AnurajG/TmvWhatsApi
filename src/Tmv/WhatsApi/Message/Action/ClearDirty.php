@@ -2,8 +2,6 @@
 
 namespace Tmv\WhatsApi\Message\Action;
 
-use Tmv\WhatsApi\Client\Client;
-
 /**
  * Class ClearDirty
  * Clears the "dirty" status on your account
@@ -67,7 +65,8 @@ class ClearDirty extends AbstractAction
                 'name'       => 'iq',
                 'attributes' => array(
                     'type' => 'set',
-                    'to'   => 's.whatsapp.net'
+                    'to'   => 's.whatsapp.net',
+                    'id'   => $this->getId()
                 ),
                 'children'   => array($cleanNode)
             )

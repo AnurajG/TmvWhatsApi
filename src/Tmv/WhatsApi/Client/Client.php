@@ -7,6 +7,7 @@ use Tmv\WhatsApi\Exception\IncompleteMessageException;
 use Tmv\WhatsApi\Exception\RuntimeException;
 use Tmv\WhatsApi\Message\Action;
 use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
+use Tmv\WhatsApi\Message\Node\Listener\MessageListener;
 use Tmv\WhatsApi\Message\Node\Listener\SuccessListener;
 use Tmv\WhatsApi\Message\Node\Listener\ChallengeListener;
 use Tmv\WhatsApi\Message\Node\NodeFactory;
@@ -86,7 +87,14 @@ class Client
      */
     protected $protocolService;
 
+    /**
+     * @var string
+     */
     protected $challengeData;
+    /**
+     * A buffer
+     * @var string
+     */
     protected $incompleteMessage;
     /**
      * Instances of the KeyStream class.
@@ -98,9 +106,24 @@ class Client
      * @var KeyStream
      */
     protected $outputKey;
+    /**
+     * @var array
+     */
     protected $messageQueue = array();
+
+    /**
+     * @var int
+     */
+    protected $lastMessageIdSent;
+
+    /**
+     * @var int
+     */
     protected $messageCounter = 0;
 
+    /**
+     * @var string
+     */
     protected $challengeDataFilepath;
 
     /**
@@ -149,6 +172,7 @@ class Client
 
         $this->getEventManager()->attachAggregate(new ChallengeListener());
         $this->getEventManager()->attachAggregate(new SuccessListener());
+        $this->getEventManager()->attachAggregate(new MessageListener());
 
         if (!($phone instanceof Phone)) {
             $phone = new Phone($phone);
@@ -622,20 +646,44 @@ class Client
      * Send an action to the WhatsApp server.
      *
      * @param  Action\ActionInterface $action
-     * @return $this
+     * @return Action\ActionInterface
      */
     public function send(Action\ActionInterface $action)
     {
-        $this->getEventManager()->trigger('action.sent.pre', $this, array('action' => $action));
-        $action->send($this);
+        // @todo: messages queue disabled
+        if ($action instanceof Action\MessageInterface && false) {
+            // We need to use a queue
+            /* @todo: should I really use a queue?
+            if (!$this->lastMessageIdSent) {
+                $this->lastMessageIdSent = $action->getId();
+                $this->sendNode($action->getNode());
+                //listen for response
+                $this->waitForServer($action->getId());
+            } else {
+                $this->messageQueue[] = $action;
+            }
+            */
+        } else {
+            $res = $this->getEventManager()->trigger('action.send.pre', $this, array('action' => $action));
+            if ($res->last() instanceof Action\ActionInterface) {
+                // if someone modified the action, we can use it (just the last listener)
+                $action = $res->last();
+            }
+            $node = $action->getNode();
+            $node = $this->sendNode($node);
 
-        return $this;
+            // updating the action with the id of the sent node
+            $action->setId($node->getAttribute('id'));
+
+            $this->getEventManager()->trigger('action.send.post', $this, array('action' => $action, 'node' => $node));
+        }
+        return $action;
     }
 
     /**
      * Send node to the WhatsApp server.
      * @param  NodeInterface $node
-     * @return $this
+     * @return NodeInterface
      */
     public function sendNode(NodeInterface $node)
     {
@@ -643,10 +691,14 @@ class Client
             $node->setAttribute('id', $node->getName() . '-' . time() . '-' . $this->getMessageCounter());
             $this->incrementMessageCounter();
         }
-        $this->getEventManager()->trigger('node.sent', $this, array('node' => $node));
+
+        $this->getEventManager()->trigger('node.send.pre', $this, array('node' => $node));
+
         $this->sendData($this->nodeWriter->write($node));
 
-        return $this;
+        $this->getEventManager()->trigger('node.send.post', $this, array('node' => $node));
+
+        return $node;
     }
 
     /**
@@ -1068,5 +1120,13 @@ class Client
     public function getMessageCounter()
     {
         return $this->messageCounter;
+    }
+
+    /**
+     * @return \Tmv\WhatsApi\Entity\Phone
+     */
+    public function getPhone()
+    {
+        return $this->phone;
     }
 }

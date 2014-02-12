@@ -175,7 +175,7 @@ abstract class AbstractNode implements NodeInterface
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return bool
      */
     public function hasChild($name)
@@ -187,6 +187,21 @@ abstract class AbstractNode implements NodeInterface
         }
 
         return false;
+    }
+
+    /**
+     * @param string $name
+     * @return NodeInterface
+     */
+    public function getChild($name)
+    {
+        foreach ($this->getChildren() as $child) {
+            if ($child->getName() == $name) {
+                return $child;
+            }
+        }
+
+        return null;
     }
 
     /**

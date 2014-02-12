@@ -3,7 +3,7 @@
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
-use Tmv\WhatsApi\Message\Node\Success;
+use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Zend\EventManager\EventManagerInterface;
 
 class FailureListener extends AbstractListener
@@ -26,7 +26,7 @@ class FailureListener extends AbstractListener
 
     public function onReceivedNode(ReceivedNodeEvent $e)
     {
-        /** @var Success $node */
+        /** @var NodeInterface $node */
         $node = $e->getNode();
         $client = $e->getClient();
 
