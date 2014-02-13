@@ -20,6 +20,10 @@ abstract class AbstractMessage extends AbstractAction implements MessageInterfac
      * @var string
      */
     protected $fromName = '';
+    /**
+     * @var int
+     */
+    protected $timestamp;
 
     /**
      * @param string $fromName
@@ -32,9 +36,9 @@ abstract class AbstractMessage extends AbstractAction implements MessageInterfac
     }
 
     /**
-     * @return \Tmv\WhatsApi\Message\Node\NodeInterface
+     * @return $this
      */
-    public function getNode()
+    public function buildNode()
     {
         $node = $this->getNodeFactory()->fromArray(
             array(
@@ -43,7 +47,7 @@ abstract class AbstractMessage extends AbstractAction implements MessageInterfac
                     'to'   => $this->getJID($this->getTo()),
                     'type' => 'chat',
                     'id'   => $this->getId(),
-                    't' => time()
+                    't' => $this->getTimestamp()
                 ),
                 'children'   => array(
                     array(
@@ -75,7 +79,8 @@ abstract class AbstractMessage extends AbstractAction implements MessageInterfac
             )
         );
 
-        return $node;
+        $this->setNode($node);
+        return $this;
     }
 
     /**
@@ -113,6 +118,27 @@ abstract class AbstractMessage extends AbstractAction implements MessageInterfac
     public function getFromName()
     {
         return $this->fromName;
+    }
+
+    /**
+     * @param int $timestamp
+     * @return $this
+     */
+    public function setTimestamp($timestamp)
+    {
+        $this->timestamp = (int)$timestamp;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimestamp()
+    {
+        if (!$this->timestamp) {
+            $this->timestamp = time();
+        }
+        return $this->timestamp;
     }
 
     /**

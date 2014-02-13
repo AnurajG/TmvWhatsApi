@@ -59,6 +59,15 @@ class NodeFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testFromMessageNode()
+    {
+        $this->assertInstanceOf(
+            '\Tmv\WhatsApi\Message\Node\Message',
+            $this->object->fromArray(array('name' => 'message')),
+            'Message instance'
+        );
+    }
+
     /**
      * @expectedException \Tmv\WhatsApi\Exception\InvalidArgumentException
      */

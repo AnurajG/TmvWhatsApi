@@ -54,9 +54,9 @@ class MessageReceived extends AbstractAction
     }
 
     /**
-     * @return \Tmv\WhatsApi\Message\Node\NodeInterface
+     * @return $this
      */
-    public function getNode()
+    public function buildNode()
     {
         $node = $this->getNodeFactory()->fromArray(
             array(
@@ -78,7 +78,8 @@ class MessageReceived extends AbstractAction
             )
         );
 
-        return $node;
+        $this->setNode($node);
+        return $this;
     }
 
     /**

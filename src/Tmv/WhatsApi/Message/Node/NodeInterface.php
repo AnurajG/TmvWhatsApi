@@ -23,6 +23,12 @@ interface NodeInterface
     public function getAttributes();
 
     /**
+     * @param $name
+     * @return bool
+     */
+    public function hasAttribute($name);
+
+    /**
      * @return string
      */
     public function getData();
@@ -56,4 +62,14 @@ interface NodeInterface
      * @return $this
      */
     public function setAttribute($name, $value);
+
+    /**
+     * @return string
+     */
+    public function toString();
+
+    /**
+     * @return array
+     */
+    public function toArray();
 }

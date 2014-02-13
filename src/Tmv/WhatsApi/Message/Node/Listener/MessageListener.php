@@ -46,14 +46,29 @@ class MessageListener extends AbstractListener
         $foo = explode('@', $node->getFrom());
         if (is_array($foo) && count($foo) > 1 && strcmp($foo[1], "s.us") == 0 && $node->getChild('body') != null) {
             $params = array(
-                $this->phoneNumber,
                 $node->getAttribute('from'),
                 $node->getAttribute('type'),
                 $node->getAttribute('id'),
                 $node->getAttribute('t'),
                 $node->getChild("body")->getData()
             );
-            $client->getEventManager('status.received', $client, $params);
+            $client->getEventManager()->trigger('status.received', $client, $params);
+        }
+
+        // check for message received ack
+        if ($node->hasChild('x') && $client->getMessageQueue()->hasParked()
+            && $client->getMessageQueue()->getParked()->getId() == $node->getAttribute('id')
+        ) {
+            $client->getMessageQueue()->removeParked();
+            $client->sendNextMessage();
+
+            $client->getEventManager()->trigger('message.received-server', $client, array($node));
+        }
+
+        // check if sent message is expired, we don't wait anymore
+        if ($client->getMessageQueue()->getParkedTime() < time() - 5) {
+            $client->getMessageQueue()->removeParked();
+            $client->getEventManager()->trigger('message.not-received-server', $client, array($node));
         }
     }
 }

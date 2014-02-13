@@ -16,6 +16,17 @@ interface MessageInterface extends ActionInterface
     public function getTo();
 
     /**
+     * @return int
+     */
+    public function getTimestamp();
+
+    /**
+     * @param int $timestamp
+     * @return $this
+     */
+    public function setTimestamp($timestamp);
+
+    /**
      * @return \Tmv\WhatsApi\Message\Node\NodeInterface
      */
     public function getSubNode();

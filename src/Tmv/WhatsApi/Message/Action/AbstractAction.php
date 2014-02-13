@@ -3,6 +3,7 @@
 namespace Tmv\WhatsApi\Message\Action;
 
 use Tmv\WhatsApi\Message\Node\NodeFactory;
+use Tmv\WhatsApi\Message\Node\NodeInterface;
 
 abstract class AbstractAction implements ActionInterface
 {
@@ -10,6 +11,11 @@ abstract class AbstractAction implements ActionInterface
      * @var string
      */
     protected $id;
+
+    /**
+     * @var NodeInterface
+     */
+    protected $node;
 
     /**
      * @var NodeFactory
@@ -32,6 +38,24 @@ abstract class AbstractAction implements ActionInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param \Tmv\WhatsApi\Message\Node\NodeInterface $node
+     * @return $this
+     */
+    public function setNode($node)
+    {
+        $this->node = $node;
+        return $this;
+    }
+
+    /**
+     * @return \Tmv\WhatsApi\Message\Node\NodeInterface
+     */
+    public function getNode()
+    {
+        return $this->node;
     }
 
     /**

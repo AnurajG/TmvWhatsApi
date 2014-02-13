@@ -17,7 +17,7 @@ abstract class AbstractNode implements NodeInterface
      */
     protected $attributes = array();
     /**
-     * @var Node[]
+     * @var NodeInterface[]
      */
     protected $children = array();
     /**
@@ -31,10 +31,9 @@ abstract class AbstractNode implements NodeInterface
     protected $nodeFactory;
 
     /**
-     * @param  array                    $data
-     * @param  NodeFactory              $factory
-     * @return Node
-     * @throws InvalidArgumentException
+     * @param  array $data
+     * @param  NodeFactory $factory
+     * @return NodeInterface
      */
     public static function fromArray(array $data, NodeFactory $factory)
     {
@@ -45,9 +44,6 @@ abstract class AbstractNode implements NodeInterface
             foreach ($data['children'] as $child) {
                 if (is_array($child)) {
                     $child = $factory->fromArray($child);
-                }
-                if (!$child instanceof NodeInterface) {
-                    throw new InvalidArgumentException("Argument passed in children is not an instance of NodeInterface");
                 }
                 $children[] = $child;
             }
@@ -66,7 +62,7 @@ abstract class AbstractNode implements NodeInterface
     abstract public function getName();
 
     /**
-     * @param  string                   $name
+     * @param  string $name
      * @return $this
      * @throws InvalidArgumentException
      */
@@ -87,6 +83,15 @@ abstract class AbstractNode implements NodeInterface
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function hasAttribute($name)
+    {
+        return isset($this->attributes[$name]);
     }
 
     /**
@@ -135,7 +140,7 @@ abstract class AbstractNode implements NodeInterface
     }
 
     /**
-     * @return Node[]
+     * @return NodeInterface[]
      */
     public function getChildren()
     {
@@ -157,7 +162,7 @@ abstract class AbstractNode implements NodeInterface
     }
 
     /**
-     * @param  NodeInterface|array      $child
+     * @param  NodeInterface|array $child
      * @return $this
      * @throws InvalidArgumentException
      */
@@ -246,10 +251,10 @@ abstract class AbstractNode implements NodeInterface
             $children[] = $child->toArray();
         }
         $array = array(
-            'name' => $this->getName(),
+            'name'       => $this->getName(),
             'attributes' => $this->getAttributes(),
-            'data' => $this->getData(),
-            'children' => $children
+            'data'       => $this->getData(),
+            'children'   => $children
         );
 
         return $array;
@@ -297,14 +302,15 @@ abstract class AbstractNode implements NodeInterface
             foreach ($this->getChildren() as $child) {
                 $childString = $child->toString();
                 $childString =
-                    implode("\n",
+                    implode(
+                        "\n",
                         array_map(
-                        function ($value) use ($indent) {
-                            return $indent . "  " . $value;
-                        },
-                        explode($nl, $childString)
-                    )
-                );
+                            function ($value) use ($indent) {
+                                return $indent . "  " . $value;
+                            },
+                            explode($nl, $childString)
+                        )
+                    );
                 $foo[] = $childString;
             }
             $ret .= implode($nl, $foo);

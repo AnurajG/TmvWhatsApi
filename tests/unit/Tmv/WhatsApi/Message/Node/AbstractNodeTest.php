@@ -75,7 +75,10 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
         );
         $this->object->setAttributes($attributes);
         $this->assertEquals($attributes, $this->object->getAttributes());
+        $this->assertTrue($this->object->hasAttribute('first'));
+        $this->assertTrue($this->object->hasAttribute('second'));
         $this->assertEquals('foo', $this->object->getAttribute('first'));
+        $this->assertEquals('foo2', $this->object->getAttribute('second'));
 
         $nodeMock = m::mock('\Tmv\WhatsApi\Message\Node\Node');
         $nodeMock->shouldReceive('getName')->andReturn('iq');
@@ -91,6 +94,7 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
             )
         );
 
+        $this->assertEquals($nodeMock, $this->object->getChild('iq'));
         $this->assertEquals(array($nodeMock), $this->object->getChildren());
         $this->assertTrue($this->object->hasChild('iq'));
         $this->assertFalse($this->object->hasChild('iq2'));
