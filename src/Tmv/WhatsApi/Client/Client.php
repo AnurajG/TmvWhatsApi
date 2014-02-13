@@ -7,6 +7,7 @@ use Tmv\WhatsApi\Exception\IncompleteMessageException;
 use Tmv\WhatsApi\Exception\RuntimeException;
 use Tmv\WhatsApi\Message\Action;
 use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
+use Tmv\WhatsApi\Message\MessageQueue;
 use Tmv\WhatsApi\Message\Node\Listener\MessageListener;
 use Tmv\WhatsApi\Message\Node\Listener\SuccessListener;
 use Tmv\WhatsApi\Message\Node\Listener\ChallengeListener;
@@ -107,9 +108,9 @@ class Client
      */
     protected $outputKey;
     /**
-     * @var array
+     * @var MessageQueue
      */
-    protected $messageQueue = array();
+    protected $messageQueue;
 
     /**
      * @var int
@@ -650,33 +651,57 @@ class Client
      */
     public function send(Action\ActionInterface $action)
     {
-        // @todo: messages queue disabled
-        if ($action instanceof Action\MessageInterface && false) {
-            // We need to use a queue
-            // @todo: use a queue to ensure that messages are delivered in the right order
-            if (!$this->lastMessageIdSent) {
-                $this->lastMessageIdSent = $action->getId();
-                $this->sendNode($action->getNode());
-                //listen for response
-                $this->waitForServer($action->getId());
+
+        $this->getEventManager()->trigger('action.send.pre', $this, array('action' => $action));
+
+        $node = $action->buildNode()->getNode();
+
+        $eventParams = array('action' => $action, 'node' => $node, 'enqueued' => false);
+
+        if ($action instanceof Action\MessageInterface) {
+            // Am I still waiting the response of the last dequeued message?
+            $this->getMessageQueue()->addMessage($action);
+            if ($this->getMessageQueue()->getParked()) {
+                $eventParams['enqueued'] = true;
             } else {
-                $this->messageQueue[] = $action;
+                $this->sendNextMessage();
             }
         } else {
-            $res = $this->getEventManager()->trigger('action.send.pre', $this, array('action' => $action));
-            if ($res->last() instanceof Action\ActionInterface) {
-                // if someone modified the action, we can use it (just the last listener)
-                $action = $res->last();
+            // send without waiting
+            $node = $this->sendNode($node);
+        }
+
+        // updating the action with the id of the sent node
+        if ($node->hasAttribute('id')) {
+            $action->setId($node->getAttribute('id'));
+        }
+
+        $this->getEventManager()->trigger('action.send.post', $this, $eventParams);
+
+        return $action;
+    }
+
+    public function sendNextMessage()
+    {
+        if ($this->getMessageQueue()->count()) {
+            $action = $this->getMessageQueue()->getNextMessage();
+            if ($action instanceof Action\MessageInterface) {
+                $action->setTimestamp(time());
             }
-            $node = $action->getNode();
+            /** @var Action\ActionInterface $action */
+            $node = $action->buildNode()->getNode();
             $node = $this->sendNode($node);
 
             // updating the action with the id of the sent node
-            $action->setId($node->getAttribute('id'));
+            if ($node->hasAttribute('id')) {
+                $action->setId($node->getAttribute('id'));
+            }
 
-            $this->getEventManager()->trigger('action.send.post', $this, array('action' => $action, 'node' => $node));
+            // @todo: wait for response
+        } else {
+            $this->getMessageQueue()->removeParked();
         }
-        return $action;
+        return $this;
     }
 
     /**
@@ -686,10 +711,8 @@ class Client
      */
     public function sendNode(NodeInterface $node)
     {
-        if (!$node->getAttribute('id')) {
-            $node->setAttribute('id', $node->getName() . '-' . time() . '-' . $this->getMessageCounter());
-            $this->incrementMessageCounter();
-        }
+        $node->setAttribute('id', $node->getName() . '-' . time() . '-' . $this->getMessageCounter());
+        $this->incrementMessageCounter();
 
         $this->getEventManager()->trigger('node.send.pre', $this, array('node' => $node));
 
@@ -1123,6 +1146,17 @@ class Client
     public function getMessageCounter()
     {
         return $this->messageCounter;
+    }
+
+    /**
+     * @return MessageQueue
+     */
+    public function getMessageQueue()
+    {
+        if (!$this->messageQueue) {
+            $this->messageQueue = new MessageQueue();
+        }
+        return $this->messageQueue;
     }
 
     /**

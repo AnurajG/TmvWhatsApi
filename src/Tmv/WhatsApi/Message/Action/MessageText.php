@@ -2,8 +2,6 @@
 
 namespace Tmv\WhatsApi\Message\Action;
 
-use Tmv\WhatsApi\Client\Client;
-
 /**
  * Class MessageText
  * Send a text message

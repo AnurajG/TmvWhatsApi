@@ -44,9 +44,9 @@ class ClearDirty extends AbstractAction
     }
 
     /**
-     * @return \Tmv\WhatsApi\Message\Node\NodeInterface
+     * @return $this
      */
-    public function getNode()
+    public function buildNode()
     {
         $catNodes = array();
         foreach ($this->getCategories() as $category) {
@@ -72,6 +72,7 @@ class ClearDirty extends AbstractAction
             )
         );
 
-        return $node;
+        $this->setNode($node);
+        return $this;
     }
 }

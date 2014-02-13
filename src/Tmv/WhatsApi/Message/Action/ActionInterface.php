@@ -19,4 +19,9 @@ interface ActionInterface
      * @return \Tmv\WhatsApi\Message\Node\NodeInterface
      */
     public function getNode();
+
+    /**
+     * @return $this
+     */
+    public function buildNode();
 }
