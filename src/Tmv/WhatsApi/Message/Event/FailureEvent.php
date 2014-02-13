@@ -2,7 +2,22 @@
 
 namespace Tmv\WhatsApi\Message\Event;
 
-class FailureEvent extends AbstractEvent
+use Tmv\WhatsApi\Exception\RuntimeException;
+
+class FailureEvent extends NodeEvent
 {
-    // TODO: To complete
+    /**
+     * @var string
+     */
+    protected $name = 'login.failed';
+
+    /**
+     * @param $name
+     * @return null
+     * @throws \Tmv\WhatsApi\Exception\RuntimeException
+     */
+    public function setName($name)
+    {
+        throw new RuntimeException("Name for this event can't be changed");
+    }
 }

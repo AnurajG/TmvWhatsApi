@@ -4,12 +4,12 @@ namespace Tmv\WhatsApi\Message\Event;
 
 use Tmv\WhatsApi\Exception\RuntimeException;
 
-class ChallengeEvent extends NodeEvent
+class StatusReceivedEvent extends NodeEvent
 {
     /**
      * @var string
      */
-    protected $name = 'challenge';
+    protected $name = 'status.received';
 
     /**
      * @param $name

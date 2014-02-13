@@ -2,6 +2,7 @@
 
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
+use Tmv\WhatsApi\Message\Event\FailureEvent;
 use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Zend\EventManager\EventManagerInterface;
@@ -30,6 +31,11 @@ class FailureListener extends AbstractListener
         $node = $e->getNode();
         $client = $e->getClient();
 
-        $client->getEventManager()->trigger('login.failed', $client, array('node' => $node));
+        // triggering public event
+        $event = new FailureEvent();
+        $event->setClient($client);
+        $event->setTarget($client);
+        $event->setNode($node);
+        $client->getEventManager()->trigger($event);
     }
 }

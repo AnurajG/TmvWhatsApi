@@ -2,6 +2,7 @@
 
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
+use Tmv\WhatsApi\Message\Event\ChallengeEvent;
 use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
 use Tmv\WhatsApi\Message\Node\Challenge;
 use Zend\EventManager\EventManagerInterface;
@@ -29,6 +30,14 @@ class ChallengeListener extends AbstractListener
         /** @var Challenge $node */
         $node = $e->getNode();
         $client = $e->getClient();
+
+        // triggering public event
+        $event = new ChallengeEvent();
+        $event->setClient($client);
+        $event->setTarget($client);
+        $event->setNode($node);
+        $client->getEventManager()->trigger($event);
+
         $client->setChallengeData($node->getData());
     }
 }

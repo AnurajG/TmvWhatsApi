@@ -653,7 +653,7 @@ class Client
         // @todo: messages queue disabled
         if ($action instanceof Action\MessageInterface && false) {
             // We need to use a queue
-            /* @todo: should I really use a queue?
+            // @todo: use a queue to ensure that messages are delivered in the right order
             if (!$this->lastMessageIdSent) {
                 $this->lastMessageIdSent = $action->getId();
                 $this->sendNode($action->getNode());
@@ -662,7 +662,6 @@ class Client
             } else {
                 $this->messageQueue[] = $action;
             }
-            */
         } else {
             $res = $this->getEventManager()->trigger('action.send.pre', $this, array('action' => $action));
             if ($res->last() instanceof Action\ActionInterface) {
@@ -761,7 +760,11 @@ class Client
             $node = $this->nodeReader->nextTree($data);
             while ($node != null) {
 
-                $nodeEvent = new ReceivedNodeEvent($this, $node);
+                $nodeEvent = new ReceivedNodeEvent();
+                $nodeEvent->setClient($this);
+                $nodeEvent->setTarget($this);
+                $nodeEvent->setName('received.node.' . $node->getName());
+                $nodeEvent->setNode($node);
                 $this->getEventManager()->trigger($nodeEvent);
 
                 $node = $this->nodeReader->nextTree();

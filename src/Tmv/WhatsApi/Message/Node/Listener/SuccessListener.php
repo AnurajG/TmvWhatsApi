@@ -3,6 +3,7 @@
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
+use Tmv\WhatsApi\Message\Event\SuccessEvent;
 use Tmv\WhatsApi\Message\Node\Success;
 use Zend\EventManager\EventManagerInterface;
 
@@ -30,10 +31,15 @@ class SuccessListener extends AbstractListener
         $node = $e->getNode();
         $client = $e->getClient();
 
+        // triggering public event
+        $event = new SuccessEvent();
+        $event->setClient($client);
+        $event->setTarget($client);
+        $event->setNode($node);
+        $client->getEventManager()->trigger($event);
+
         $client->setConnected(true);
         $client->writeChallengeData($node->getData());
         $client->getNodeWriter()->setKey($client->getOutputKey());
-
-        $client->getEventManager()->trigger('login.success', $client, array('node' => $node));
     }
 }

@@ -31,6 +31,8 @@ class MessageListener extends AbstractListener
         $node = $e->getNode();
         $client = $e->getClient();
 
+        // @todo: triggering public events
+
         //do not send received confirmation if sender is yourself
         $fromMeString = $client->getPhone()->getPhoneNumber() . '@' . $client::WHATSAPP_SERVER;
         if ($node->getFrom() && strpos($node->getFrom(), $fromMeString) === false
@@ -38,6 +40,20 @@ class MessageListener extends AbstractListener
         ) {
             $action = MessageReceived::fromMessageNode($node);
             $client->send($action);
+        }
+
+        // check if it is a response to a status request
+        $foo = explode('@', $node->getFrom());
+        if (is_array($foo) && count($foo) > 1 && strcmp($foo[1], "s.us") == 0 && $node->getChild('body') != null) {
+            $params = array(
+                $this->phoneNumber,
+                $node->getAttribute('from'),
+                $node->getAttribute('type'),
+                $node->getAttribute('id'),
+                $node->getAttribute('t'),
+                $node->getChild("body")->getData()
+            );
+            $client->getEventManager('status.received', $client, $params);
         }
     }
 }

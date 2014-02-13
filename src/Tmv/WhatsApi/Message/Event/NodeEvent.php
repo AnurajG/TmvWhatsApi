@@ -4,7 +4,7 @@ namespace Tmv\WhatsApi\Message\Event;
 
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 
-class ReceivedNodeEvent extends NodeEvent
+class NodeEvent extends AbstractEvent
 {
     /**
      * @var NodeInterface
