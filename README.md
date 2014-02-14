@@ -40,14 +40,16 @@ $password = ''; // your password
 
 $client = new \Tmv\WhatsApi\Client\Client($number, $token, $nickname);
 $client->setChallengeDataFilepath(__DIR__ . '/data/nextChallenge.dat');
-$client->getEventManager()->attach('*', function (\Zend\EventManager\EventInterface $e) {
-        if ($e instanceof \Tmv\WhatsApi\Message\Event\ReceivedNodeEvent) {
-            echo $e->getName() . PHP_EOL;
-            echo $e->getNode() . PHP_EOL;
-            echo PHP_EOL;
-            return;
-        }
-    });
+$client->getEventManager()->attach(
+    'login.success',
+    function (\Tmv\WhatsApi\Message\Event\SuccessEvent $e) use ($nickname) {
+        // Send a message
+        $number = '';
+        $message = new \Tmv\WhatsApi\Message\Action\MessageText($nickname, $number);
+        $message->setBody('Hello');
+        $e->getClient()->send($message);
+    }
+);
 $client->connect();
 $client->loginWithPassword($password);
 while (true) {

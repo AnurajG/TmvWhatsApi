@@ -171,9 +171,9 @@ class Client
     public function __construct($phone, $identity, $nickname, $debug = false)
     {
 
-        $this->getEventManager()->attachAggregate(new ChallengeListener());
-        $this->getEventManager()->attachAggregate(new SuccessListener());
-        $this->getEventManager()->attachAggregate(new MessageListener());
+        $this->getEventManager()->attachAggregate(new ChallengeListener(), 9990);
+        $this->getEventManager()->attachAggregate(new SuccessListener(), 9980);
+        $this->getEventManager()->attachAggregate(new MessageListener(), 9970);
 
         if (!($phone instanceof Phone)) {
             $phone = new Phone($phone);
@@ -661,7 +661,7 @@ class Client
         if ($action instanceof Action\MessageInterface) {
             // Am I still waiting the response of the last dequeued message?
             $this->getMessageQueue()->addMessage($action);
-            if ($this->getMessageQueue()->getParked()) {
+            if ($this->getMessageQueue()->hasParked()) {
                 $eventParams['enqueued'] = true;
             } else {
                 $this->sendNextMessage();
@@ -669,11 +669,12 @@ class Client
         } else {
             // send without waiting
             $node = $this->sendNode($node);
-        }
 
-        // updating the action with the id of the sent node
-        if ($node->hasAttribute('id')) {
-            $action->setId($node->getAttribute('id'));
+            // updating the action with the id of the sent node
+            $action->setNode($node);
+            if ($node->hasAttribute('id')) {
+                $action->setId($node->getAttribute('id'));
+            }
         }
 
         $this->getEventManager()->trigger('action.send.post', $this, $eventParams);
@@ -685,6 +686,7 @@ class Client
     {
         if ($this->getMessageQueue()->count()) {
             $action = $this->getMessageQueue()->getNextMessage();
+            $action->setId(null);
             if ($action instanceof Action\MessageInterface) {
                 $action->setTimestamp(time());
             }
@@ -693,13 +695,12 @@ class Client
             $node = $this->sendNode($node);
 
             // updating the action with the id of the sent node
+            $action->setNode($node);
             if ($node->hasAttribute('id')) {
                 $action->setId($node->getAttribute('id'));
             }
-
-            // @todo: wait for response
         } else {
-            $this->getMessageQueue()->removeParked();
+            $this->getMessageQueue()->hasParked();
         }
         return $this;
     }
@@ -711,8 +712,10 @@ class Client
      */
     public function sendNode(NodeInterface $node)
     {
-        $node->setAttribute('id', $node->getName() . '-' . time() . '-' . $this->getMessageCounter());
-        $this->incrementMessageCounter();
+        if ($node->hasAttribute('id') && (null === $node->getAttribute('id') || "" === $node->getAttribute('id'))) {
+            $node->setAttribute('id', $node->getName() . '-' . time() . '-' . $this->getMessageCounter());
+            $this->incrementMessageCounter();
+        }
 
         $this->getEventManager()->trigger('node.send.pre', $this, array('node' => $node));
 

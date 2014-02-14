@@ -91,7 +91,7 @@ abstract class AbstractNode implements NodeInterface
      */
     public function hasAttribute($name)
     {
-        return isset($this->attributes[$name]);
+        return array_key_exists($name, $this->attributes);
     }
 
     /**
@@ -215,7 +215,7 @@ abstract class AbstractNode implements NodeInterface
      */
     public function getAttribute($name)
     {
-        return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+        return $this->hasAttribute($name) ? $this->attributes[$name] : null;
     }
 
     /**

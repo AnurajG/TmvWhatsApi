@@ -21,6 +21,12 @@ interface ActionInterface
     public function getNode();
 
     /**
+     * @param \Tmv\WhatsApi\Message\Node\NodeInterface $node
+     * @return $this
+     */
+    public function setNode($node);
+
+    /**
      * @return $this
      */
     public function buildNode();

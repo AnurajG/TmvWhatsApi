@@ -56,7 +56,8 @@ class MessageListener extends AbstractListener
         }
 
         // check for message received ack
-        if ($node->hasChild('x') && $client->getMessageQueue()->hasParked()
+        if ($node->hasChild('x')
+            && $client->getMessageQueue()->hasParked()
             && $client->getMessageQueue()->getParked()->getId() == $node->getAttribute('id')
         ) {
             $client->getMessageQueue()->removeParked();
