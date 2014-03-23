@@ -17,7 +17,6 @@ class NodeFactory
         if (empty($data['name'])) {
             throw new InvalidArgumentException("Key 'name' is required");
         }
-        $node = null;
         switch ($data['name']) {
             case 'challenge':
                 $node = Challenge::fromArray($data, $this);

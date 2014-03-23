@@ -165,10 +165,8 @@ class Client
      *                         or using Missvenom to sniff from your phone.
      * @param string $nickname
      *                         The user name.
-     * @param $debug
-     *                         Debug on or off, false by default.
      */
-    public function __construct($phone, $identity, $nickname, $debug = false)
+    public function __construct($phone, $identity, $nickname)
     {
 
         $this->getEventManager()->attachAggregate(new ChallengeListener(), 9990);
@@ -423,11 +421,16 @@ class Client
 
     /**
      * Disconnect to the WhatsApp network.
+     *
+     * @return $this
      */
     public function disconnect()
     {
-        fclose($this->socket);
-        $this->getEventManager()->trigger('disconnect.success', $this);
+        if (null !== $this->socket) {
+            fclose($this->socket);
+            $this->getEventManager()->trigger('disconnect.success', $this);
+        }
+        return $this;
     }
 
     /**
@@ -699,8 +702,6 @@ class Client
             if ($node->hasAttribute('id')) {
                 $action->setId($node->getAttribute('id'));
             }
-        } else {
-            $this->getMessageQueue()->hasParked();
         }
         return $this;
     }

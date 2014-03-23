@@ -86,7 +86,7 @@ abstract class AbstractNode implements NodeInterface
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return bool
      */
     public function hasAttribute($name)
@@ -109,8 +109,8 @@ abstract class AbstractNode implements NodeInterface
     }
 
     /**
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param mixed $value
      * @return $this
      */
     public function setAttribute($name, $value)
@@ -210,7 +210,7 @@ abstract class AbstractNode implements NodeInterface
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return string
      */
     public function getAttribute($name)
@@ -260,11 +260,17 @@ abstract class AbstractNode implements NodeInterface
         return $array;
     }
 
+    /**
+     * @return string
+     */
     public function toString()
     {
         return $this->nodeString();
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->toString();

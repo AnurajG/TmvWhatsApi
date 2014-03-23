@@ -79,7 +79,7 @@ class NodeReader
     }
 
     /**
-     * @param null $input
+     * @param string|null $input
      * @return null|\Tmv\WhatsApi\Message\Node\Node
      * @throws \Tmv\WhatsApi\Exception\IncompleteMessageException
      * @throws \Tmv\WhatsApi\Exception\RuntimeException
