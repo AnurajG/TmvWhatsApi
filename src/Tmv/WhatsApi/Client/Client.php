@@ -858,7 +858,7 @@ class Client
 
     protected function createAuthBlob()
     {
-        if ($this->challengeData) {
+        if ($this->challengeData && false) {
             $key = $this->getProtocolService()->pbkdf2('sha1', base64_decode($this->password), $this->challengeData, 16, 20, true);
             $this->inputKey = new KeyStream(new RC4($key, 256), $key);
             $this->outputKey = new KeyStream(new RC4($key, 256), $key);
@@ -905,8 +905,7 @@ class Client
      * Create a unique msg id.
      *
      * @param  string $prefix
-     * @return string
-     *                       A message id string.
+     * @return string A message id string.
      */
     protected function createMsgId($prefix)
     {

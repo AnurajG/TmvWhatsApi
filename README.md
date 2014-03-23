@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/thomasvargiu/TmvWhatsApi.png?branch=master)](https://travis-ci.org/thomasvargiu/TmvWhatsApi)
 [![Coverage Status](https://coveralls.io/repos/thomasvargiu/TmvWhatsApi/badge.png?branch=master)](https://coveralls.io/r/thomasvargiu/TmvWhatsApi?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/thomasvargiu/TmvWhatsApi/badges/quality-score.png?s=c66994bc72499c4771de0e22fb8f257b75685552)](https://scrutinizer-ci.com/g/thomasvargiu/TmvWhatsApi/)
 
 # WhatsAPI
 

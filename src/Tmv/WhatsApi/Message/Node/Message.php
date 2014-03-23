@@ -2,10 +2,6 @@
 
 namespace Tmv\WhatsApi\Message\Node;
 
-use Tmv\WhatsApi\Exception\InvalidArgumentException;
-use Zend\Stdlib\Hydrator\Aggregate\AggregateHydrator;
-use Zend\Stdlib\Hydrator\ClassMethods;
-
 class Message extends AbstractNode
 {
 

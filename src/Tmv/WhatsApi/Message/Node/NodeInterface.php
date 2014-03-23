@@ -34,7 +34,7 @@ interface NodeInterface
     public function getData();
 
     /**
-     * @return array|NodeInterface
+     * @return array|NodeInterface[]
      */
     public function getChildren();
 

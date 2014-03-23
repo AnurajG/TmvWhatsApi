@@ -78,6 +78,12 @@ class NodeReader
         return $this;
     }
 
+    /**
+     * @param null $input
+     * @return null|\Tmv\WhatsApi\Message\Node\Node
+     * @throws \Tmv\WhatsApi\Exception\IncompleteMessageException
+     * @throws \Tmv\WhatsApi\Exception\RuntimeException
+     */
     public function nextTree($input = null)
     {
         if ($input != null) {
@@ -92,12 +98,11 @@ class NodeReader
         }
         $this->readInt24();
         if ($stanzaFlag & 8) {
-            if (isset($this->key)) {
-                $remainingData = substr($this->input, $stanzaSize);
-                $this->input = $this->key->decode($this->input, 0, $stanzaSize) . $remainingData;
-            } else {
+            if (!isset($this->key)) {
                 throw new RuntimeException("Encountered encrypted message, missing key");
             }
+            $remainingData = substr($this->input, $stanzaSize);
+            $this->input = $this->key->decode($this->input, 0, $stanzaSize) . $remainingData;
         }
         if ($stanzaSize > 0) {
             return $this->nextTreeInternal();
@@ -106,6 +111,11 @@ class NodeReader
         return null;
     }
 
+    /**
+     * @param int $token
+     * @return mixed
+     * @throws \Tmv\WhatsApi\Exception\RuntimeException
+     */
     protected function getToken($token)
     {
         if ($token < 0 || $token >= count($this->dictionary)) {
@@ -116,6 +126,11 @@ class NodeReader
         return $ret;
     }
 
+    /**
+     * @param string $token
+     * @return mixed|string
+     * @throws \Tmv\WhatsApi\Exception\RuntimeException
+     */
     protected function readString($token)
     {
         $ret = "";
@@ -148,6 +163,10 @@ class NodeReader
         return $ret;
     }
 
+    /**
+     * @param int $size
+     * @return array
+     */
     protected function readAttributes($size)
     {
         $attributes = array();
@@ -161,6 +180,9 @@ class NodeReader
         return $attributes;
     }
 
+    /**
+     * @return null|\Tmv\WhatsApi\Message\Node\Node
+     */
     protected function nextTreeInternal()
     {
         $token = $this->readInt8();
@@ -210,11 +232,19 @@ class NodeReader
         );
     }
 
+    /**
+     * @param string $token
+     * @return bool
+     */
     protected function isListTag($token)
     {
         return (($token == 248) || ($token == 0) || ($token == 249));
     }
 
+    /**
+     * @param string $token
+     * @return array
+     */
     protected function readList($token)
     {
         $size = $this->readListSize($token);
@@ -226,6 +256,11 @@ class NodeReader
         return $ret;
     }
 
+    /**
+     * @param string $token
+     * @return int
+     * @throws \Tmv\WhatsApi\Exception\RuntimeException
+     */
     protected function readListSize($token)
     {
         if ($token == 0xf8) {
@@ -239,6 +274,10 @@ class NodeReader
         return $size;
     }
 
+    /**
+     * @param int $offset
+     * @return int
+     */
     protected function peekInt24($offset = 0)
     {
         $ret = 0;
@@ -251,6 +290,9 @@ class NodeReader
         return $ret;
     }
 
+    /**
+     * @return int
+     */
     protected function readInt24()
     {
         $ret = $this->peekInt24();
@@ -261,6 +303,10 @@ class NodeReader
         return $ret;
     }
 
+    /**
+     * @param int $offset
+     * @return int
+     */
     protected function peekInt16($offset = 0)
     {
         $ret = 0;
@@ -272,6 +318,9 @@ class NodeReader
         return $ret;
     }
 
+    /**
+     * @return int
+     */
     protected function readInt16()
     {
         $ret = $this->peekInt16();
@@ -282,6 +331,10 @@ class NodeReader
         return $ret;
     }
 
+    /**
+     * @param int $offset
+     * @return int
+     */
     protected function peekInt8($offset = 0)
     {
         $ret = 0;
@@ -293,6 +346,9 @@ class NodeReader
         return $ret;
     }
 
+    /**
+     * @return int
+     */
     protected function readInt8()
     {
         $ret = $this->peekInt8();
@@ -303,6 +359,10 @@ class NodeReader
         return $ret;
     }
 
+    /**
+     * @param int $len
+     * @return string
+     */
     protected function fillArray($len)
     {
         $ret = "";

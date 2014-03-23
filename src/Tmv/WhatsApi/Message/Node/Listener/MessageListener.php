@@ -22,7 +22,7 @@ class MessageListener extends AbstractListener
      */
     public function attach(EventManagerInterface $events)
     {
-        $events->attach('received.node.message', array($this, 'onReceivedNode'));
+        $this->listeners[] = $events->attach('received.node.message', array($this, 'onReceivedNode'));
     }
 
     public function onReceivedNode(ReceivedNodeEvent $e)
