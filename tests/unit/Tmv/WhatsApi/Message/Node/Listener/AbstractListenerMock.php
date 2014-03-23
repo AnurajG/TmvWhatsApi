@@ -14,12 +14,4 @@ class AbstractListenerMock extends AbstractListener
     {
         $this->listeners[] = $events->attach('test.event');
     }
-
-    /**
-     * @return \Zend\Stdlib\CallbackHandler[]
-     */
-    public function getListeners()
-    {
-        return $this->listeners;
-    }
 }

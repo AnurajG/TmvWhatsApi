@@ -39,4 +39,12 @@ abstract class AbstractListener implements ListenerAggregateInterface
             }
         }
     }
+
+    /**
+     * @return \Zend\Stdlib\CallbackHandler[]
+     */
+    public function getListeners()
+    {
+        return $this->listeners;
+    }
 }
