@@ -2,6 +2,7 @@
 
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
+use Tmv\WhatsApi\Client\Client;
 use Tmv\WhatsApi\Message\Action\MessageReceived;
 use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
 use Tmv\WhatsApi\Message\Node\Message;
@@ -34,7 +35,7 @@ class MessageListener extends AbstractListener
         // @todo: triggering public events
 
         //do not send received confirmation if sender is yourself
-        $fromMeString = $client->getPhone()->getPhoneNumber() . '@' . $client::WHATSAPP_SERVER;
+        $fromMeString = $client->getPhone()->getPhoneNumber() . '@' . Client::WHATSAPP_SERVER;
         if ($node->getFrom() && strpos($node->getFrom(), $fromMeString) === false
             && ($node->hasChild("request") || $node->hasChild("received"))
         ) {
