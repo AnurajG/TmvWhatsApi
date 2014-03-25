@@ -36,7 +36,8 @@ class ProtocolService
         // on my repository
         $f =  file_get_contents(__DIR__ . "/../../../data/magic.dat");
         $count = 0;
-        for ($i=0; $i < strlen($f); $i++) {
+        $strlen = strlen($f);
+        for ($i=0; $i < $strlen; $i++) {
             $f[$i] = $f[$i] ^ $KEY[$count++];
             if ($count == strlen($KEY) -1) {
                 $count = 0;

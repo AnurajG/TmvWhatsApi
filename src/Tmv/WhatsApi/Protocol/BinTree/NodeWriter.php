@@ -17,7 +17,8 @@ class NodeWriter
 
     public function __construct(Dictionary $dictionary)
     {
-        for ($i = 0; $i < count($dictionary); $i++) {
+        $dictCount = count($dictionary);
+        for ($i = 0; $i < $dictCount; $i++) {
             if (strlen($dictionary[$i]) > 0) {
                 $this->tokenMap[$dictionary[$i]] = $i;
             }
