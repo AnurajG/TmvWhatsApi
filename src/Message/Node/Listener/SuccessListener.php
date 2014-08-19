@@ -40,6 +40,6 @@ class SuccessListener extends AbstractListener
 
         $client->setConnected(true);
         $client->writeChallengeData($node->getData());
-        $client->getConnection()->getNodeWriter()->setKey($client->getOutputKey());
+        $client->getConnection()->getNodeWriter()->setKey($client->getConnection()->getOutputKey());
     }
 }

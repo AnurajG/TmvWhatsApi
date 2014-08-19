@@ -72,16 +72,6 @@ class Client
      */
     protected $incompleteMessage;
     /**
-     * Instances of the KeyStream class.
-     * @var KeyStream
-     */
-    protected $inputKey;
-    /**
-     * Instances of the KeyStream class.
-     * @var KeyStream
-     */
-    protected $outputKey;
-    /**
      * @var MessageQueue
      */
     protected $messageQueue;
@@ -497,8 +487,8 @@ class Client
         if ($this->challengeData != null) {
             $data = $this->createAuthResponseNode();
             $this->sendNode($data);
-            $this->getConnection()->getNodeReader()->setKey($this->inputKey);
-            $this->getConnection()->getNodeWriter()->setKey($this->outputKey);
+            $this->getConnection()->getNodeReader()->setKey($this->getConnection()->getInputKey());
+            $this->getConnection()->getNodeWriter()->setKey($this->getConnection()->getOutputKey());
             $this->pollMessages();
         }
 
@@ -670,10 +660,10 @@ class Client
     {
         if ($this->challengeData) {
             $key = ProtocolService::pbkdf2('sha1', base64_decode($this->getIdentity()->getPassword()), $this->challengeData, 16, 20, true);
-            $this->inputKey = $this->createKeyStream($key[2], $key[3]);
-            $this->outputKey = $this->createKeyStream($key[0], $key[1]);
-            $this->getConnection()->getNodeReader()->setKey($this->inputKey);
-            //$this->getConnection()->getNodeWriter()->setKey($this->outputKey);
+            $this->getConnection()->setInputKey($this->createKeyStream($key[2], $key[3]));
+            $this->getConnection()->setOutputKey($this->createKeyStream($key[0], $key[1]));
+            $this->getConnection()->getNodeReader()->setKey($this->getConnection()->getInputKey());
+            //$this->getConnection()->getNodeWriter()->setKey($this->getConnection()->getOutputKey());
             $phone = $this->getIdentity()->getPhone();
             $array = "\0\0\0\0" .
                 $phone->getPhoneNumber() .
@@ -685,7 +675,7 @@ class Client
                 "001";
 
             $this->challengeData = null;
-            return $this->outputKey->encodeMessage($array, 0, strlen($array), false);
+            return $this->getConnection()->getOutputKey()->encodeMessage($array, 0, strlen($array), false);
         }
 
         return null;
@@ -721,49 +711,11 @@ class Client
     protected function authenticate()
     {
         $keys = KeyStream::generateKeys(base64_decode($this->getIdentity()->getPassword()), $this->challengeData);
-        $this->inputKey = $this->createKeyStream($keys[2], $keys[3]);
-        $this->outputKey = $this->createKeyStream($keys[0], $keys[1]);
+        $this->getConnection()->setInputKey($this->createKeyStream($keys[2], $keys[3]));
+        $this->getConnection()->setOutputKey($this->createKeyStream($keys[0], $keys[1]));
         $array = "\0\0\0\0" . $this->getIdentity()->getPhone()->getPhoneNumber() . $this->challengeData;// . time() . static::WHATSAPP_USER_AGENT . " MccMnc/" . str_pad($phone["mcc"], 3, "0", STR_PAD_LEFT) . "001";
-        $response = $this->outputKey->encodeMessage($array, 0, 4, strlen($array) - 4);
+        $response = $this->getConnection()->getOutputKey()->encodeMessage($array, 0, 4, strlen($array) - 4);
         return $response;
-    }
-
-    /**
-     * @param  \Tmv\WhatsApi\Protocol\KeyStream $inputKey
-     * @return $this
-     */
-    public function setInputKey($inputKey)
-    {
-        $this->inputKey = $inputKey;
-
-        return $this;
-    }
-
-    /**
-     * @return \Tmv\WhatsApi\Protocol\KeyStream
-     */
-    public function getInputKey()
-    {
-        return $this->inputKey;
-    }
-
-    /**
-     * @param  \Tmv\WhatsApi\Protocol\KeyStream $outputKey
-     * @return $this
-     */
-    public function setOutputKey($outputKey)
-    {
-        $this->outputKey = $outputKey;
-
-        return $this;
-    }
-
-    /**
-     * @return \Tmv\WhatsApi\Protocol\KeyStream
-     */
-    public function getOutputKey()
-    {
-        return $this->outputKey;
     }
 
     /**

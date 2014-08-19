@@ -6,6 +6,7 @@ use Tmv\WhatsApi\Connection\Adapter\AdapterInterface;
 
 use Tmv\WhatsApi\Protocol\BinTree\NodeReader;
 use Tmv\WhatsApi\Protocol\BinTree\NodeWriter;
+use Tmv\WhatsApi\Protocol\KeyStream;
 
 class Connection
 {
@@ -18,10 +19,20 @@ class Connection
      * @var NodeWriter
      */
     protected $nodeWriter;
+
     /**
      * @var NodeReader
      */
     protected $nodeReader;
+
+    /**
+     * @var KeyStream
+     */
+    protected $inputKey;
+    /**
+     * @var KeyStream
+     */
+    protected $outputKey;
 
     function __construct(AdapterInterface $adapter)
     {
@@ -86,6 +97,42 @@ class Connection
             $this->nodeWriter = new NodeWriter();
         }
         return $this->nodeWriter;
+    }
+
+    /**
+     * @param KeyStream $inputKey
+     * @return $this
+     */
+    public function setInputKey($inputKey)
+    {
+        $this->inputKey = $inputKey;
+        return $this;
+    }
+
+    /**
+     * @return KeyStream
+     */
+    public function getInputKey()
+    {
+        return $this->inputKey;
+    }
+
+    /**
+     * @param KeyStream $outputKey
+     * @return $this
+     */
+    public function setOutputKey($outputKey)
+    {
+        $this->outputKey = $outputKey;
+        return $this;
+    }
+
+    /**
+     * @return KeyStream
+     */
+    public function getOutputKey()
+    {
+        return $this->outputKey;
     }
 
     /**
