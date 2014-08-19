@@ -39,7 +39,7 @@ $token    = ''; // token
 $nickname = ''; // your name
 $password = ''; // your password
 
-$client = new \Tmv\WhatsApi\Client\Client($number, $token, $nickname);
+$client = new \Tmv\WhatsApi\Client($number, $token, $nickname);
 $client->setChallengeDataFilepath(__DIR__ . '/data/nextChallenge.dat');
 $client->getEventManager()->attach(
     'login.success',
