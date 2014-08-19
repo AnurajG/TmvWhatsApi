@@ -31,7 +31,7 @@ Just an example:
 
 ## How to start using this library
 
-The library is not complete, you can just login and instantiate the first connection.
+The library is not complete, you can just login and instantiate the first connection, sending a text message
 
 ```php
 $number   = ''; // your number
@@ -39,20 +39,49 @@ $token    = ''; // token
 $nickname = ''; // your name
 $password = ''; // your password
 
-$client = new \Tmv\WhatsApi\Client($number, $token, $nickname);
+// Creating a service to retrieve phone info
+$localizationService = new \Tmv\WhatsApi\Service\LocalizationService();
+$localizationService->setCountriesPath(__DIR__ . '/data/countries.csv');
+
+// Creating a phone object...
+$phone = new \Tmv\WhatsApi\Entity\Phone($number);
+// Injecting phone properties
+$phone = $localizationService->dissectPhone($phone);
+
+$identity = new \Tmv\WhatsApi\Entity\Identity();
+$identity->setNickname($nickname);
+$identity->setToken($token);
+$identity->setPassword($password);
+$identity->setPhone($phone);
+
+$client = new \Tmv\WhatsApi\Client($identity);
 $client->setChallengeDataFilepath(__DIR__ . '/data/nextChallenge.dat');
+
+// Debug events
 $client->getEventManager()->attach(
-    'login.success',
-    function (\Tmv\WhatsApi\Message\Event\SuccessEvent $e) use ($nickname) {
-        // Send a message
-        $number = '';
-        $message = new \Tmv\WhatsApi\Message\Action\MessageText($nickname, $number);
-        $message->setBody('Hello');
-        $e->getClient()->send($message);
+    'node.received',
+    function (\Zend\EventManager\Event $e) {
+        $node = $e->getParam('node');
+        echo sprintf("\n--- Node received:\n%s\n", $node);
     }
 );
+$client->getEventManager()->attach(
+    'node.send.pre',
+    function (\Zend\EventManager\Event $e) {
+        $node = $e->getParam('node');
+        echo sprintf("\n--- Sending Node:\n%s\n", $node);
+    }
+);
+
+// Connecting...
 $client->connect();
-$client->loginWithPassword($password);
+$client->login();
+
+$number = ''; // number to send message
+$client->send(new \Tmv\WhatsApi\Message\Action\ChatState($number, 'composing'));
+$message = new \Tmv\WhatsApi\Message\Action\MessageText($nickname, $number);
+$message->setBody('Hello');
+$client->send($message);
 while (true) {
     $client->pollMessages();
 }
