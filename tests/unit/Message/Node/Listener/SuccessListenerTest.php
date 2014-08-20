@@ -38,6 +38,10 @@ class SuccessListenerTest extends \PHPUnit_Framework_TestCase
         $nodeWriterMock = m::mock('\Tmv\WhatsApi\Protocol\BinTree\NodeWriter');
         $keyStreamMock = m::mock('\Tmv\WhatsApi\Protocol\KeyStream');
 
+        $connectionMock = m::mock('Tmv\\WhatsApi\\Connection\\Connection');
+        $connectionMock->shouldReceive('getNodeWriter')->andReturn($nodeWriterMock);
+        $connectionMock->shouldReceive('getOutputKey')->once()->andReturn($keyStreamMock);
+
         $event->shouldReceive('getNode')->once()->andReturn($node);
         $event->shouldReceive('getClient')->once()->andReturn($client);
 
@@ -46,9 +50,8 @@ class SuccessListenerTest extends \PHPUnit_Framework_TestCase
         $nodeWriterMock->shouldReceive('setKey')->once()->with($keyStreamMock);
 
         $client->shouldReceive('getEventManager')->once()->andReturn($eventManagerMock);
+        $client->shouldReceive('getConnection')->andReturn($connectionMock);
         $client->shouldReceive('setConnected')->once()->with(true);
-        $client->shouldReceive('getOutputKey')->once()->andReturn($keyStreamMock);
-        $client->shouldReceive('getNodeWriter')->once()->andReturn($nodeWriterMock);
         $client->shouldReceive('writeChallengeData')->once()->with('the data');
 
         $eventManagerMock->shouldReceive('trigger')

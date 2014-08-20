@@ -29,6 +29,9 @@ class FailureListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $this->object->getListeners());
     }
 
+    /**
+     * @expectedException \RuntimeException
+     */
     public function testOnReceivedNodeMethod()
     {
         $event = m::mock('\Tmv\WhatsApi\Message\Event\ReceivedNodeEvent');

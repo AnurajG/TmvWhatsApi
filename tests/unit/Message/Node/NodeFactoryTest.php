@@ -67,12 +67,4 @@ class NodeFactoryTest extends \PHPUnit_Framework_TestCase
             'Message instance'
         );
     }
-
-    /**
-     * @expectedException \Tmv\WhatsApi\Exception\InvalidArgumentException
-     */
-    public function testWithoutNameException()
-    {
-        $this->object->fromArray(array());
-    }
 }

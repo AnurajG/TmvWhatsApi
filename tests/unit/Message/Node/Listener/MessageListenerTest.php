@@ -41,10 +41,13 @@ class MessageListenerTest extends \PHPUnit_Framework_TestCase
         $nodeBody = m::mock('\Tmv\WhatsApi\Message\Node\NodeInterface');
         $parkedMock = m::mock('\Tmv\WhatsApi\Message\Action\MessageInterface');
 
+        $identityMock = m::mock('Tmv\\WhatsApi\\Entity\\Identity');
+        $identityMock->shouldReceive('getPhone')->andReturn($phoneMock);;
+
         $event->shouldReceive('getNode')->once()->andReturn($node);
         $event->shouldReceive('getClient')->once()->andReturn($client);
         $client->shouldReceive('getEventManager')->times(3)->andReturn($eventManagerMock);
-        $client->shouldReceive('getPhone')->once()->andReturn($phoneMock);
+        $client->shouldReceive('getIdentity')->once()->andReturn($identityMock);
         $client->shouldReceive('getMessageQueue')->times(5)->andReturn($messageQueueMock);
         $client->shouldReceive('sendNextMessage')->once();
         $phoneMock->shouldReceive('getPhoneNumber')->once()->andReturn('0123456789');
@@ -62,7 +65,7 @@ class MessageListenerTest extends \PHPUnit_Framework_TestCase
         $node->shouldReceive('hasChild')->with('x')->once()->andReturn(true);
         $node->shouldReceive('getChild')->with('body')->twice()->andReturn($nodeBody);
         $node->shouldReceive('getAttribute')->with('from')->once()->andReturn('somethingelse@s.us');
-        $node->shouldReceive('getAttribute')->with('type')->once()->andReturn('the type');
+        $node->shouldReceive('getAttribute')->with('type')->twice()->andReturn('the type');
         $node->shouldReceive('getAttribute')->with('id')->twice()->andReturn('the id');
         $node->shouldReceive('getAttribute')->with('t')->once()->andReturn(123);
         $nodeBody->shouldReceive('getData')->once()->andReturn('the body');
