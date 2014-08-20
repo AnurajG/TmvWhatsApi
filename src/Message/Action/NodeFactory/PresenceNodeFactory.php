@@ -20,8 +20,16 @@ class PresenceNodeFactory extends AbstractNodeFactory implements NodeActionFacto
         }
 
         $node = new Node();
-        $node->setName('presence')
-            ->setAttribute('name', $action->getName());
+        $node->setName('presence');
+        if ($action->getName()) {
+            $node->setAttribute('name', $action->getName());
+        }
+        if ($action->getType()) {
+            $node->setAttribute('type', $action->getType());
+        }
+        if ($action->getLast()) {
+            $node->setAttribute('last', $action->getLast());
+        }
 
         return $node;
     }

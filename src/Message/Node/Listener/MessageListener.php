@@ -45,6 +45,15 @@ class MessageListener extends AbstractListener
         }
 
         // check if it is a response to a status request
+        $this->checkIsResponseStatus($client, $node);
+
+        // check and send receipt
+        $this->sendReceipt($client, $node);
+    }
+
+    protected function checkIsResponseStatus(Client $client, Message $node)
+    {
+        // check if it is a response to a status request
         $foo = explode('@', $node->getFrom());
         if (is_array($foo) && count($foo) > 1 && strcmp($foo[1], "s.us") == 0 && $node->getChild('body') != null) {
             $params = array(
@@ -56,29 +65,17 @@ class MessageListener extends AbstractListener
             );
             $client->getEventManager()->trigger('status.received', $client, $params);
         }
+        return $this;
+    }
 
-        // check for message received ack
-        if ($node->hasChild('x')
-            && $client->getMessageQueue()->hasParked()
-            && $client->getMessageQueue()->getParked()->getId() == $node->getAttribute('id')
-        ) {
-            $client->getMessageQueue()->removeParked();
-            $client->sendNextMessage();
-
-            $client->getEventManager()->trigger('message.received-server', $client, array($node));
-        }
-
-        // check if sent message is expired, we don't wait anymore
-        if ($client->getMessageQueue()->getParkedTime() < time() - 5) {
-            $client->getMessageQueue()->removeParked();
-            $client->getEventManager()->trigger('message.not-received-server', $client, array($node));
-        }
-
+    protected function sendReceipt(Client $client, Message $node)
+    {
         if ($node->getAttribute("type") == "text" && $node->getChild('body') != null) {
             $receipt = new Receipt();
             $receipt->setTo($node->getAttribute('from'));
             $receipt->setId($node->getAttribute('id'));
             $client->send($receipt);
         }
+        return $this;
     }
 }

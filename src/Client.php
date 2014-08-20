@@ -8,9 +8,9 @@ use Tmv\WhatsApi\Entity\Identity;
 use Tmv\WhatsApi\Exception\RuntimeException;
 use Tmv\WhatsApi\Message\Action;
 use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
-use Tmv\WhatsApi\Message\MessageQueue;
 use Tmv\WhatsApi\Message\Node\Listener\InjectIdListener;
 use Tmv\WhatsApi\Message\Node\Listener\MessageListener;
+use Tmv\WhatsApi\Message\Node\Listener\ReceiptListener;
 use Tmv\WhatsApi\Message\Node\Listener\SuccessListener;
 use Tmv\WhatsApi\Message\Node\Listener\ChallengeListener;
 use Tmv\WhatsApi\Message\Node\NodeFactory;
@@ -61,10 +61,6 @@ class Client
      * @var string
      */
     protected $incompleteMessage;
-    /**
-     * @var MessageQueue
-     */
-    protected $messageQueue;
 
     /**
      * @var int
@@ -106,6 +102,7 @@ class Client
         $this->getEventManager()->attachAggregate(new ChallengeListener(), 100);
         $this->getEventManager()->attachAggregate(new SuccessListener(), 100);
         $this->getEventManager()->attachAggregate(new MessageListener(), 100);
+        $this->getEventManager()->attachAggregate(new ReceiptListener(), 100);
 
         $client = $this;
 
@@ -303,10 +300,9 @@ class Client
      * Send an action to the WhatsApp server.
      *
      * @param  Action\ActionInterface $action
-     * @param bool $direct
      * @return Action\ActionInterface
      */
-    public function send(Action\ActionInterface $action, $direct = false)
+    public function send(Action\ActionInterface $action)
     {
 
         $this->getEventManager()->trigger('action.send.pre', $this, array('action' => $action));
@@ -314,38 +310,15 @@ class Client
         $nodeFactory = $this->getNodeActionFactory();
         $node = $nodeFactory->createNode($action);
 
-        $eventParams = array('action' => $action, 'node' => $node, 'enqueued' => false);
-
-        if (!$direct && $action instanceof Action\MessageInterface) {
-            // Am I still waiting the response of the last dequeued message?
-            $this->getMessageQueue()->addMessage($action);
-            if ($this->getMessageQueue()->hasParked()) {
-                $eventParams['enqueued'] = true;
-            } else {
-                $this->sendNextMessage();
-            }
-        } else {
-            // send without waiting
-            $this->sendNode($node);
+        $node = $this->sendNode($node);
+        if ($node->hasAttribute('id')) {
+            $action->setId($node->getAttribute('id'));
         }
 
+        $eventParams = array('action' => $action, 'node' => $node);
         $this->getEventManager()->trigger('action.send.post', $this, $eventParams);
 
         return $action;
-    }
-
-    /**
-     * Send next queued message
-     *
-     * @return $this
-     */
-    public function sendNextMessage()
-    {
-        if ($this->getMessageQueue()->count()) {
-            $action = $this->getMessageQueue()->getNextMessage();
-            $this->send($action, true);
-        }
-        return $this;
     }
 
     /**
@@ -603,17 +576,6 @@ class Client
             throw new RuntimeException(sprintf("File '%s' is not writable", $filePath));
         }
         return true;
-    }
-
-    /**
-     * @return MessageQueue
-     */
-    public function getMessageQueue()
-    {
-        if (!$this->messageQueue) {
-            $this->messageQueue = new MessageQueue();
-        }
-        return $this->messageQueue;
     }
 
     /**
