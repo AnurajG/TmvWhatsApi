@@ -10,7 +10,7 @@ interface MessageIdAwareInterface
     public function getId();
 
     /**
-     * @param string $id
+     * @param  string $id
      * @return $this
      */
     public function setId($id);
@@ -21,7 +21,7 @@ interface MessageIdAwareInterface
     public function getTimestamp();
 
     /**
-     * @param int $timestamp
+     * @param  int   $timestamp
      * @return $this
      */
     public function setTimestamp($timestamp);

@@ -65,6 +65,7 @@ class MessageListener extends AbstractListener
             );
             $client->getEventManager()->trigger('status.received', $client, $params);
         }
+
         return $this;
     }
 
@@ -76,6 +77,7 @@ class MessageListener extends AbstractListener
             $receipt->setId($node->getAttribute('id'));
             $client->send($receipt);
         }
+
         return $this;
     }
 }

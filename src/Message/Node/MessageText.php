@@ -13,11 +13,12 @@ class MessageText extends Message
         if ($this->hasChild('body')) {
             return $this->getChild('body')->getData();
         }
+
         return null;
     }
 
     /**
-     * @param string $body
+     * @param  string $body
      * @return $this
      */
     public function setBody($body)
@@ -29,6 +30,7 @@ class MessageText extends Message
             $this->addChild($nodeBody);
         }
         $nodeBody->setData($body);
+
         return $this;
     }
 

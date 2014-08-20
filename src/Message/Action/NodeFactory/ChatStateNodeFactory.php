@@ -8,7 +8,7 @@ use Tmv\WhatsApi\Message\Node\Node;
 class ChatStateNodeFactory extends AbstractNodeFactory implements NodeActionFactoryInterface
 {
     /**
-     * @param Action\ActionInterface $action
+     * @param  Action\ActionInterface    $action
      * @return Node
      * @throws \InvalidArgumentException
      */

@@ -405,14 +405,17 @@ class TokenMap
         $foo = array_search($string, self::$primaryStrings);
         if ($foo) {
             $token = $foo;
+
             return true;
         }
         $foo = array_search($string, self::$secondaryStrings);
         if ($foo) {
             $subdict = true;
             $token = $foo;
+
             return true;
         }
+
         return false;
     }
 
@@ -435,7 +438,7 @@ class TokenMap
             throw new RuntimeException("Invalid token/length in getToken");
         }
         $string = $tokenMap[$token];
+
         return $string;
     }
 }
- 

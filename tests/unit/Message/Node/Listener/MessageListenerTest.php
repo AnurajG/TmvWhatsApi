@@ -58,7 +58,6 @@ class MessageListenerTest extends \PHPUnit_Framework_TestCase
         $node->shouldReceive('getAttribute')->with('t')->once()->andReturn(123);
         $nodeBody->shouldReceive('getData')->once()->andReturn('the body');
 
-
         $eventManagerMock->shouldReceive('trigger')->once();
 
         $this->object->onReceivedNode($event);

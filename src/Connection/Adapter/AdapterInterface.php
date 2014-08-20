@@ -32,4 +32,3 @@ interface AdapterInterface
      */
     public function readData();
 }
- 

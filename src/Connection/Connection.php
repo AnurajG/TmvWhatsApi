@@ -34,18 +34,19 @@ class Connection
      */
     protected $outputKey;
 
-    function __construct(AdapterInterface $adapter)
+    public function __construct(AdapterInterface $adapter)
     {
         $this->adapter = $adapter;
     }
 
     /**
-     * @param \Tmv\WhatsApi\Connection\Adapter\AdapterInterface $adapter
+     * @param  \Tmv\WhatsApi\Connection\Adapter\AdapterInterface $adapter
      * @return $this
      */
     public function setAdapter($adapter)
     {
         $this->adapter = $adapter;
+
         return $this;
     }
 
@@ -58,12 +59,13 @@ class Connection
     }
 
     /**
-     * @param \Tmv\WhatsApi\Protocol\BinTree\NodeReader $nodeReader
+     * @param  \Tmv\WhatsApi\Protocol\BinTree\NodeReader $nodeReader
      * @return $this
      */
     public function setNodeReader($nodeReader)
     {
         $this->nodeReader = $nodeReader;
+
         return $this;
     }
 
@@ -75,16 +77,18 @@ class Connection
         if (!$this->nodeReader) {
             $this->nodeReader = new NodeReader();
         }
+
         return $this->nodeReader;
     }
 
     /**
-     * @param \Tmv\WhatsApi\Protocol\BinTree\NodeWriter $nodeWriter
+     * @param  \Tmv\WhatsApi\Protocol\BinTree\NodeWriter $nodeWriter
      * @return $this
      */
     public function setNodeWriter($nodeWriter)
     {
         $this->nodeWriter = $nodeWriter;
+
         return $this;
     }
 
@@ -96,16 +100,18 @@ class Connection
         if (!$this->nodeWriter) {
             $this->nodeWriter = new NodeWriter();
         }
+
         return $this->nodeWriter;
     }
 
     /**
-     * @param KeyStream $inputKey
+     * @param  KeyStream $inputKey
      * @return $this
      */
     public function setInputKey($inputKey)
     {
         $this->inputKey = $inputKey;
+
         return $this;
     }
 
@@ -118,12 +124,13 @@ class Connection
     }
 
     /**
-     * @param KeyStream $outputKey
+     * @param  KeyStream $outputKey
      * @return $this
      */
     public function setOutputKey($outputKey)
     {
         $this->outputKey = $outputKey;
+
         return $this;
     }
 
@@ -141,6 +148,7 @@ class Connection
     public function connect()
     {
         $this->getAdapter()->connect();
+
         return $this;
     }
 
@@ -150,16 +158,18 @@ class Connection
     public function disconnect()
     {
         $this->getAdapter()->disconnect();
+
         return $this;
     }
 
     /**
-     * @param string $data
+     * @param  string $data
      * @return $this
      */
     public function sendData($data)
     {
         $this->getAdapter()->sendData($data);
+
         return $this;
     }
 
@@ -171,4 +181,3 @@ class Connection
         return $this->getAdapter()->readData();
     }
 }
- 

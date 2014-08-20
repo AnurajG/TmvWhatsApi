@@ -7,7 +7,7 @@ class SocketAdapterFactory
     /**
      * Factory
      *
-     * @param array $config
+     * @param  array         $config
      * @return SocketAdapter
      */
     public static function factory(array $config)
@@ -24,7 +24,7 @@ class SocketAdapterFactory
         $adapter->setPort($config['port']);
         $adapter->setTimeoutSec($config['timeout_sec']);
         $adapter->setTimeoutUsec($config['timeout_usec']);
+
         return $adapter;
     }
 }
- 

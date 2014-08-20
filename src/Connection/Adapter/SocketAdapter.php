@@ -32,12 +32,13 @@ class SocketAdapter implements AdapterInterface
     protected $incompleteMessage;
 
     /**
-     * @param resource $socket
+     * @param  resource $socket
      * @return $this
      */
     public function setSocket($socket)
     {
         $this->socket = $socket;
+
         return $this;
     }
 
@@ -50,12 +51,13 @@ class SocketAdapter implements AdapterInterface
     }
 
     /**
-     * @param string $hostname
+     * @param  string $hostname
      * @return $this
      */
     public function setHostname($hostname)
     {
         $this->hostname = $hostname;
+
         return $this;
     }
 
@@ -68,12 +70,13 @@ class SocketAdapter implements AdapterInterface
     }
 
     /**
-     * @param int $port
+     * @param  int   $port
      * @return $this
      */
     public function setPort($port)
     {
         $this->port = $port;
+
         return $this;
     }
 
@@ -86,12 +89,13 @@ class SocketAdapter implements AdapterInterface
     }
 
     /**
-     * @param int $timeoutSec
+     * @param  int   $timeoutSec
      * @return $this
      */
     public function setTimeoutSec($timeoutSec)
     {
         $this->timeoutSec = $timeoutSec;
+
         return $this;
     }
 
@@ -104,12 +108,13 @@ class SocketAdapter implements AdapterInterface
     }
 
     /**
-     * @param int $timeoutUsec
+     * @param  int   $timeoutUsec
      * @return $this
      */
     public function setTimeoutUsec($timeoutUsec)
     {
         $this->timeoutUsec = $timeoutUsec;
+
         return $this;
     }
 
@@ -136,6 +141,7 @@ class SocketAdapter implements AdapterInterface
         } else {
             throw new RuntimeException("Unable to connect");
         }
+
         return $this;
     }
 
@@ -150,6 +156,7 @@ class SocketAdapter implements AdapterInterface
             fclose($this->socket);
             $this->socket = null;
         }
+
         return $this;
     }
 
@@ -162,6 +169,7 @@ class SocketAdapter implements AdapterInterface
     public function sendData($data)
     {
         fwrite($this->socket, $data, strlen($data));
+
         return $this;
     }
 
@@ -205,8 +213,7 @@ class SocketAdapter implements AdapterInterface
 
             if (strlen($buff) != $treeLength) {
                 throw new RuntimeException("Tree length did not match received length (buff = " . strlen($buff) . " & treeLength = $treeLength)");
-            } else
-                if (@feof($this->socket)) {
+            } elseif (@feof($this->socket)) {
                     @fclose($this->socket);
                     $this->socket = null;
                     throw new RuntimeException("Socket EOF, connection closed");
@@ -219,4 +226,3 @@ class SocketAdapter implements AdapterInterface
         return $buff;
     }
 }
- 

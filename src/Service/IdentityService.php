@@ -12,21 +12,22 @@ class IdentityService
     /**
      * Request a registration code from WhatsApp.
      *
-     * @param string $method
-     *   Accepts only 'sms' or 'voice' as a value.
-     * @param string $countryCode
-     *   ISO Country Code, 2 Digit.
-     * @param string $langCode
-     *   ISO 639-1 Language Code: two-letter codes.
+     * @param Identity $identity
+     * @param string   $method
+     *                              Accepts only 'sms' or 'voice' as a value.
+     * @param string   $countryCode
+     *                              ISO Country Code, 2 Digit.
+     * @param string   $langCode
+     *                              ISO 639-1 Language Code: two-letter codes.
      *
      * @return object
-     *   An object with server response.
-     *   - status: Status of the request (sent/fail).
-     *   - length: Registration code lenght.
-     *   - method: Used method.
-     *   - reason: Reason of the status (e.g. too_recent/missing_param/bad_param).
-     *   - param: The missing_param/bad_param.
-     *   - retry_after: Waiting time before requesting a new code.
+     *                An object with server response.
+     *                - status: Status of the request (sent/fail).
+     *                - length: Registration code lenght.
+     *                - method: Used method.
+     *                - reason: Reason of the status (e.g. too_recent/missing_param/bad_param).
+     *                - param: The missing_param/bad_param.
+     *                - retry_after: Waiting time before requesting a new code.
      *
      * @throws RuntimeException
      */
@@ -82,21 +83,21 @@ class IdentityService
      * Register account on WhatsApp using the provided code.
      *
      * @param Identity $identity
-     * @param integer $code
-     *   Numeric code value provided on requestCode().
+     * @param integer  $code
+     *                           Numeric code value provided on requestCode().
      *
      * @return object
-     *   An object with server response.
-     *   - status: Account status.
-     *   - login: Phone number with country code.
-     *   - pw: Account password.
-     *   - type: Type of account.
-     *   - expiration: Expiration date in UNIX TimeStamp.
-     *   - kind: Kind of account.
-     *   - price: Formatted price of account.
-     *   - cost: Decimal amount of account.
-     *   - currency: Currency price of account.
-     *   - price_expiration: Price expiration in UNIX TimeStamp.
+     *                An object with server response.
+     *                - status: Account status.
+     *                - login: Phone number with country code.
+     *                - pw: Account password.
+     *                - type: Type of account.
+     *                - expiration: Expiration date in UNIX TimeStamp.
+     *                - kind: Kind of account.
+     *                - price: Formatted price of account.
+     *                - cost: Decimal amount of account.
+     *                - currency: Currency price of account.
+     *                - price_expiration: Price expiration in UNIX TimeStamp.
      *
      * @throws RuntimeException
      */
@@ -114,7 +115,6 @@ class IdentityService
 
         $response = $this->getResponse($host, $query);
 
-
         if ($response['status'] != 'ok') {
             $message = 'An error occurred registering the registration code from WhatsApp. ' . $response['reason'];
             throw new RuntimeException($message);
@@ -130,19 +130,19 @@ class IdentityService
      * Make sure you update your config file if the output informs about
      * a password change.
      *
-     * @param Identity $identity
+     * @param  Identity $identity
      * @return array
-     *   An object with server response.
-     *   - status: Account status.
-     *   - login: Phone number with country code.
-     *   - pw: Account password.
-     *   - type: Type of account.
-     *   - expiration: Expiration date in UNIX TimeStamp.
-     *   - kind: Kind of account.
-     *   - price: Formatted price of account.
-     *   - cost: Decimal amount of account.
-     *   - currency: Currency price of account.
-     *   - price_expiration: Price expiration in UNIX TimeStamp.
+     *                           An object with server response.
+     *                           - status: Account status.
+     *                           - login: Phone number with country code.
+     *                           - pw: Account password.
+     *                           - type: Type of account.
+     *                           - expiration: Expiration date in UNIX TimeStamp.
+     *                           - kind: Kind of account.
+     *                           - price: Formatted price of account.
+     *                           - cost: Decimal amount of account.
+     *                           - currency: Currency price of account.
+     *                           - price_expiration: Price expiration in UNIX TimeStamp.
      *
      * @throws \RuntimeException
      */
@@ -209,10 +209,11 @@ class IdentityService
     }
 
     /**
-     * @param $phone
+     * @param  string $phone
      * @return string
      */
-    function generateRequestToken($phone) {
+    protected function generateRequestToken($phone)
+    {
         $signature = "MIIDMjCCAvCgAwIBAgIETCU2pDALBgcqhkjOOAQDBQAwfDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFDASBgNVBAcTC1NhbnRhIENsYXJhMRYwFAYDVQQKEw1XaGF0c0FwcCBJbmMuMRQwEgYDVQQLEwtFbmdpbmVlcmluZzEUMBIGA1UEAxMLQnJpYW4gQWN0b24wHhcNMTAwNjI1MjMwNzE2WhcNNDQwMjE1MjMwNzE2WjB8MQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEUMBIGA1UEBxMLU2FudGEgQ2xhcmExFjAUBgNVBAoTDVdoYXRzQXBwIEluYy4xFDASBgNVBAsTC0VuZ2luZWVyaW5nMRQwEgYDVQQDEwtCcmlhbiBBY3RvbjCCAbgwggEsBgcqhkjOOAQBMIIBHwKBgQD9f1OBHXUSKVLfSpwu7OTn9hG3UjzvRADDHj+AtlEmaUVdQCJR+1k9jVj6v8X1ujD2y5tVbNeBO4AdNG/yZmC3a5lQpaSfn+gEexAiwk+7qdf+t8Yb+DtX58aophUPBPuD9tPFHsMCNVQTWhaRMvZ1864rYdcq7/IiAxmd0UgBxwIVAJdgUI8VIwvMspK5gqLrhAvwWBz1AoGBAPfhoIXWmz3ey7yrXDa4V7l5lK+7+jrqgvlXTAs9B4JnUVlXjrrUWU/mcQcQgYC0SRZxI+hMKBYTt88JMozIpuE8FnqLVHyNKOCjrh4rs6Z1kW6jfwv6ITVi8ftiegEkO8yk8b6oUZCJqIPf4VrlnwaSi2ZegHtVJWQBTDv+z0kqA4GFAAKBgQDRGYtLgWh7zyRtQainJfCpiaUbzjJuhMgo4fVWZIvXHaSHBU1t5w//S0lDK2hiqkj8KpMWGywVov9eZxZy37V26dEqr/c2m5qZ0E+ynSu7sqUD7kGx/zeIcGT0H+KAVgkGNQCo5Uc0koLRWYHNtYoIvt5R3X6YZylbPftF/8ayWTALBgcqhkjOOAQDBQADLwAwLAIUAKYCp0d6z4QQdyN74JDfQ2WCyi8CFDUM4CaNB+ceVXdKtOrNTQcc0e+t";
         $classesMd5 = "pZ3J/O+F3HXOyx8YixzvPQ==";
 

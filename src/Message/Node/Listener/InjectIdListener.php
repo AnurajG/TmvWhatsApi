@@ -64,7 +64,7 @@ class InjectIdListener extends AbstractListener
     /**
      * @param Client $client
      * @param string $id
-     * @param int $timeout
+     * @param int    $timeout
      */
     public function waitForServer(Client $client, $id, $timeout = 5)
     {

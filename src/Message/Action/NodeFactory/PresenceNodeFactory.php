@@ -2,14 +2,13 @@
 
 namespace Tmv\WhatsApi\Message\Action\NodeFactory;
 
-use Tmv\WhatsApi\Client;
 use Tmv\WhatsApi\Message\Action;
 use Tmv\WhatsApi\Message\Node\Node;
 
 class PresenceNodeFactory extends AbstractNodeFactory implements NodeActionFactoryInterface
 {
     /**
-     * @param Action\ActionInterface $action
+     * @param  Action\ActionInterface    $action
      * @return Node
      * @throws \InvalidArgumentException
      */

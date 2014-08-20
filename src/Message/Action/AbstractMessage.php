@@ -43,12 +43,13 @@ abstract class AbstractMessage extends AbstractAction implements MessageInterfac
     }
 
     /**
-     * @param string $fromName
+     * @param  string $fromName
      * @return $this
      */
     public function setFromName($fromName)
     {
         $this->fromName = $fromName;
+
         return $this;
     }
 
@@ -61,12 +62,13 @@ abstract class AbstractMessage extends AbstractAction implements MessageInterfac
     }
 
     /**
-     * @param int $timestamp
+     * @param  int   $timestamp
      * @return $this
      */
     public function setTimestamp($timestamp)
     {
-        $this->timestamp = (int)$timestamp;
+        $this->timestamp = (int) $timestamp;
+
         return $this;
     }
 
@@ -78,6 +80,7 @@ abstract class AbstractMessage extends AbstractAction implements MessageInterfac
         if (!$this->timestamp) {
             $this->timestamp = time();
         }
+
         return $this->timestamp;
     }
 }

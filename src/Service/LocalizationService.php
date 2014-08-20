@@ -14,12 +14,13 @@ class LocalizationService
     protected $countriesPath;
 
     /**
-     * @param string $countriesPath
+     * @param  string $countriesPath
      * @return $this
      */
     public function setCountriesPath($countriesPath)
     {
         $this->countriesPath = $countriesPath;
+
         return $this;
     }
 
@@ -70,7 +71,7 @@ class LocalizationService
                         ->setMcc($mcc)
                         ->setIso3166(isset($data[3]) ? $data[3] : null)
                         ->setIso639(isset($data[4]) ? $data[4] : null);
-                    
+
                     return $phone;
                 }
             }

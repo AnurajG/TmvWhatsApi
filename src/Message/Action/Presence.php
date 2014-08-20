@@ -27,18 +27,19 @@ class Presence extends AbstractAction
      */
     protected $last;
 
-    function __construct($name = null)
+    public function __construct($name = null)
     {
         $this->name = $name;
     }
 
     /**
-     * @param string $name
+     * @param  string $name
      * @return $this
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -51,12 +52,13 @@ class Presence extends AbstractAction
     }
 
     /**
-     * @param string $type
+     * @param  string $type
      * @return $this
      */
     public function setType($type)
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -69,12 +71,13 @@ class Presence extends AbstractAction
     }
 
     /**
-     * @param string $last
+     * @param  string $last
      * @return $this
      */
     public function setLast($last)
     {
         $this->last = $last;
+
         return $this;
     }
 

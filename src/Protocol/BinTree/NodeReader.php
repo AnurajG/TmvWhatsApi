@@ -67,7 +67,7 @@ class NodeReader
     }
 
     /**
-     * @param string|null $input
+     * @param  string|null                                        $input
      * @return null|\Tmv\WhatsApi\Message\Node\Node
      * @throws \Tmv\WhatsApi\Exception\IncompleteMessageException
      * @throws \Tmv\WhatsApi\Exception\RuntimeException
@@ -100,7 +100,7 @@ class NodeReader
     }
 
     /**
-     * @param int $token
+     * @param  int                                      $token
      * @return mixed
      * @throws \Tmv\WhatsApi\Exception\RuntimeException
      */
@@ -109,20 +109,19 @@ class NodeReader
         $ret = "";
         $subdict = false;
         $ret = TokenMap::getToken($token, $subdict, $ret);
-        if(!$ret)
-        {
+        if (!$ret) {
             $token = $this->readInt8();
             $ret = TokenMap::getToken($token, $subdict, $ret);
-            if(!$ret)
-            {
+            if (!$ret) {
                 throw new RuntimeException("BinTreeNodeReader->getToken: Invalid token $token");
             }
         }
+
         return $ret;
     }
 
     /**
-     * @param string $token
+     * @param  string                                   $token
      * @return mixed|string
      * @throws \Tmv\WhatsApi\Exception\RuntimeException
      */
@@ -159,7 +158,7 @@ class NodeReader
     }
 
     /**
-     * @param int $size
+     * @param  int   $size
      * @return array
      */
     protected function readAttributes($size)
@@ -228,7 +227,7 @@ class NodeReader
     }
 
     /**
-     * @param string $token
+     * @param  string $token
      * @return bool
      */
     protected function isListTag($token)
@@ -237,7 +236,7 @@ class NodeReader
     }
 
     /**
-     * @param string $token
+     * @param  string $token
      * @return array
      */
     protected function readList($token)
@@ -252,7 +251,7 @@ class NodeReader
     }
 
     /**
-     * @param string $token
+     * @param  string                                   $token
      * @return int
      * @throws \Tmv\WhatsApi\Exception\RuntimeException
      */
@@ -270,7 +269,7 @@ class NodeReader
     }
 
     /**
-     * @param int $offset
+     * @param  int $offset
      * @return int
      */
     protected function peekInt24($offset = 0)
@@ -299,7 +298,7 @@ class NodeReader
     }
 
     /**
-     * @param int $offset
+     * @param  int $offset
      * @return int
      */
     protected function peekInt16($offset = 0)
@@ -327,7 +326,7 @@ class NodeReader
     }
 
     /**
-     * @param int $offset
+     * @param  int $offset
      * @return int
      */
     protected function peekInt8($offset = 0)
@@ -355,7 +354,7 @@ class NodeReader
     }
 
     /**
-     * @param int $len
+     * @param  int    $len
      * @return string
      */
     protected function fillArray($len)

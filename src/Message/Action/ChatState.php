@@ -2,8 +2,6 @@
 
 namespace Tmv\WhatsApi\Message\Action;
 
-use Tmv\WhatsApi\Client;
-
 /**
  * Class ChatState
  *
@@ -34,12 +32,13 @@ class ChatState extends AbstractAction
     }
 
     /**
-     * @param string $to
+     * @param  string $to
      * @return $this
      */
     public function setTo($to)
     {
         $this->to = $to;
+
         return $this;
     }
 
@@ -52,12 +51,13 @@ class ChatState extends AbstractAction
     }
 
     /**
-     * @param string $state
+     * @param  string $state
      * @return $this
      */
     public function setState($state)
     {
         $this->state = $state;
+
         return $this;
     }
 

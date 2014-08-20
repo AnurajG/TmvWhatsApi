@@ -29,8 +29,8 @@ abstract class AbstractNode implements NodeInterface
     protected $nodeFactory;
 
     /**
-     * @param  array $data
-     * @param  NodeFactory $factory
+     * @param  array         $data
+     * @param  NodeFactory   $factory
      * @return NodeInterface
      */
     public static function fromArray(array $data, NodeFactory $factory)
@@ -58,7 +58,7 @@ abstract class AbstractNode implements NodeInterface
     abstract public function getName();
 
     /**
-     * @param  string $name
+     * @param  string                   $name
      * @return $this
      * @throws InvalidArgumentException
      */
@@ -82,7 +82,7 @@ abstract class AbstractNode implements NodeInterface
     }
 
     /**
-     * @param string $name
+     * @param  string $name
      * @return bool
      */
     public function hasAttribute($name)
@@ -105,8 +105,8 @@ abstract class AbstractNode implements NodeInterface
     }
 
     /**
-     * @param string $name
-     * @param mixed $value
+     * @param  string $name
+     * @param  mixed  $value
      * @return $this
      */
     public function setAttribute($name, $value)
@@ -158,7 +158,7 @@ abstract class AbstractNode implements NodeInterface
     }
 
     /**
-     * @param  NodeInterface|array $child
+     * @param  NodeInterface|array      $child
      * @return $this
      * @throws InvalidArgumentException
      */
@@ -176,7 +176,7 @@ abstract class AbstractNode implements NodeInterface
     }
 
     /**
-     * @param string $name
+     * @param  string $name
      * @return bool
      */
     public function hasChild($name)
@@ -191,7 +191,7 @@ abstract class AbstractNode implements NodeInterface
     }
 
     /**
-     * @param string $name
+     * @param  string        $name
      * @return NodeInterface
      */
     public function getChild($name)
@@ -206,7 +206,7 @@ abstract class AbstractNode implements NodeInterface
     }
 
     /**
-     * @param string $name
+     * @param  string $name
      * @return string
      */
     public function getAttribute($name)
@@ -291,7 +291,6 @@ abstract class AbstractNode implements NodeInterface
     {
         return $this->toArray();
     }
-
 
     /**
      * @return string

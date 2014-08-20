@@ -26,12 +26,13 @@ class Identity
     protected $identityString;
 
     /**
-     * @param string $nickname
+     * @param  string $nickname
      * @return $this
      */
     public function setNickname($nickname)
     {
         $this->nickname = $nickname;
+
         return $this;
     }
 
@@ -44,12 +45,13 @@ class Identity
     }
 
     /**
-     * @param string $password
+     * @param  string $password
      * @return $this
      */
     public function setPassword($password)
     {
         $this->password = $password;
+
         return $this;
     }
 
@@ -62,13 +64,14 @@ class Identity
     }
 
     /**
-     * @param string $token
+     * @param  string $token
      * @return $this
      */
     public function setToken($token)
     {
         $this->identityString = null;
         $this->token = $token;
+
         return $this;
     }
 
@@ -81,12 +84,13 @@ class Identity
     }
 
     /**
-     * @param Phone $phone
+     * @param  Phone $phone
      * @return $this
      */
     public function setPhone(Phone $phone)
     {
         $this->phone = $phone;
+
         return $this;
     }
 
@@ -110,6 +114,7 @@ class Identity
                 $this->identityString = $this->getToken();
             }
         }
+
         return $this->identityString;
     }
 

@@ -14,12 +14,13 @@ class Message extends AbstractNode implements MessageIdAwareInterface
     }
 
     /**
-     * @param string $id
+     * @param  string $id
      * @return $this
      */
     public function setId($id)
     {
         $this->setAttribute('id', $id);
+
         return $this;
     }
 
@@ -40,23 +41,24 @@ class Message extends AbstractNode implements MessageIdAwareInterface
     }
 
     /**
-     * @param int $timestamp
+     * @param  int   $timestamp
      * @return $this
      */
     public function setTimestamp($timestamp)
     {
         $this->setAttribute('t', $timestamp);
+
         return $this;
     }
 
-
     /**
-     * @param string $from
+     * @param  string $from
      * @return $this
      */
     public function setFrom($from)
     {
         $this->setAttribute('from', $from);
+
         return $this;
     }
 

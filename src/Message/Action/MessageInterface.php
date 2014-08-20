@@ -21,9 +21,8 @@ interface MessageInterface extends ActionInterface
     public function getTimestamp();
 
     /**
-     * @param int $timestamp
+     * @param  int   $timestamp
      * @return $this
      */
     public function setTimestamp($timestamp);
 }
- 

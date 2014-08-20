@@ -37,11 +37,13 @@ class KeyStream
         );
         $array2 = array(1, 2, 3, 4);
         $nonce .= '0';
-        for ($j = 0; $j < count($array); $j++) {
+        $count = count($array);
+        for ($j = 0; $j < $count; $j++) {
             $nonce[(strlen($nonce) - 1)] = chr($array2[$j]);
             $foo = ProtocolService::pbkdf2("sha1", $password, $nonce, 2, 20, true);
             $array[$j] = $foo;
         }
+
         return $array;
     }
 
@@ -56,6 +58,7 @@ class KeyStream
                 throw new RuntimeException("MAC mismatch: $foo != $bar");
             }
         }
+
         return $this->rc4->cipher($buffer, $offset, $length);
     }
 
@@ -63,6 +66,7 @@ class KeyStream
     {
         $data = $this->rc4->cipher($buffer, $offset, $length);
         $mac = $this->computeMac($data, $offset, $length);
+
         return substr($data, 0, $macOffset) . substr($mac, 0, 4) . substr($data, $macOffset + 4);
     }
 
@@ -76,16 +80,18 @@ class KeyStream
             . chr($this->seq);
         hash_update($hmac, $array);
         $this->seq++;
+
         return hash_final($hmac, true);
     }
 
     /**
-     * @param \Tmv\WhatsApi\Service\ProtocolService $protocolService
+     * @param  \Tmv\WhatsApi\Service\ProtocolService $protocolService
      * @return $this
      */
     public function setProtocolService($protocolService)
     {
         $this->protocolService = $protocolService;
+
         return $this;
     }
 

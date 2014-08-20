@@ -60,7 +60,7 @@ class NodeWriter
 
     /**
      * @param  NodeInterface $node
-     * @param bool $encrypt
+     * @param  bool          $encrypt
      * @return string
      */
     public function write(NodeInterface $node, $encrypt = true)
@@ -110,8 +110,7 @@ class NodeWriter
     {
         $size = strlen($this->output);
         $data = $this->output;
-        if($this->key != null && $encrypt)
-        {
+        if ($this->key != null && $encrypt) {
             $bsize = $this->getInt24($size);
             //encrypt
             $data = $this->key->encodeMessage($data, $size, 0, $size);
@@ -123,6 +122,7 @@ class NodeWriter
         }
         $ret = $this->writeInt24($size) . $data;
         $this->output = '';
+
         return $ret;
     }
 
@@ -131,6 +131,7 @@ class NodeWriter
         $ret = ord(substr($data, 0, 1)) << 16;
         $ret |= ord(substr($data, 1, 1)) << 8;
         $ret |= ord(substr($data, 2, 1)) << 0;
+
         return $ret;
     }
 
@@ -140,6 +141,7 @@ class NodeWriter
         $ret .= chr((($length & 0xf0000) >> 16));
         $ret .= chr((($length & 0xff00) >> 8));
         $ret .= chr(($length & 0xff));
+
         return $ret;
     }
 
@@ -244,6 +246,7 @@ class NodeWriter
                 $this->writeToken(236);
             }
             $this->writeToken($intVal);
+
             return null;
         }
         $index = strpos($tag, '@');
@@ -254,6 +257,7 @@ class NodeWriter
         } else {
             $this->writeBytes($tag);
         }
+
         return $this;
     }
 

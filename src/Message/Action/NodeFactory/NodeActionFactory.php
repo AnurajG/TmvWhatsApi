@@ -27,7 +27,7 @@ class NodeActionFactory
     protected $instances = array();
 
     /**
-     * @param ActionInterface $action
+     * @param  ActionInterface                          $action
      * @return \Tmv\WhatsApi\Message\Node\NodeInterface
      * @throws \RuntimeException
      */
@@ -37,12 +37,13 @@ class NodeActionFactory
             throw new RuntimeException("Factory class not defined");
         }
         /** @var NodeActionFactoryInterface $factory */
-        $factory = new $this->factoryMap[get_class($action)];
+        $factory = new $this->factoryMap[get_class($action)]();
+
         return $factory->createNode($action);
     }
 
     /**
-     * @param ActionInterface $action
+     * @param  ActionInterface            $action
      * @return NodeActionFactoryInterface
      */
     public function getFactoryForAction(ActionInterface $action)
@@ -51,11 +52,12 @@ class NodeActionFactory
         if (isset($this->instances[$key])) {
             return $this->instances[$key];
         }
+
         return $this->createFactory($key);
     }
 
     /**
-     * @param string $key
+     * @param  string                     $key
      * @return NodeActionFactoryInterface
      * @throws \RuntimeException
      */
@@ -64,18 +66,20 @@ class NodeActionFactory
         if (!isset($this->factoryMap[$key])) {
             throw new RuntimeException(sprintf("Factory for action %s not defined", $key));
         }
-        $instance = new $this->factoryMap[$key];
+        $instance = new $this->factoryMap[$key]();
         $this->instances[$key] = $instance;
+
         return $instance;
     }
 
     /**
-     * @param array $factoryMap
+     * @param  array $factoryMap
      * @return $this
      */
     public function setFactoryMap($factoryMap)
     {
         $this->factoryMap = $factoryMap;
+
         return $this;
     }
 
@@ -88,8 +92,8 @@ class NodeActionFactory
     }
 
     /**
-     * @param string $actionClass
-     * @param string|NodeActionFactoryInterface $factoryClass
+     * @param  string                            $actionClass
+     * @param  string|NodeActionFactoryInterface $factoryClass
      * @return $this
      * @throws \InvalidArgumentException
      */
@@ -107,6 +111,7 @@ class NodeActionFactory
         } else {
             throw new \InvalidArgumentException("Factory class is not a valid class");
         }
+
         return $this;
     }
 }

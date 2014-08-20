@@ -56,16 +56,6 @@ class Client
      * @var string
      */
     protected $challengeData;
-    /**
-     * A buffer
-     * @var string
-     */
-    protected $incompleteMessage;
-
-    /**
-     * @var int
-     */
-    protected $lastMessageIdSent;
 
     /**
      * @var string
@@ -152,6 +142,7 @@ class Client
     public function disconnect()
     {
         $this->getConnection()->disconnect();
+
         return $this;
     }
 
@@ -248,16 +239,15 @@ class Client
      * If you already know your password you can log into the Whatsapp server
      * using this method.
      *
-     * @param bool   $profileSubscribe Add a feature
      * @throws RuntimeException
      */
-    public function login($profileSubscribe = false)
+    public function login()
     {
         $challengeData = $this->readChallengeData();
         if (!empty($challengeData)) {
             $this->challengeData = $challengeData;
         }
-        $this->doLogin($profileSubscribe);
+        $this->doLogin();
     }
 
     /**
@@ -324,7 +314,7 @@ class Client
     /**
      * Send node to the WhatsApp server.
      * @param  NodeInterface $node
-     * @param bool $encrypt
+     * @param  bool          $encrypt
      * @return NodeInterface
      */
     public function sendNode(NodeInterface $node, $encrypt = true)
@@ -357,7 +347,7 @@ class Client
     /**
      * Pull from the socket, and place incoming messages in the message queue.
      *
-     * @param bool $autoReceipt
+     * @param  bool $autoReceipt
      * @return bool
      */
     public function pollMessages($autoReceipt = true)
@@ -365,6 +355,7 @@ class Client
         $data = $this->getConnection()->readData();
         if ($data) {
             $this->processInboundData($data, $autoReceipt);
+
             return true;
         }
 
@@ -373,8 +364,8 @@ class Client
 
     /**
      * Process inbound data.
-     * @param bool $autoReceipt
-     * @param string $data The data to process.
+     * @param  bool   $autoReceipt
+     * @param  string $data        The data to process.
      * @return $this
      */
     protected function processInboundData($data, $autoReceipt = true)
@@ -392,6 +383,7 @@ class Client
             $nodeEvent->setNode($node);
             $this->getEventManager()->trigger($nodeEvent);
         }
+
         return $this;
     }
 
@@ -416,6 +408,7 @@ class Client
                 'data' => $data
             )
         );
+
         return $node;
     }
 
@@ -450,6 +443,7 @@ class Client
                 "001";
 
             $this->challengeData = null;
+
             return $this->getConnection()->getOutputKey()->encodeMessage($array, 0, strlen($array), false);
         }
 
@@ -490,11 +484,12 @@ class Client
         $this->getConnection()->setOutputKey($this->createKeyStream($keys[0], $keys[1]));
         $array = "\0\0\0\0" . $this->getIdentity()->getPhone()->getPhoneNumber() . $this->challengeData;// . time() . static::WHATSAPP_USER_AGENT . " MccMnc/" . str_pad($phone["mcc"], 3, "0", STR_PAD_LEFT) . "001";
         $response = $this->getConnection()->getOutputKey()->encodeMessage($array, 0, 4, strlen($array) - 4);
+
         return $response;
     }
 
     /**
-     * @param  mixed $challengeData
+     * @param  string $challengeData
      * @return $this
      */
     public function setChallengeData($challengeData)
@@ -505,7 +500,7 @@ class Client
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getChallengeData()
     {
@@ -540,6 +535,7 @@ class Client
         $this->checkChallengeDataFilePermission();
         $filepath = $this->getChallengeDataFilepath();
         file_put_contents($filepath, $data);
+
         return $this;
     }
 
@@ -550,6 +546,7 @@ class Client
     {
         $this->checkChallengeDataFilePermission();
         $filepath = $this->getChallengeDataFilepath();
+
         return file_get_contents($filepath);
     }
 
@@ -575,16 +572,18 @@ class Client
         if (!is_writable($filePath)) {
             throw new RuntimeException(sprintf("File '%s' is not writable", $filePath));
         }
+
         return true;
     }
 
     /**
-     * @param Action\NodeFactory\NodeActionFactory $nodeActionFactory
+     * @param  Action\NodeFactory\NodeActionFactory $nodeActionFactory
      * @return $this
      */
     public function setNodeActionFactory($nodeActionFactory)
     {
         $this->nodeActionFactory = $nodeActionFactory;
+
         return $this;
     }
 
@@ -596,16 +595,18 @@ class Client
         if (!$this->nodeActionFactory) {
             $this->nodeActionFactory = new Action\NodeFactory\NodeActionFactory();
         }
+
         return $this->nodeActionFactory;
     }
 
     /**
-     * @param \Tmv\WhatsApi\Connection\Connection $connection
+     * @param  \Tmv\WhatsApi\Connection\Connection $connection
      * @return $this
      */
     public function setConnection($connection)
     {
         $this->connection = $connection;
+
         return $this;
     }
 
@@ -622,16 +623,18 @@ class Client
             $connection = new Connection($adapter);
             $this->connection = $connection;
         }
+
         return $this->connection;
     }
 
     /**
-     * @param \Tmv\WhatsApi\Entity\Identity $identity
+     * @param  \Tmv\WhatsApi\Entity\Identity $identity
      * @return $this
      */
     public function setIdentity($identity)
     {
         $this->identity = $identity;
+
         return $this;
     }
 

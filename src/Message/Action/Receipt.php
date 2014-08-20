@@ -2,8 +2,6 @@
 
 namespace Tmv\WhatsApi\Message\Action;
 
-use Tmv\WhatsApi\Client;
-
 /**
  * Class Receipt
  *
@@ -27,12 +25,13 @@ class Receipt extends AbstractAction
     }
 
     /**
-     * @param string $to
+     * @param  string $to
      * @return $this
      */
     public function setTo($to)
     {
         $this->to = $to;
+
         return $this;
     }
 

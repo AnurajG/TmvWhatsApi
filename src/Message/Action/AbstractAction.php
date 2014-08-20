@@ -10,12 +10,13 @@ abstract class AbstractAction implements ActionInterface
     protected $id;
 
     /**
-     * @param string $id
+     * @param  string $id
      * @return $this
      */
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 

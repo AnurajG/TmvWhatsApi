@@ -10,8 +10,8 @@ abstract class AbstractNodeFactory
     /**
      * Process number/jid and turn it into a JID if necessary
      *
-     * @param string $number
-     *  Number to process
+     * @param  string $number
+     *                        Number to process
      * @return string
      */
     protected function getJID($number)
@@ -30,4 +30,3 @@ abstract class AbstractNodeFactory
         return $number;
     }
 }
- 

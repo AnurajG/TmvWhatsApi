@@ -4,7 +4,6 @@ namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Client;
 use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
-use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManagerInterface;
 
@@ -29,6 +28,10 @@ class ReceiptListener extends AbstractListener
 
     public function onReceivedNode(ReceivedNodeEvent $e)
     {
-
+        $client = $e->getClient();
+        $params = array(
+            'node' => $e->getNode()
+        );
+        $client->getEventManager()->trigger('onReceipt', $client, $params);
     }
 }
