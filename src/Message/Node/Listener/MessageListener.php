@@ -4,6 +4,7 @@ namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Client;
 use Tmv\WhatsApi\Message\Action\MessageReceived;
+use Tmv\WhatsApi\Message\Action\Receipt;
 use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
 use Tmv\WhatsApi\Message\Node\Message;
 use Zend\EventManager\EventManagerInterface;
@@ -71,6 +72,13 @@ class MessageListener extends AbstractListener
         if ($client->getMessageQueue()->getParkedTime() < time() - 5) {
             $client->getMessageQueue()->removeParked();
             $client->getEventManager()->trigger('message.not-received-server', $client, array($node));
+        }
+
+        if ($node->getAttribute("type") == "text" && $node->getChild('body') != null) {
+            $receipt = new Receipt();
+            $receipt->setTo($node->getAttribute('from'));
+            $receipt->setId($node->getAttribute('id'));
+            $client->send($receipt);
         }
     }
 }
