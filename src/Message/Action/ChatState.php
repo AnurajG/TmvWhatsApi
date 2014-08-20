@@ -12,6 +12,7 @@ use Tmv\WhatsApi\Client;
 class ChatState extends AbstractAction
 {
     const STATE_COMPOSING = 'composing';
+    const STATE_PAUSED = 'paused';
 
     /**
      * @var string

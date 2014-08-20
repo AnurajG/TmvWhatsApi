@@ -90,7 +90,7 @@ class NodeReader
                 throw new RuntimeException("Encountered encrypted message, missing key");
             }
             $realSize = $stanzaSize - 4;
-            $this->input = $this->key->DecodeMessage($this->input, $realSize, 0, $realSize);
+            $this->input = $this->key->decodeMessage($this->input, $realSize, 0, $realSize);
         }
         if ($stanzaSize > 0) {
             return $this->nextTreeInternal();
