@@ -17,6 +17,7 @@ class NodeActionFactory
         'Tmv\\WhatsApi\\Message\\Action\\ChatState' => 'Tmv\\WhatsApi\\Message\\Action\\NodeFactory\\ChatStateNodeFactory',
         'Tmv\\WhatsApi\\Message\\Action\\ClearDirty' => 'Tmv\\WhatsApi\\Message\\Action\\NodeFactory\\ClearDirtyNodeFactory',
         'Tmv\\WhatsApi\\Message\\Action\\Presence' => 'Tmv\\WhatsApi\\Message\\Action\\NodeFactory\\PresenceNodeFactory',
+        'Tmv\\WhatsApi\\Message\\Action\\Receipt' => 'Tmv\\WhatsApi\\Message\\Action\\NodeFactory\\ReceiptNodeFactory',
     );
     /**
      * Already instanced factories
