@@ -33,7 +33,6 @@ class NodeActionFactory
      */
     public function createNode(ActionInterface $action)
     {
-        $factory = null;
         if (!isset($this->factoryMap[get_class($action)])) {
             throw new RuntimeException("Factory class not defined");
         }

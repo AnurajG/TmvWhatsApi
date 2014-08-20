@@ -171,20 +171,6 @@ class SocketAdapter implements AdapterInterface
     public function readData()
     {
         return $this->readStanza();
-        $buff = '';
-        if ($this->socket != null) {
-            $ret = @fread($this->socket, 1024);
-            if ($ret) {
-                $buff = $this->incompleteMessage . $ret;
-                $this->incompleteMessage = '';
-            } elseif (@feof($this->socket)) {
-                @fclose($this->socket);
-                $this->socket = null;
-                throw new RuntimeException("Socket EOF, connection closed");
-            }
-        }
-
-        return $buff;
     }
 
     /**

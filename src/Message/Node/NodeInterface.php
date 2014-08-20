@@ -54,7 +54,7 @@ interface NodeInterface extends ArraySerializableInterface
 
     /**
      * @param string $name
-     * @return mixed
+     * @return string
      */
     public function getAttribute($name);
 
