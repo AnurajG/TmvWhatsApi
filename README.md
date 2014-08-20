@@ -5,7 +5,6 @@
 # WhatsAPI
 
 **Status: development**
-*You can use it just to develop on it*
 
 
 ## About WhatsAPI
@@ -82,7 +81,12 @@ $client->send(new \Tmv\WhatsApi\Message\Action\ChatState($number, 'composing'));
 $message = new \Tmv\WhatsApi\Message\Action\MessageText($nickname, $number);
 $message->setBody('Hello');
 $client->send($message);
+$time = time();
 while (true) {
     $client->pollMessages();
+    if (time() - $time >= 10) {
+        $time = time();
+        $client->send(new \Tmv\WhatsApi\Message\Action\Presence($identity->getNickname()));
+    }
 }
 ```
