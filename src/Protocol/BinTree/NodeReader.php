@@ -108,10 +108,10 @@ class NodeReader
     {
         $ret = "";
         $subdict = false;
-        $ret = TokenMap::getToken($token, $subdict, $ret);
+        $ret = TokenMap::getToken($token, $subdict);
         if (!$ret) {
             $token = $this->readInt8();
-            $ret = TokenMap::getToken($token, $subdict, $ret);
+            $ret = TokenMap::getToken($token, $subdict);
             if (!$ret) {
                 throw new RuntimeException("BinTreeNodeReader->getToken: Invalid token $token");
             }

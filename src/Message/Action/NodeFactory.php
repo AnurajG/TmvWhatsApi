@@ -1,11 +1,10 @@
 <?php
 
-namespace Tmv\WhatsApi\Message\Action\NodeFactory;
+namespace Tmv\WhatsApi\Message\Action;
 
-use Tmv\WhatsApi\Message\Action\ActionInterface;
 use RuntimeException;
 
-class NodeActionFactory
+class NodeFactory
 {
     /**
      * Factory Map
@@ -13,11 +12,11 @@ class NodeActionFactory
      * @var array
      */
     protected $factoryMap = array(
-        'Tmv\\WhatsApi\\Message\\Action\\MessageText' => 'Tmv\\WhatsApi\\Message\\Action\\NodeFactory\\MessageTextNodeFactory',
-        'Tmv\\WhatsApi\\Message\\Action\\ChatState' => 'Tmv\\WhatsApi\\Message\\Action\\NodeFactory\\ChatStateNodeFactory',
-        'Tmv\\WhatsApi\\Message\\Action\\ClearDirty' => 'Tmv\\WhatsApi\\Message\\Action\\NodeFactory\\ClearDirtyNodeFactory',
-        'Tmv\\WhatsApi\\Message\\Action\\Presence' => 'Tmv\\WhatsApi\\Message\\Action\\NodeFactory\\PresenceNodeFactory',
-        'Tmv\\WhatsApi\\Message\\Action\\Receipt' => 'Tmv\\WhatsApi\\Message\\Action\\NodeFactory\\ReceiptNodeFactory',
+        'Tmv\\WhatsApi\\Message\\Action\\MessageText' => 'Tmv\\WhatsApi\\Message\\Action\\MessageTextFactory',
+        'Tmv\\WhatsApi\\Message\\Action\\ChatState' => 'Tmv\\WhatsApi\\Message\\Action\\ChatStateFactory',
+        'Tmv\\WhatsApi\\Message\\Action\\ClearDirty' => 'Tmv\\WhatsApi\\Message\\Action\\ClearDirtyFactory',
+        'Tmv\\WhatsApi\\Message\\Action\\Presence' => 'Tmv\\WhatsApi\\Message\\Action\\PresenceFactory',
+        'Tmv\\WhatsApi\\Message\\Action\\Receipt' => 'Tmv\\WhatsApi\\Message\\Action\\ReceiptFactory',
     );
     /**
      * Already instanced factories
@@ -29,22 +28,18 @@ class NodeActionFactory
     /**
      * @param  ActionInterface                          $action
      * @return \Tmv\WhatsApi\Message\Node\NodeInterface
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function createNode(ActionInterface $action)
     {
-        if (!isset($this->factoryMap[get_class($action)])) {
-            throw new RuntimeException("Factory class not defined");
-        }
-        /** @var NodeActionFactoryInterface $factory */
-        $factory = new $this->factoryMap[get_class($action)]();
+        $factory = $this->getFactoryForAction($action);
 
         return $factory->createNode($action);
     }
 
     /**
      * @param  ActionInterface            $action
-     * @return NodeActionFactoryInterface
+     * @return FactoryInterface
      */
     public function getFactoryForAction(ActionInterface $action)
     {
@@ -58,8 +53,8 @@ class NodeActionFactory
 
     /**
      * @param  string                     $key
-     * @return NodeActionFactoryInterface
-     * @throws \RuntimeException
+     * @return FactoryInterface
+     * @throws RuntimeException
      */
     protected function createFactory($key)
     {
@@ -93,13 +88,13 @@ class NodeActionFactory
 
     /**
      * @param  string                            $actionClass
-     * @param  string|NodeActionFactoryInterface $factoryClass
+     * @param  string|FactoryInterface $factoryClass
      * @return $this
      * @throws \InvalidArgumentException
      */
     public function addFactory($actionClass, $factoryClass)
     {
-        if ($factoryClass instanceof NodeActionFactoryInterface) {
+        if ($factoryClass instanceof FactoryInterface) {
             $this->instances[$actionClass] = $factoryClass;
             $this->factoryMap[$actionClass] = get_class($factoryClass);
         } elseif (is_string($factoryClass)) {

@@ -8,11 +8,11 @@ use Tmv\WhatsApi\Entity\Identity;
 use Tmv\WhatsApi\Exception\RuntimeException;
 use Tmv\WhatsApi\Message\Action;
 use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
+use Tmv\WhatsApi\Message\Node\Listener\ChallengeListener;
 use Tmv\WhatsApi\Message\Node\Listener\InjectIdListener;
 use Tmv\WhatsApi\Message\Node\Listener\MessageListener;
 use Tmv\WhatsApi\Message\Node\Listener\ReceiptListener;
 use Tmv\WhatsApi\Message\Node\Listener\SuccessListener;
-use Tmv\WhatsApi\Message\Node\Listener\ChallengeListener;
 use Tmv\WhatsApi\Message\Node\NodeFactory;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Tmv\WhatsApi\Protocol\KeyStream;
@@ -76,7 +76,7 @@ class Client
     protected $connection;
 
     /**
-     * @var Action\NodeFactory\NodeActionFactory
+     * @var \Tmv\WhatsApi\Message\Action\NodeFactory
      */
     protected $nodeActionFactory;
 
@@ -577,7 +577,7 @@ class Client
     }
 
     /**
-     * @param  Action\NodeFactory\NodeActionFactory $nodeActionFactory
+     * @param  \Tmv\WhatsApi\Message\Action\NodeFactory $nodeActionFactory
      * @return $this
      */
     public function setNodeActionFactory($nodeActionFactory)
@@ -588,12 +588,12 @@ class Client
     }
 
     /**
-     * @return Action\NodeFactory\NodeActionFactory
+     * @return \Tmv\WhatsApi\Message\Action\NodeFactory
      */
     public function getNodeActionFactory()
     {
         if (!$this->nodeActionFactory) {
-            $this->nodeActionFactory = new Action\NodeFactory\NodeActionFactory();
+            $this->nodeActionFactory = new Action\NodeFactory();
         }
 
         return $this->nodeActionFactory;

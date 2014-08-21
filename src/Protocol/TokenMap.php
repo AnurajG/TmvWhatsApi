@@ -2,8 +2,10 @@
 
 namespace Tmv\WhatsApi\Protocol;
 
-use RuntimeException;
-
+/**
+ * Class TokenMap
+ * @package Tmv\WhatsApi\Protocol
+ */
 class TokenMap
 {
     private static $primaryStrings = array(
@@ -400,45 +402,57 @@ class TokenMap
         "filehash"
     );
 
-    public static function tryGetToken($string, &$subdict, &$token)
+    const SECOND_MAP_OFFSET = 236;
+
+    /**
+     * @param string $string
+     * @param bool $subdict
+     * @return int|mixed
+     */
+    public static function tryGetToken($string, &$subdict)
     {
-        $foo = array_search($string, self::$primaryStrings);
-        if ($foo) {
-            $token = $foo;
-
-            return true;
+        $index1 = array_search($string, static::$primaryStrings);
+        if ($index1) {
+            return $index1;
         }
-        $foo = array_search($string, self::$secondaryStrings);
-        if ($foo) {
+        $index2 = array_search($string, static::$secondaryStrings);
+        if ($index2) {
             $subdict = true;
-            $token = $foo;
-
-            return true;
+            return $index2;
         }
 
-        return false;
+        return -1;
     }
 
-    public static function getToken($token, &$subdict, &$string)
+    /**
+     * Check if token number match the 2nd map
+     *
+     * @param int $token
+     * @return bool
+     */
+    protected static function checkSubdictionaryIndex($token)
+    {
+        $newIndex = $token - static::SECOND_MAP_OFFSET;
+        return isset(static::$secondaryStrings[$newIndex]);
+    }
+
+    /**
+     * @param int $token
+     * @param bool $subdict
+     * @return null
+     */
+    public static function getToken($token, &$subdict)
     {
         //override subdict
-        if (!$subdict && $token >= 236 && $token < (236 + count(self::$secondaryStrings))) {
+        if (!$subdict && static::checkSubdictionaryIndex($token)) {
             $subdict = true;
         }
+
+        $tokenMap = static::$primaryStrings;
         if ($subdict) {
-            $tokenMap = self::$secondaryStrings;
-        } else {
-            $tokenMap = self::$primaryStrings;
+            $tokenMap = static::$secondaryStrings;
         }
 
-        if ($token < 0 || $token > count($tokenMap)) {
-            return null; //fail
-        }
-        if (!isset($tokenMap[$token])) {
-            throw new RuntimeException("Invalid token/length in getToken");
-        }
-        $string = $tokenMap[$token];
-
-        return $string;
+        return isset($tokenMap[$token]) ? $tokenMap[$token] : null;
     }
 }

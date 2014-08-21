@@ -1,21 +1,21 @@
 <?php
 
-namespace Tmv\WhatsApi\Message\Action\NodeFactory;
+namespace Tmv\WhatsApi\Message\Action;
 
 use Tmv\WhatsApi\Message\Action;
 use Tmv\WhatsApi\Message\Node\MessageText as MessageNode;
 use Tmv\WhatsApi\Message\Node\Node;
 
-class MessageTextNodeFactory extends AbstractNodeFactory implements NodeActionFactoryInterface
+class MessageTextFactory extends AbstractFactory implements FactoryInterface
 {
     /**
-     * @param  Action\ActionInterface    $action
+     * @param  ActionInterface    $action
      * @return MessageNode
      * @throws \InvalidArgumentException
      */
-    public function createNode(Action\ActionInterface $action)
+    public function createNode(ActionInterface $action)
     {
-        if (!$action instanceof Action\MessageText) {
+        if (!$action instanceof MessageText) {
             throw new \InvalidArgumentException("Action class not valid");
         }
         $server = new Node();

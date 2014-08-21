@@ -239,9 +239,9 @@ class NodeWriter
      */
     protected function writeString($tag)
     {
-        $intVal = -1;
         $subdict = false;
-        if (TokenMap::tryGetToken($tag, $subdict, $intVal)) {
+        $intVal = TokenMap::tryGetToken($tag, $subdict);
+        if ($intVal !== -1) {
             if ($subdict) {
                 $this->writeToken(236);
             }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Tmv\WhatsApi\Message\Action\NodeFactory;
+namespace Tmv\WhatsApi\Message\Action;
 
 use Tmv\WhatsApi\Client;
 
-abstract class AbstractNodeFactory
+abstract class AbstractFactory implements FactoryInterface
 {
 
     /**
@@ -27,6 +27,16 @@ abstract class AbstractNodeFactory
             }
         }
 
+        return $number;
+    }
+
+    /**
+     * @param string$jid
+     * @return string
+     */
+    protected function getNumberFromJID($jid)
+    {
+        list($number) = explode('@', $jid, 2);
         return $number;
     }
 }

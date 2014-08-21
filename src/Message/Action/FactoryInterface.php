@@ -1,11 +1,10 @@
 <?php
 
-namespace Tmv\WhatsApi\Message\Action\NodeFactory;
+namespace Tmv\WhatsApi\Message\Action;
 
-use Tmv\WhatsApi\Message\Action\ActionInterface;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 
-interface NodeActionFactoryInterface
+interface FactoryInterface
 {
     /**
      * @param  ActionInterface $action
