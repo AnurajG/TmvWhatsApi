@@ -1,11 +1,11 @@
 <?php
 
-namespace Tmv\WhatsApi\Message\Event;
+namespace Tmv\WhatsApi\Event;
 
 use Tmv\WhatsApi\Client;
 use Zend\EventManager\Event;
 
-abstract class AbstractEvent extends Event
+abstract class AbstractPublicEvent extends Event
 {
     /**
      * @var Client
@@ -13,18 +13,17 @@ abstract class AbstractEvent extends Event
     protected $client;
 
     /**
-     * @param  Client $client
+     * @param \Tmv\WhatsApi\Client $client
      * @return $this
      */
-    public function setClient(Client $client)
+    public function setClient($client)
     {
         $this->client = $client;
-
         return $this;
     }
 
     /**
-     * @return Client
+     * @return \Tmv\WhatsApi\Client
      */
     public function getClient()
     {

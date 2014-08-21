@@ -32,35 +32,31 @@ class MessageListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnReceivedNodeMethod()
     {
-        $event = m::mock('\Tmv\WhatsApi\Message\Event\ReceivedNodeEvent');
-        $node = m::mock('\Tmv\WhatsApi\Message\Node\Message');
-        $eventManagerMock = m::mock('\Zend\EventManager\EventManagerInterface');
-        $client = m::mock('\Tmv\WhatsApi\Client');
-        $phoneMock = m::mock('\Tmv\WhatsApi\Entity\Phone');
-        $nodeBody = m::mock('\Tmv\WhatsApi\Message\Node\NodeInterface');
 
-        $identityMock = m::mock('Tmv\\WhatsApi\\Entity\\Identity');
-        $identityMock->shouldReceive('getPhone')->andReturn($phoneMock);;
+        $object = $this->object;
+        $node = m::mock('Tmv\\WhatsApi\\Message\\Node\\Message');
+        $node->shouldReceive('getAttribute')->with('from')->andReturn('from-value');
+        $node->shouldReceive('getAttribute')->with('id')->andReturn('id-value');
+        $messageMock = m::mock('Tmv\\WhatsApi\\Message\\Received\\MessageInterface');
 
-        $event->shouldReceive('getNode')->once()->andReturn($node);
-        $event->shouldReceive('getClient')->once()->andReturn($client);
-        $client->shouldReceive('getEventManager')->andReturn($eventManagerMock);
-        $client->shouldReceive('getIdentity')->once()->andReturn($identityMock);
-        $phoneMock->shouldReceive('getPhoneNumber')->once()->andReturn('0123456789');
+        $messageReceivedFactoryMock = m::mock('Tmv\\WhatsApi\\Message\\Received\\MessageFactory');
+        $messageReceivedFactoryMock->shouldReceive('createMessage')->with($node)->andReturn($messageMock);
 
-        $node->shouldReceive('getFrom')->times(3)->andReturn('somethingelse@s.us');
-        $node->shouldReceive('hasChild')->with('request')->once()->andReturn(false);
-        $node->shouldReceive('hasChild')->with('received')->once()->andReturn(false);
-        $node->shouldReceive('getChild')->with('body')->twice()->andReturn($nodeBody);
-        $node->shouldReceive('getAttribute')->with('from')->once()->andReturn('somethingelse@s.us');
-        $node->shouldReceive('getAttribute')->with('type')->twice()->andReturn('the type');
-        $node->shouldReceive('getAttribute')->with('id')->once()->andReturn('the id');
-        $node->shouldReceive('getAttribute')->with('t')->once()->andReturn(123);
-        $nodeBody->shouldReceive('getData')->once()->andReturn('the body');
+        $this->object->setMessageReceivedFactory($messageReceivedFactoryMock);
 
+        $event = m::mock('Zend\\EventManager\\Event');
+        $eventManagerMock = m::mock('Zend\\EventManager\\EventManagerInterface');
         $eventManagerMock->shouldReceive('trigger')->once();
 
-        $this->object->onReceivedNode($event);
+        $client = m::mock('Tmv\\WhatsApi\\Client');
+
+        $this->object->setClient($client);
+
+        $event->shouldReceive('getParam')->with('node')->once()->andReturn($node);
+        $client->shouldReceive('getEventManager')->andReturn($eventManagerMock);
+        $client->shouldReceive('send')->once();
+
+        $object->onReceivedNode($event);
     }
 
     protected function tearDown()

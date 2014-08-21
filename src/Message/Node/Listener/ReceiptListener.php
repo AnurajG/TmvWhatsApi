@@ -2,8 +2,7 @@
 
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
-use Tmv\WhatsApi\Client;
-use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
+use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManagerInterface;
 
@@ -22,16 +21,32 @@ class ReceiptListener extends AbstractListener
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(array('received.node.receipt', 'received.node.void'),
-            array($this, 'onReceivedNode'));
+        $this->listeners[] = $events->attach('received.node.void', array($this, 'onReceivedNodeVoid'));
+        $this->listeners[] = $events->attach('received.node.receipt', array($this, 'onReceivedNodeReceipt'));
     }
 
-    public function onReceivedNode(ReceivedNodeEvent $e)
+    public function onReceivedNodeVoid(Event $e)
     {
-        $client = $e->getClient();
+        /** @var NodeInterface $node */
+        $node = $e->getParam('node');
+        $client = $this->getClient();
+        if ($node->getAttribute("class") != "message") {
+            return;
+        }
         $params = array(
-            'node' => $e->getNode()
+            'node' => $node
         );
-        $client->getEventManager()->trigger('onReceipt', $client, $params);
+        $this->getClient()->getEventManager()->trigger('onReceiptServer', $client, $params);
+    }
+
+    public function onReceivedNodeReceipt(Event $e)
+    {
+        /** @var NodeInterface $node */
+        $node = $e->getParam('node');
+        $params = array(
+            'node' => $node
+        );
+        // todo: creare evento pubblico
+        $this->getClient()->getEventManager()->trigger('onReceiptClient', $this, $params);
     }
 }

@@ -7,12 +7,7 @@ use Tmv\WhatsApi\Connection\Connection;
 use Tmv\WhatsApi\Entity\Identity;
 use Tmv\WhatsApi\Exception\RuntimeException;
 use Tmv\WhatsApi\Message\Action;
-use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
-use Tmv\WhatsApi\Message\Node\Listener\ChallengeListener;
-use Tmv\WhatsApi\Message\Node\Listener\InjectIdListener;
-use Tmv\WhatsApi\Message\Node\Listener\MessageListener;
-use Tmv\WhatsApi\Message\Node\Listener\ReceiptListener;
-use Tmv\WhatsApi\Message\Node\Listener\SuccessListener;
+use Tmv\WhatsApi\Message\Node\Listener\ListenerFactory;
 use Tmv\WhatsApi\Message\Node\NodeFactory;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Tmv\WhatsApi\Protocol\KeyStream;
@@ -88,21 +83,14 @@ class Client
     public function __construct(Identity $identity)
     {
 
-        $this->getEventManager()->attachAggregate(new InjectIdListener(), 100);
-        $this->getEventManager()->attachAggregate(new ChallengeListener(), 100);
-        $this->getEventManager()->attachAggregate(new SuccessListener(), 100);
-        $this->getEventManager()->attachAggregate(new MessageListener(), 100);
-        $this->getEventManager()->attachAggregate(new ReceiptListener(), 100);
-
-        $client = $this;
-
-        $this->getEventManager()->attach(
-            'login.success',
-            function () use ($client) {
-                $client->send(new Action\Presence($client->getIdentity()->getNickname()));
-            },
-            100
-        );
+        $listenerFactory = new ListenerFactory();
+        $this->getEventManager()->attachAggregate($listenerFactory->factory('StreamError', $this), 100);
+        $this->getEventManager()->attachAggregate($listenerFactory->factory('Notification', $this), 100);
+        $this->getEventManager()->attachAggregate($listenerFactory->factory('Challenge', $this), 100);
+        $this->getEventManager()->attachAggregate($listenerFactory->factory('Success', $this), 100);
+        $this->getEventManager()->attachAggregate($listenerFactory->factory('Message', $this), 100);
+        $this->getEventManager()->attachAggregate($listenerFactory->factory('Receipt', $this), 100);
+        $this->getEventManager()->attachAggregate($listenerFactory->factory('InjectId', $this), 100);
 
         $this->setIdentity($identity);
         $this->setConnected(false);
@@ -376,12 +364,8 @@ class Client
                 $this,
                 array('node' => $node, 'autoReceipt' => $autoReceipt)
             );
-            $nodeEvent = new ReceivedNodeEvent();
-            $nodeEvent->setClient($this);
-            $nodeEvent->setTarget($this);
-            $nodeEvent->setName('received.node.' . $node->getName());
-            $nodeEvent->setNode($node);
-            $this->getEventManager()->trigger($nodeEvent);
+            $params = array('node' => $node);
+            $this->getEventManager()->trigger('received.node.' . $node->getName(), $this, $params);
         }
 
         return $this;

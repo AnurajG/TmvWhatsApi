@@ -2,9 +2,10 @@
 
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
-use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
-use Tmv\WhatsApi\Message\Event\SuccessEvent;
+use Tmv\WhatsApi\Event\LoginSuccessEvent;
+use Tmv\WhatsApi\Message\Action\Presence;
 use Tmv\WhatsApi\Message\Node\Success;
+use Zend\EventManager\Event;
 use Zend\EventManager\EventManagerInterface;
 
 class SuccessListener extends AbstractListener
@@ -25,21 +26,21 @@ class SuccessListener extends AbstractListener
         $this->listeners[] = $events->attach('received.node.success', array($this, 'onReceivedNode'));
     }
 
-    public function onReceivedNode(ReceivedNodeEvent $e)
+    public function onReceivedNode(Event $e)
     {
         /** @var Success $node */
-        $node = $e->getNode();
-        $client = $e->getClient();
+        $node = $e->getParam('node');
+        $client = $this->getClient();
 
         // triggering public event
-        $event = new SuccessEvent();
-        $event->setClient($client);
-        $event->setTarget($client);
-        $event->setNode($node);
+        $event = new LoginSuccessEvent('onLoginSuccess', $this, array('node' => $node));
+        $event->setClient($this->getClient());
         $client->getEventManager()->trigger($event);
 
         $client->setConnected(true);
         $client->writeChallengeData($node->getData());
         $client->getConnection()->getNodeWriter()->setKey($client->getConnection()->getOutputKey());
+
+        $client->send(new Presence($client->getIdentity()->getNickname()));
     }
 }

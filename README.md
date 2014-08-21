@@ -5,7 +5,7 @@
 # WhatsAPI
 
 **Status: development**
-
+**Not use it in production environment!**
 
 ## About WhatsAPI
 
@@ -20,73 +20,128 @@ The original WhatsAPI library is not compatible with composer, no PSR compatible
 I want to develop this new library in order to make it more usable.
 If you want to help, just do it :)
 
-### The idea is: ###
-
-Just an example:
-* The client received a message.
-* It's converted in a ```Node``` object, if exists could be a specific ```Node``` object, like ```Success``` node.
-* One or more default listeners are attached to the ```node.received``` event. There are also specific event for each tag node. They do all the internal things, like response to system messages.
-* Anyone can create a listener to do something on a certain event, like message received, presence changed, etc.
-
 ## How to start using this library
 
-The library is not complete, you can just login and instantiate the first connection, sending a text message
+### Initializing client ###
 
 ```php
-$number   = ''; // your number
-$token    = ''; // token
-$nickname = ''; // your name
-$password = ''; // your password
+use Tmv\WhatsApi\Service\LocalizationService;
+use Tmv\WhatsApi\Entity\Phone;
+use Tmv\WhatsApi\Entity\Identity;
+use Tmv\WhatsApi\Client;
 
+// Initializing client
 // Creating a service to retrieve phone info
-$localizationService = new \Tmv\WhatsApi\Service\LocalizationService();
+$localizationService = new LocalizationService();
 $localizationService->setCountriesPath(__DIR__ . '/data/countries.csv');
 
 // Creating a phone object...
-$phone = new \Tmv\WhatsApi\Entity\Phone($number);
+$phone = new Phone(''); // your phone number with international prefix
 // Injecting phone properties
-$phone = $localizationService->dissectPhone($phone);
-
-$identity = new \Tmv\WhatsApi\Entity\Identity();
-$identity->setNickname($nickname);
-$identity->setToken($token);
-$identity->setPassword($password);
+$localizationService->injectPhoneProperties($phone);
+// Creating identity
+$identity = new Identity();
+$identity->setNickname(''); // your name
+$identity->setToken('');    // your token
+$identity->setPassword(''); // your password
 $identity->setPhone($phone);
 
-$client = new \Tmv\WhatsApi\Client($identity);
+// Initializing client
+$client = new Client($identity);
 $client->setChallengeDataFilepath(__DIR__ . '/data/nextChallenge.dat');
+
+// Attaching events...
+// ...
+
+// Connecting and login...
+$client->connect();
+$client->login();
+
+// Actions
+// ...
+
+// Polling incoming messages
+$time = time();
+while (true) {
+    $client->pollMessages();
+    if (time() - $time >= 10) {
+        $time = time();
+        // we send a presence message every 10 seconds to avoid server disconnection
+        $client->send(new Action\Presence($identity->getNickname()));
+    }
+}
+```
+
+### Sending a message ###
+
+```php
+use Tmv\WhatsApi\Message\Action;
+
+$number = ''; // number to send message
+// Sending composing notification (simulating typing)
+$client->send(new Action\ChatState($number, Action\ChatState::STATE_COMPOSING));
+// Sending paused notification (typing end)
+$client->send(new Action\ChatState($number, Action\ChatState::STATE_PAUSED));
+
+// Creating message action
+$message = new Action\MessageText($identity->getNickname(), $number);
+$message->setBody('Hello');
+
+// Sending message...
+$client->send($message);
+```
+
+### Receiving message ###
+
+```php
+
+use Tmv\WhatsApi\Event\MessageReceivedEvent;
+use Tmv\WhatsApi\Message\Received;
+
+// onMessageReceived event
+$client->getEventManager()->attach(
+    'onMessageReceived',
+    function (MessageReceivedEvent $e) {
+        $message = $e->getMessage();
+        echo str_repeat('-', 80) . PHP_EOL;
+        echo '** MESSAGE RECEIVED **' . PHP_EOL;
+        echo sprintf('From: %s', $message->getFrom()) . PHP_EOL;
+        if ($message->isFromGroup()) {
+            echo sprintf('Group: %s', $message->getGroupId()) . PHP_EOL;
+        }
+        echo sprintf('Date: %s', $message->getDateTime()->format('Y-m-d H:i:s')) . PHP_EOL;
+
+        if ($message instanceof Received\MessageText) {
+            echo PHP_EOL;
+            echo sprintf('%s', $message->getBody()) . PHP_EOL;
+        } elseif ($message instanceof Received\MessageMedia) {
+            echo sprintf('Type: %s', $message->getMedia()->getType()) . PHP_EOL;
+        }
+        echo str_repeat('-', 80) . PHP_EOL;
+    }
+);
+```
+
+### Debugging ###
+
+It's possible to debug attaching events. It's possible to listen all events attaching to '*' event.
+
+```php
+use Zend\EventManager\Event;
 
 // Debug events
 $client->getEventManager()->attach(
     'node.received',
-    function (\Zend\EventManager\Event $e) {
+    function (Event $e) {
         $node = $e->getParam('node');
         echo sprintf("\n--- Node received:\n%s\n", $node);
     }
 );
 $client->getEventManager()->attach(
     'node.send.pre',
-    function (\Zend\EventManager\Event $e) {
+    function (Event $e) {
         $node = $e->getParam('node');
         echo sprintf("\n--- Sending Node:\n%s\n", $node);
     }
 );
-
-// Connecting...
-$client->connect();
-$client->login();
-
-$number = ''; // number to send message
-$client->send(new \Tmv\WhatsApi\Message\Action\ChatState($number, 'composing'));
-$message = new \Tmv\WhatsApi\Message\Action\MessageText($nickname, $number);
-$message->setBody('Hello');
-$client->send($message);
-$time = time();
-while (true) {
-    $client->pollMessages();
-    if (time() - $time >= 10) {
-        $time = time();
-        $client->send(new \Tmv\WhatsApi\Message\Action\Presence($identity->getNickname()));
-    }
-}
 ```

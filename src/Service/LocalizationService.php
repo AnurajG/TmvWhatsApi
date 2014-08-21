@@ -36,11 +36,11 @@ class LocalizationService
      * Dissect country code from phone number.
      *
      * @param  Phone                    $phone
-     * @return Phone
+     * @return $this
      * @throws InvalidArgumentException
      * @throws RuntimeException
      */
-    public function dissectPhone(Phone $phone)
+    public function injectPhoneProperties(Phone $phone)
     {
         if (!file_exists($this->getCountriesPath()) || !is_readable($this->getCountriesPath())) {
             throw new RuntimeException("File doesn't exists or isn't readable.");
@@ -72,7 +72,7 @@ class LocalizationService
                         ->setIso3166(isset($data[3]) ? $data[3] : null)
                         ->setIso639(isset($data[4]) ? $data[4] : null);
 
-                    return $phone;
+                    return $this;
                 }
             }
             fclose($handle);

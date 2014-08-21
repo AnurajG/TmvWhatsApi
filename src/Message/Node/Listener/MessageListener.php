@@ -3,14 +3,64 @@
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Client;
-use Tmv\WhatsApi\Message\Action\MessageReceived;
+use Tmv\WhatsApi\Event\MessageReceivedEvent;
 use Tmv\WhatsApi\Message\Action\Receipt;
-use Tmv\WhatsApi\Message\Event\ReceivedNodeEvent;
 use Tmv\WhatsApi\Message\Node\Message;
+use Tmv\WhatsApi\Message\Received\MessageFactory;
+use Tmv\WhatsApi\Message\Received\MessageFactoryInterface;
+use Zend\EventManager\Event;
 use Zend\EventManager\EventManagerInterface;
 
 class MessageListener extends AbstractListener
 {
+
+    /**
+     * @var bool
+     */
+    protected $sendAutoReceipt = true;
+    /**
+     * @var MessageFactoryInterface
+     */
+    protected $messageReceivedFactory;
+
+    /**
+     * @param boolean $sendAutoReceipt
+     * @return $this
+     */
+    public function setSendAutoReceipt($sendAutoReceipt)
+    {
+        $this->sendAutoReceipt = $sendAutoReceipt;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function shouldSendAutoReceipt()
+    {
+        return $this->sendAutoReceipt;
+    }
+
+    /**
+     * @param MessageFactoryInterface $messageReceivedFactory
+     * @return $this
+     */
+    public function setMessageReceivedFactory(MessageFactoryInterface $messageReceivedFactory)
+    {
+        $this->messageReceivedFactory = $messageReceivedFactory;
+        return $this;
+    }
+
+    /**
+     * @return MessageFactoryInterface
+     */
+    public function getMessageReceivedFactory()
+    {
+        if (!$this->messageReceivedFactory) {
+            $this->messageReceivedFactory = new MessageFactory();
+        }
+        return $this->messageReceivedFactory;
+    }
 
     /**
      * Attach one or more listeners
@@ -27,57 +77,41 @@ class MessageListener extends AbstractListener
         $this->listeners[] = $events->attach('received.node.message', array($this, 'onReceivedNode'));
     }
 
-    public function onReceivedNode(ReceivedNodeEvent $e)
+    public function onReceivedNode(Event $e)
     {
         /** @var Message $node */
-        $node = $e->getNode();
-        $client = $e->getClient();
+        $node = $e->getParam('node');
+        $client = $this->getClient();
 
-        // @todo: triggering public events
+        $factory = $this->getMessageReceivedFactory();
+        $message = $factory->createMessage($node);
 
-        //do not send received confirmation if sender is yourself
-        $fromMeString = $client->getIdentity()->getPhone()->getPhoneNumber() . '@' . Client::WHATSAPP_SERVER;
-        if ($node->getFrom() && strpos($node->getFrom(), $fromMeString) === false
-            && ($node->hasChild("request") || $node->hasChild("received"))
-        ) {
-            $action = MessageReceived::fromMessageNode($node);
-            $client->send($action);
-        }
-
-        // check if it is a response to a status request
-        $this->checkIsResponseStatus($client, $node);
+        $event = $this->createMessageReceivedEvent();
+        $event->setClient($client);
+        $event->setMessage($message);
+        $client->getEventManager()->trigger($event);
 
         // check and send receipt
-        $this->sendReceipt($client, $node);
-    }
-
-    protected function checkIsResponseStatus(Client $client, Message $node)
-    {
-        // check if it is a response to a status request
-        $foo = explode('@', $node->getFrom());
-        if (is_array($foo) && count($foo) > 1 && strcmp($foo[1], "s.us") == 0 && $node->getChild('body') != null) {
-            $params = array(
-                $node->getAttribute('from'),
-                $node->getAttribute('type'),
-                $node->getAttribute('id'),
-                $node->getAttribute('t'),
-                $node->getChild("body")->getData()
-            );
-            $client->getEventManager()->trigger('status.received', $client, $params);
+        if ($this->shouldSendAutoReceipt()) {
+            $this->sendReceipt($client, $node);
         }
-
-        return $this;
     }
 
     protected function sendReceipt(Client $client, Message $node)
     {
-        if ($node->getAttribute("type") == "text" && $node->getChild('body') != null) {
-            $receipt = new Receipt();
-            $receipt->setTo($node->getAttribute('from'));
-            $receipt->setId($node->getAttribute('id'));
-            $client->send($receipt);
-        }
+        $receipt = new Receipt();
+        $receipt->setTo($node->getAttribute('from'));
+        $receipt->setId($node->getAttribute('id'));
+        $client->send($receipt);
 
         return $this;
+    }
+
+    /**
+     * @return MessageReceivedEvent
+     */
+    protected function createMessageReceivedEvent()
+    {
+        return new MessageReceivedEvent('onMessageReceived', $this);
     }
 }

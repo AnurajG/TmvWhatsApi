@@ -4,13 +4,37 @@ namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
+use Tmv\WhatsApi\Client;
 
-abstract class AbstractListener implements ListenerAggregateInterface
+abstract class AbstractListener implements ListenerAggregateInterface, ListenerInterface
 {
     /**
      * @var \Zend\Stdlib\CallbackHandler[]
      */
     protected $listeners = array();
+
+    /**
+     * @var Client
+     */
+    protected $client;
+
+    /**
+     * @param Client $client
+     * @return $this
+     */
+    public function setClient(Client $client)
+    {
+        $this->client = $client;
+        return $this;
+    }
+
+    /**
+     * @return Client
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
 
     /**
      * Attach one or more listeners
