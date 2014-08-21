@@ -8,7 +8,7 @@ use Tmv\WhatsApi\Message\Node\Node;
 class ClearDirtyFactory extends AbstractFactory implements FactoryInterface
 {
     /**
-     * @param  ActionInterface    $action
+     * @param  ActionInterface           $action
      * @return Node
      * @throws \InvalidArgumentException
      */

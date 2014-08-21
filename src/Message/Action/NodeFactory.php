@@ -38,7 +38,7 @@ class NodeFactory
     }
 
     /**
-     * @param  ActionInterface            $action
+     * @param  ActionInterface  $action
      * @return FactoryInterface
      */
     public function getFactoryForAction(ActionInterface $action)
@@ -52,7 +52,7 @@ class NodeFactory
     }
 
     /**
-     * @param  string                     $key
+     * @param  string           $key
      * @return FactoryInterface
      * @throws RuntimeException
      */
@@ -87,8 +87,8 @@ class NodeFactory
     }
 
     /**
-     * @param  string                            $actionClass
-     * @param  string|FactoryInterface $factoryClass
+     * @param  string                    $actionClass
+     * @param  string|FactoryInterface   $factoryClass
      * @return $this
      * @throws \InvalidArgumentException
      */

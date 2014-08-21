@@ -37,6 +37,7 @@ abstract class AbstractFactory implements FactoryInterface
     protected function getNumberFromJID($jid)
     {
         list($number) = explode('@', $jid, 2);
+
         return $number;
     }
 }

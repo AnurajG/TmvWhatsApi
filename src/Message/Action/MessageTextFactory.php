@@ -9,7 +9,7 @@ use Tmv\WhatsApi\Message\Node\Node;
 class MessageTextFactory extends AbstractFactory implements FactoryInterface
 {
     /**
-     * @param  ActionInterface    $action
+     * @param  ActionInterface           $action
      * @return MessageNode
      * @throws \InvalidArgumentException
      */

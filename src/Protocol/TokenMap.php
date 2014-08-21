@@ -405,8 +405,8 @@ class TokenMap
     const SECOND_MAP_OFFSET = 236;
 
     /**
-     * @param string $string
-     * @param bool $subdict
+     * @param  string    $string
+     * @param  bool      $subdict
      * @return int|mixed
      */
     public static function tryGetToken($string, &$subdict)
@@ -418,6 +418,7 @@ class TokenMap
         $index2 = array_search($string, static::$secondaryStrings);
         if ($index2) {
             $subdict = true;
+
             return $index2;
         }
 
@@ -427,18 +428,19 @@ class TokenMap
     /**
      * Check if token number match the 2nd map
      *
-     * @param int $token
+     * @param  int  $token
      * @return bool
      */
     protected static function checkSubdictionaryIndex($token)
     {
         $newIndex = $token - static::SECOND_MAP_OFFSET;
+
         return isset(static::$secondaryStrings[$newIndex]);
     }
 
     /**
-     * @param int $token
-     * @param bool $subdict
+     * @param  int  $token
+     * @param  bool $subdict
      * @return null
      */
     public static function getToken($token, &$subdict)
