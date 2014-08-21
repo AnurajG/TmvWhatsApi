@@ -2,9 +2,7 @@
 
 namespace Tmv\WhatsApi\Message\Node;
 
-use Zend\Stdlib\ArraySerializableInterface;
-
-interface NodeInterface extends ArraySerializableInterface
+interface NodeInterface
 {
 
     /**
