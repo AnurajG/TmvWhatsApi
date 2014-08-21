@@ -2,6 +2,11 @@
     "name": "thomasvargiu/tmv-whatsapi",
     "description": "Library to communicate with WhatsApp service",
     "type": "library",
+    "keywords": [
+        "whatsapp",
+        "whatsapi",
+        "sms"
+    ],
     "minimum-stability": "stable",
     "authors": [
         {
