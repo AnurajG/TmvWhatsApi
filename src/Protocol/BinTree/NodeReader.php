@@ -106,7 +106,6 @@ class NodeReader
      */
     protected function getToken($token)
     {
-        $ret = "";
         $subdict = false;
         $ret = TokenMap::getToken($token, $subdict);
         if (!$ret) {

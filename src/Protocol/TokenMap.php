@@ -8,7 +8,7 @@ namespace Tmv\WhatsApi\Protocol;
  */
 class TokenMap
 {
-    private static $primaryStrings = array(
+    protected static $primaryStrings = array(
         "",
         "",
         "",
@@ -216,7 +216,7 @@ class TokenMap
         "creator"
     );
 
-    private static $secondaryStrings = array(
+    protected static $secondaryStrings = array(
         "Bell.caf",
         "Boing.caf",
         "Glass.caf",
@@ -441,7 +441,7 @@ class TokenMap
     /**
      * @param  int  $token
      * @param  bool $subdict
-     * @return null
+     * @return string|null
      */
     public static function getToken($token, &$subdict)
     {
