@@ -10,12 +10,13 @@ class MessageText extends AbstractMessage
     protected $body;
 
     /**
-     * @param string $body
+     * @param  string $body
      * @return $this
      */
     public function setBody($body)
     {
         $this->body = $body;
+
         return $this;
     }
 
@@ -27,4 +28,3 @@ class MessageText extends AbstractMessage
         return $this->body;
     }
 }
- 

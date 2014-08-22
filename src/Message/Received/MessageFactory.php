@@ -7,14 +7,13 @@ use Tmv\WhatsApi\Message\Node\NodeInterface;
 class MessageFactory implements MessageFactoryInterface
 {
     /**
-     * @param NodeInterface $node
+     * @param  NodeInterface             $node
      * @return MessageMedia|MessageText
      * @throws \InvalidArgumentException
      */
     public function createMessage(NodeInterface $node)
     {
         $type = $node->getAttribute('type');
-        $factory = null;
         switch ($type) {
             case AbstractMessage::TYPE_TEXT:
                 $factory = new MessageTextFactory();

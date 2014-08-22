@@ -439,8 +439,8 @@ class TokenMap
     }
 
     /**
-     * @param  int  $token
-     * @param  bool $subdict
+     * @param  int         $token
+     * @param  bool        $subdict
      * @return string|null
      */
     public static function getToken($token, &$subdict)

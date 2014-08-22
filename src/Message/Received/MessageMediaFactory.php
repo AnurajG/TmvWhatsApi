@@ -9,7 +9,7 @@ use Tmv\WhatsApi\Message\Received\Media\MediaFactory;
 class MessageMediaFactory implements MessageFactoryInterface
 {
     /**
-     * @param NodeInterface $node
+     * @param  NodeInterface $node
      * @return MessageText
      */
     public function createMessage(NodeInterface $node)
@@ -28,7 +28,7 @@ class MessageMediaFactory implements MessageFactoryInterface
         }
 
         $dateTime = new DateTime();
-        $dateTime->setTimestamp((int)$node->getAttribute('t'));
+        $dateTime->setTimestamp((int) $node->getAttribute('t'));
         $message->setDateTime($dateTime);
         $message->setNotify($node->getAttribute('notify'));
         $message->setType($node->getAttribute('type'));
@@ -36,6 +36,7 @@ class MessageMediaFactory implements MessageFactoryInterface
         $mediaFactory = $this->createMediaFactory();
         $media = $mediaFactory->createMedia($node->getChild('media'));
         $message->setMedia($media);
+
         return $message;
     }
 
@@ -58,4 +59,3 @@ class MessageMediaFactory implements MessageFactoryInterface
         return $number;
     }
 }
- 

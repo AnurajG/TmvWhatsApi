@@ -320,9 +320,9 @@ abstract class AbstractNode implements NodeInterface
 
         $indent = "";
 
-        $ret = $indent . $lt . $this->getName();
+        $ret = $indent.$lt.$this->getName();
         foreach ($this->getAttributes() as $key => $value) {
-            $ret .= " " . $key . "=\"" . $value . "\"";
+            $ret .= " ".$key."=\"".$value."\"";
         }
         $ret .= $gt;
         if (null != $this->getData() && strlen($this->getData()) > 0) {
@@ -331,7 +331,7 @@ abstract class AbstractNode implements NodeInterface
                 $ret .= $this->getData();
             } else {
                 //raw data
-                $ret .= " " . strlen($this->getData()) . " byte data";
+                $ret .= " ".strlen($this->getData())." byte data";
             }
         }
         if (count($this->getChildren())) {
@@ -344,7 +344,7 @@ abstract class AbstractNode implements NodeInterface
                         "\n",
                         array_map(
                             function ($value) use ($indent) {
-                                return $indent . "  " . $value;
+                                return $indent."  ".$value;
                             },
                             explode($nl, $childString)
                         )
@@ -352,9 +352,9 @@ abstract class AbstractNode implements NodeInterface
                 $foo[] = $childString;
             }
             $ret .= implode($nl, $foo);
-            $ret .= $nl . $indent;
+            $ret .= $nl.$indent;
         }
-        $ret .= $lt . "/" . $this->getName() . $gt;
+        $ret .= $lt."/".$this->getName().$gt;
 
         return $ret;
     }

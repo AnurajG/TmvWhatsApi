@@ -8,7 +8,7 @@ use DateTime;
 class MessageTextFactory implements MessageFactoryInterface
 {
     /**
-     * @param NodeInterface $node
+     * @param  NodeInterface $node
      * @return MessageText
      */
     public function createMessage(NodeInterface $node)
@@ -28,10 +28,11 @@ class MessageTextFactory implements MessageFactoryInterface
 
         $message->setId($node->getAttribute('id'));
         $dateTime = new DateTime();
-        $dateTime->setTimestamp((int)$node->getAttribute('t'));
+        $dateTime->setTimestamp((int) $node->getAttribute('t'));
         $message->setDateTime($dateTime);
         $message->setNotify($node->getAttribute('notify'));
         $message->setType($node->getAttribute('type'));
+
         return $message;
     }
 
@@ -46,4 +47,3 @@ class MessageTextFactory implements MessageFactoryInterface
         return $number;
     }
 }
- 

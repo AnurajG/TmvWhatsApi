@@ -7,7 +7,7 @@ abstract class AbstractMediaFactory
     /**
      * Convert in integer value if <> NULL
      *
-     * @param string $value
+     * @param  string $value
      * @return int
      */
     protected function convertIntIfValid($value)
@@ -15,7 +15,7 @@ abstract class AbstractMediaFactory
         if (null === $value) {
             return $value;
         }
-        return (int)$value;
+
+        return (int) $value;
     }
 }
- 

@@ -18,12 +18,13 @@ class Image extends AbstractMediaFile
     protected $encoding;
 
     /**
-     * @param int $height
+     * @param  int   $height
      * @return $this
      */
     public function setHeight($height)
     {
         $this->height = $height;
+
         return $this;
     }
 
@@ -36,12 +37,13 @@ class Image extends AbstractMediaFile
     }
 
     /**
-     * @param int $width
+     * @param  int   $width
      * @return $this
      */
     public function setWidth($width)
     {
         $this->width = $width;
+
         return $this;
     }
 
@@ -54,12 +56,13 @@ class Image extends AbstractMediaFile
     }
 
     /**
-     * @param string $encoding
+     * @param  string $encoding
      * @return $this
      */
     public function setEncoding($encoding)
     {
         $this->encoding = $encoding;
+
         return $this;
     }
 
@@ -71,4 +74,3 @@ class Image extends AbstractMediaFile
         return $this->encoding;
     }
 }
- 

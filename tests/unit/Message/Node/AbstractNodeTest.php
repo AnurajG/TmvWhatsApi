@@ -161,7 +161,7 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
         $this->object->setAttributes($attributes);
         $this->object->setChildren(array($childMock));
 
-        $string = "" . $this->object;
+        $string = "".$this->object;
         $nodeString = <<<TXT
 <nodename foo="baz" baz="foo">
   <child></child>
@@ -189,7 +189,7 @@ TXT;
         $this->object->setData($dataString);
 
         $string = $this->object->toString();
-        $dataString = ' ' . strlen($dataString) . ' byte data';
+        $dataString = ' '.strlen($dataString).' byte data';
         $nodeString = <<<TXT
 <nodename>{$dataString}</nodename>
 TXT;

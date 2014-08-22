@@ -8,7 +8,7 @@ class AudioFactory extends AbstractMediaFactory implements MediaFactoryInterface
 {
 
     /**
-     * @param NodeInterface $node
+     * @param  NodeInterface  $node
      * @return MediaInterface
      */
     public function createMedia(NodeInterface $node)
@@ -27,6 +27,7 @@ class AudioFactory extends AbstractMediaFactory implements MediaFactoryInterface
         $media->setAudioCodec($node->getAttribute('acodec'));
         $media->setAudioBitrate($this->convertIntIfValid($node->getAttribute('abitrate')));
         $media->setAudioSampFreq($this->convertIntIfValid($node->getAttribute('asampfreq')));
+
         return $media;
     }
 }

@@ -5,12 +5,13 @@ namespace Tmv\WhatsApi\Message\Node\Listener;
 class InjectIdListenerMock extends InjectIdListener
 {
     /**
-     * @param string $receivedId
+     * @param  string $receivedId
      * @return $this
      */
     public function setReceivedId($receivedId)
     {
         $this->receivedId = $receivedId;
+
         return $this;
     }
 
@@ -22,4 +23,3 @@ class InjectIdListenerMock extends InjectIdListener
         return $this->receivedId;
     }
 }
- 

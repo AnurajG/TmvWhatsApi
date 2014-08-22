@@ -20,7 +20,6 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $nodeWriterMock = m::mock('Tmv\\WhatsApi\\Protocol\\BinTree\\NodeWriter');
         $keyStreamMock = m::mock('Tmv\\WhatsApi\\Protocol\\KeyStream');
 
-
         $object = new Connection($adapterMock);
 
         $this->assertEquals($adapterMock, $object->getAdapter());

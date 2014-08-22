@@ -22,7 +22,7 @@ class SocketAdapterFactoryTest extends \PHPUnit_Framework_TestCase
         );
         $data = array();
         $ret = SocketAdapterFactory::factory($data);
-        $this->assertInstanceOf(__NAMESPACE__ . '\\SocketAdapter', $ret);
+        $this->assertInstanceOf(__NAMESPACE__.'\\SocketAdapter', $ret);
         $this->assertEquals($defaults['hostname'], $ret->getHostname());
         $this->assertEquals($defaults['port'], $ret->getPort());
         $this->assertEquals($defaults['timeout_sec'], $ret->getTimeoutSec());
@@ -38,7 +38,7 @@ class SocketAdapterFactoryTest extends \PHPUnit_Framework_TestCase
             'timeout_usec' => 10
         );
         $ret = SocketAdapterFactory::factory($data);
-        $this->assertInstanceOf(__NAMESPACE__ . '\\SocketAdapter', $ret);
+        $this->assertInstanceOf(__NAMESPACE__.'\\SocketAdapter', $ret);
         $this->assertEquals($data['hostname'], $ret->getHostname());
         $this->assertEquals($data['port'], $ret->getPort());
         $this->assertEquals($data['timeout_sec'], $ret->getTimeoutSec());

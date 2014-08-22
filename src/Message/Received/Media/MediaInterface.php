@@ -9,4 +9,3 @@ interface MediaInterface
      */
     public function getType();
 }
- 

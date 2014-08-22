@@ -24,12 +24,13 @@ class MessageListener extends AbstractListener
     protected $messageReceivedFactory;
 
     /**
-     * @param boolean $sendAutoReceipt
+     * @param  boolean $sendAutoReceipt
      * @return $this
      */
     public function setSendAutoReceipt($sendAutoReceipt)
     {
         $this->sendAutoReceipt = $sendAutoReceipt;
+
         return $this;
     }
 
@@ -42,12 +43,13 @@ class MessageListener extends AbstractListener
     }
 
     /**
-     * @param MessageFactoryInterface $messageReceivedFactory
+     * @param  MessageFactoryInterface $messageReceivedFactory
      * @return $this
      */
     public function setMessageReceivedFactory(MessageFactoryInterface $messageReceivedFactory)
     {
         $this->messageReceivedFactory = $messageReceivedFactory;
+
         return $this;
     }
 
@@ -59,6 +61,7 @@ class MessageListener extends AbstractListener
         if (!$this->messageReceivedFactory) {
             $this->messageReceivedFactory = new MessageFactory();
         }
+
         return $this->messageReceivedFactory;
     }
 

@@ -29,7 +29,7 @@ class IdentityTest extends \PHPUnit_Framework_TestCase
             'token' => 'my-token',
         );
 
-        $phoneMock = m::mock(__NAMESPACE__ . '\\Phone');
+        $phoneMock = m::mock(__NAMESPACE__.'\\Phone');
 
         $this->object->setNickname($data['nickname']);
         $this->object->setPassword($data['password']);

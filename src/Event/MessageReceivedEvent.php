@@ -13,12 +13,13 @@ class MessageReceivedEvent extends AbstractPublicEvent
     protected $message;
 
     /**
-     * @param MessageInterface $message
+     * @param  MessageInterface $message
      * @return $this
      */
     public function setMessage(MessageInterface $message)
     {
         $this->message = $message;
+
         return $this;
     }
 
@@ -30,4 +31,3 @@ class MessageReceivedEvent extends AbstractPublicEvent
         return $this->message;
     }
 }
- 

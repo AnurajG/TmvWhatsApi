@@ -26,12 +26,13 @@ class Location extends AbstractMedia implements MediaInterface
     protected $url;
 
     /**
-     * @param string $encoding
+     * @param  string $encoding
      * @return $this
      */
     public function setEncoding($encoding)
     {
         $this->encoding = $encoding;
+
         return $this;
     }
 
@@ -44,12 +45,13 @@ class Location extends AbstractMedia implements MediaInterface
     }
 
     /**
-     * @param float $latitude
+     * @param  float $latitude
      * @return $this
      */
     public function setLatitude($latitude)
     {
         $this->latitude = $latitude;
+
         return $this;
     }
 
@@ -62,12 +64,13 @@ class Location extends AbstractMedia implements MediaInterface
     }
 
     /**
-     * @param float $longitude
+     * @param  float $longitude
      * @return $this
      */
     public function setLongitude($longitude)
     {
         $this->longitude = $longitude;
+
         return $this;
     }
 
@@ -80,12 +83,13 @@ class Location extends AbstractMedia implements MediaInterface
     }
 
     /**
-     * @param string $name
+     * @param  string $name
      * @return $this
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -98,12 +102,13 @@ class Location extends AbstractMedia implements MediaInterface
     }
 
     /**
-     * @param string $url
+     * @param  string $url
      * @return $this
      */
     public function setUrl($url)
     {
         $this->url = $url;
+
         return $this;
     }
 
@@ -115,4 +120,3 @@ class Location extends AbstractMedia implements MediaInterface
         return $this->url;
     }
 }
- 

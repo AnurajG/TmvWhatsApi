@@ -67,7 +67,7 @@ class KeyStream
         $data = $this->rc4->cipher($buffer, $offset, $length);
         $mac = $this->computeMac($data, $offset, $length);
 
-        return substr($data, 0, $macOffset) . substr($mac, 0, 4) . substr($data, $macOffset + 4);
+        return substr($data, 0, $macOffset).substr($mac, 0, 4).substr($data, $macOffset + 4);
     }
 
     private function computeMac($buffer, $offset, $length)
@@ -75,9 +75,9 @@ class KeyStream
         $hmac = hash_init("sha1", HASH_HMAC, $this->macKey);
         hash_update($hmac, substr($buffer, $offset, $length));
         $array = chr($this->seq >> 24)
-            . chr($this->seq >> 16)
-            . chr($this->seq >> 8)
-            . chr($this->seq);
+            .chr($this->seq >> 16)
+            .chr($this->seq >> 8)
+            .chr($this->seq);
         hash_update($hmac, $array);
         $this->seq++;
 

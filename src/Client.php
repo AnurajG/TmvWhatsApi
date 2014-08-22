@@ -190,12 +190,12 @@ class Client
     protected function getResponse($host, array $query)
     {
         // Build the url.
-        $url = $host . '?';
+        $url = $host.'?';
         if (function_exists('http_build_query')) {
             $url .= http_build_query($query);
         } else {
             foreach ($query as $key => $value) {
-                $url .= $key . '=' . $value . '&';
+                $url .= $key.'='.$value.'&';
             }
             $url = rtrim($url, '&');
         }
@@ -245,7 +245,7 @@ class Client
     {
         $this->getConnection()->getNodeWriter()->resetKey();
         $this->getConnection()->getNodeReader()->resetKey();
-        $resource = static::WHATSAPP_DEVICE . '-' . static::WHATSAPP_VER . '-' . static::PORT;
+        $resource = static::WHATSAPP_DEVICE.'-'.static::WHATSAPP_VER.'-'.static::PORT;
         $data = $this->getConnection()->getNodeWriter()->startStream(static::WHATSAPP_SERVER, $resource);
         $auth = $this->createAuthNode();
 
@@ -365,7 +365,7 @@ class Client
                 array('node' => $node, 'autoReceipt' => $autoReceipt)
             );
             $params = array('node' => $node);
-            $this->getEventManager()->trigger('received.node.' . $node->getName(), $this, $params);
+            $this->getEventManager()->trigger('received.node.'.$node->getName(), $this, $params);
         }
 
         return $this;
@@ -417,13 +417,13 @@ class Client
             $this->getConnection()->getNodeReader()->setKey($this->getConnection()->getInputKey());
             //$this->getConnection()->getNodeWriter()->setKey($this->getConnection()->getOutputKey());
             $phone = $this->getIdentity()->getPhone();
-            $array = "\0\0\0\0" .
-                $phone->getPhoneNumber() .
-                $this->challengeData .
-                time() .
-                static::WHATSAPP_USER_AGENT .
-                " MccMnc/" .
-                str_pad($phone->getMcc(), 3, "0", STR_PAD_LEFT) .
+            $array = "\0\0\0\0".
+                $phone->getPhoneNumber().
+                $this->challengeData.
+                time().
+                static::WHATSAPP_USER_AGENT.
+                " MccMnc/".
+                str_pad($phone->getMcc(), 3, "0", STR_PAD_LEFT).
                 "001";
 
             $this->challengeData = null;
@@ -466,7 +466,7 @@ class Client
         $keys = KeyStream::generateKeys(base64_decode($this->getIdentity()->getPassword()), $this->challengeData);
         $this->getConnection()->setInputKey($this->createKeyStream($keys[2], $keys[3]));
         $this->getConnection()->setOutputKey($this->createKeyStream($keys[0], $keys[1]));
-        $array = "\0\0\0\0" . $this->getIdentity()->getPhone()->getPhoneNumber() . $this->challengeData;// . time() . static::WHATSAPP_USER_AGENT . " MccMnc/" . str_pad($phone["mcc"], 3, "0", STR_PAD_LEFT) . "001";
+        $array = "\0\0\0\0".$this->getIdentity()->getPhone()->getPhoneNumber().$this->challengeData;// . time() . static::WHATSAPP_USER_AGENT . " MccMnc/" . str_pad($phone["mcc"], 3, "0", STR_PAD_LEFT) . "001";
         $response = $this->getConnection()->getOutputKey()->encodeMessage($array, 0, 4, strlen($array) - 4);
 
         return $response;

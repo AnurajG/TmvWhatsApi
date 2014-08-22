@@ -6,4 +6,3 @@ class LoginSuccessEvent extends AbstractPublicEvent
 {
 
 }
- 

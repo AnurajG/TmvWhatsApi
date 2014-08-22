@@ -20,10 +20,10 @@ abstract class AbstractFactory implements FactoryInterface
             //check if group message
             if (stristr($number, '-')) {
                 //to group
-                $number .= "@" . Client::WHATSAPP_GROUP_SERVER;
+                $number .= "@".Client::WHATSAPP_GROUP_SERVER;
             } else {
                 //to normal user
-                $number .= "@" . Client::WHATSAPP_SERVER;
+                $number .= "@".Client::WHATSAPP_SERVER;
             }
         }
 

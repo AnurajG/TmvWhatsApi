@@ -48,7 +48,7 @@ class InjectIdListener extends AbstractListener
     {
         $node = $e->getParam('node');
         if ($node instanceof NodeInterface && $node instanceof MessageIdAwareInterface) {
-            $node->setId($node->getName() . '-' . time() . '-' . $this->messageCounter++);
+            $node->setId($node->getName().'-'.time().'-'.$this->messageCounter++);
             $node->setTimestamp(time());
             $e->setParam('node', $node);
         }

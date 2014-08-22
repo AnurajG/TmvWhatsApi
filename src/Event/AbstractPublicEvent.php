@@ -13,12 +13,13 @@ abstract class AbstractPublicEvent extends Event
     protected $client;
 
     /**
-     * @param \Tmv\WhatsApi\Client $client
+     * @param  \Tmv\WhatsApi\Client $client
      * @return $this
      */
     public function setClient($client)
     {
         $this->client = $client;
+
         return $this;
     }
 

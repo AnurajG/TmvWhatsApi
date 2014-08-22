@@ -54,12 +54,13 @@ class Video extends AbstractMediaFile
     protected $audioSampFmt;
 
     /**
-     * @param int $seconds
+     * @param  int   $seconds
      * @return $this
      */
     public function setSeconds($seconds)
     {
         $this->seconds = $seconds;
+
         return $this;
     }
 
@@ -72,12 +73,13 @@ class Video extends AbstractMediaFile
     }
 
     /**
-     * @param int $audioBitrate
+     * @param  int   $audioBitrate
      * @return $this
      */
     public function setAudioBitrate($audioBitrate)
     {
         $this->audioBitrate = $audioBitrate;
+
         return $this;
     }
 
@@ -90,12 +92,13 @@ class Video extends AbstractMediaFile
     }
 
     /**
-     * @param string $audioCodec
+     * @param  string $audioCodec
      * @return $this
      */
     public function setAudioCodec($audioCodec)
     {
         $this->audioCodec = $audioCodec;
+
         return $this;
     }
 
@@ -108,12 +111,13 @@ class Video extends AbstractMediaFile
     }
 
     /**
-     * @param int $audioSampFmt
+     * @param  int   $audioSampFmt
      * @return $this
      */
     public function setAudioSampFmt($audioSampFmt)
     {
         $this->audioSampFmt = $audioSampFmt;
+
         return $this;
     }
 
@@ -126,12 +130,13 @@ class Video extends AbstractMediaFile
     }
 
     /**
-     * @param int $audioSampFreq
+     * @param  int   $audioSampFreq
      * @return $this
      */
     public function setAudioSampFreq($audioSampFreq)
     {
         $this->audioSampFreq = $audioSampFreq;
+
         return $this;
     }
 
@@ -144,12 +149,13 @@ class Video extends AbstractMediaFile
     }
 
     /**
-     * @param int $duration
+     * @param  int   $duration
      * @return $this
      */
     public function setDuration($duration)
     {
         $this->duration = $duration;
+
         return $this;
     }
 
@@ -162,12 +168,13 @@ class Video extends AbstractMediaFile
     }
 
     /**
-     * @param string $encoding
+     * @param  string $encoding
      * @return $this
      */
     public function setEncoding($encoding)
     {
         $this->encoding = $encoding;
+
         return $this;
     }
 
@@ -180,12 +187,13 @@ class Video extends AbstractMediaFile
     }
 
     /**
-     * @param int $fps
+     * @param  int   $fps
      * @return $this
      */
     public function setFps($fps)
     {
         $this->fps = $fps;
+
         return $this;
     }
 
@@ -198,12 +206,13 @@ class Video extends AbstractMediaFile
     }
 
     /**
-     * @param int $height
+     * @param  int   $height
      * @return $this
      */
     public function setHeight($height)
     {
         $this->height = $height;
+
         return $this;
     }
 
@@ -216,12 +225,13 @@ class Video extends AbstractMediaFile
     }
 
     /**
-     * @param int $videoBitrate
+     * @param  int   $videoBitrate
      * @return $this
      */
     public function setVideoBitrate($videoBitrate)
     {
         $this->videoBitrate = $videoBitrate;
+
         return $this;
     }
 
@@ -234,12 +244,13 @@ class Video extends AbstractMediaFile
     }
 
     /**
-     * @param string $videoCodec
+     * @param  string $videoCodec
      * @return $this
      */
     public function setVideoCodec($videoCodec)
     {
         $this->videoCodec = $videoCodec;
+
         return $this;
     }
 
@@ -252,12 +263,13 @@ class Video extends AbstractMediaFile
     }
 
     /**
-     * @param int $width
+     * @param  int   $width
      * @return $this
      */
     public function setWidth($width)
     {
         $this->width = $width;
+
         return $this;
     }
 
@@ -269,4 +281,3 @@ class Video extends AbstractMediaFile
         return $this->width;
     }
 }
- 

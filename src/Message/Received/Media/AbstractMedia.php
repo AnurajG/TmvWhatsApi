@@ -18,12 +18,13 @@ abstract class AbstractMedia implements MediaInterface
     protected $type;
 
     /**
-     * @param string $ip
+     * @param  string $ip
      * @return $this
      */
     public function setIp($ip)
     {
         $this->ip = $ip;
+
         return $this;
     }
 
@@ -36,12 +37,13 @@ abstract class AbstractMedia implements MediaInterface
     }
 
     /**
-     * @param string $data
+     * @param  string $data
      * @return $this
      */
     public function setData($data)
     {
         $this->data = $data;
+
         return $this;
     }
 
@@ -54,12 +56,13 @@ abstract class AbstractMedia implements MediaInterface
     }
 
     /**
-     * @param string $type
+     * @param  string $type
      * @return $this
      */
     public function setType($type)
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -71,4 +74,3 @@ abstract class AbstractMedia implements MediaInterface
         return $this->type;
     }
 }
- 

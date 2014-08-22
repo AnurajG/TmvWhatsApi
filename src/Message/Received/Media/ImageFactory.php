@@ -8,7 +8,7 @@ class ImageFactory extends AbstractMediaFactory implements MediaFactoryInterface
 {
 
     /**
-     * @param NodeInterface $node
+     * @param  NodeInterface  $node
      * @return MediaInterface
      */
     public function createMedia(NodeInterface $node)
@@ -25,6 +25,7 @@ class ImageFactory extends AbstractMediaFactory implements MediaFactoryInterface
         $media->setHeight($this->convertIntIfValid($node->getAttribute('height')));
         $media->setSize($this->convertIntIfValid($node->getAttribute('size')));
         $media->setEncoding($node->getAttribute('encoding'));
+
         return $media;
     }
 }

@@ -26,12 +26,13 @@ abstract class AbstractMediaFile extends AbstractMedia
     protected $fileHash;
 
     /**
-     * @param string $file
+     * @param  string $file
      * @return $this
      */
     public function setFile($file)
     {
         $this->file = $file;
+
         return $this;
     }
 
@@ -44,12 +45,13 @@ abstract class AbstractMediaFile extends AbstractMedia
     }
 
     /**
-     * @param string $fileHash
+     * @param  string $fileHash
      * @return $this
      */
     public function setFileHash($fileHash)
     {
         $this->fileHash = $fileHash;
+
         return $this;
     }
 
@@ -62,12 +64,13 @@ abstract class AbstractMediaFile extends AbstractMedia
     }
 
     /**
-     * @param string $mimeType
+     * @param  string $mimeType
      * @return $this
      */
     public function setMimeType($mimeType)
     {
         $this->mimeType = $mimeType;
+
         return $this;
     }
 
@@ -80,12 +83,13 @@ abstract class AbstractMediaFile extends AbstractMedia
     }
 
     /**
-     * @param int $size
+     * @param  int   $size
      * @return $this
      */
     public function setSize($size)
     {
         $this->size = $size;
+
         return $this;
     }
 
@@ -98,12 +102,13 @@ abstract class AbstractMediaFile extends AbstractMedia
     }
 
     /**
-     * @param string $url
+     * @param  string $url
      * @return $this
      */
     public function setUrl($url)
     {
         $this->url = $url;
+
         return $this;
     }
 

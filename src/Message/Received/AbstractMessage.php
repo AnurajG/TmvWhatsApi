@@ -41,12 +41,13 @@ abstract class AbstractMessage implements MessageInterface
     protected $groupId;
 
     /**
-     * @param string $type
+     * @param  string $type
      * @return $this
      */
     public function setType($type)
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -59,12 +60,13 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * @param string $from
+     * @param  string $from
      * @return $this
      */
     public function setFrom($from)
     {
         $this->from = $from;
+
         return $this;
     }
 
@@ -77,12 +79,13 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * @param string $id
+     * @param  string $id
      * @return $this
      */
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -95,12 +98,13 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * @param DateTime $dateTime
+     * @param  DateTime $dateTime
      * @return $this
      */
     public function setDateTime(DateTime $dateTime)
     {
         $this->dateTime = $dateTime;
+
         return $this;
     }
 
@@ -113,12 +117,13 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * @param string $notify
+     * @param  string $notify
      * @return $this
      */
     public function setNotify($notify)
     {
         $this->notify = $notify;
+
         return $this;
     }
 
@@ -131,12 +136,13 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * @param string $groupId
+     * @param  string $groupId
      * @return $this
      */
     public function setGroupId($groupId)
     {
         $this->groupId = $groupId;
+
         return $this;
     }
 

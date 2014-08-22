@@ -30,12 +30,13 @@ class Audio extends AbstractMediaFile
     protected $audioBitrate;
 
     /**
-     * @param int $audioBitrate
+     * @param  int   $audioBitrate
      * @return $this
      */
     public function setAudioBitrate($audioBitrate)
     {
         $this->audioBitrate = $audioBitrate;
+
         return $this;
     }
 
@@ -48,12 +49,13 @@ class Audio extends AbstractMediaFile
     }
 
     /**
-     * @param string $audioCodec
+     * @param  string $audioCodec
      * @return $this
      */
     public function setAudioCodec($audioCodec)
     {
         $this->audioCodec = $audioCodec;
+
         return $this;
     }
 
@@ -66,12 +68,13 @@ class Audio extends AbstractMediaFile
     }
 
     /**
-     * @param int $audioSampFreq
+     * @param  int   $audioSampFreq
      * @return $this
      */
     public function setAudioSampFreq($audioSampFreq)
     {
         $this->audioSampFreq = $audioSampFreq;
+
         return $this;
     }
 
@@ -84,12 +87,13 @@ class Audio extends AbstractMediaFile
     }
 
     /**
-     * @param int $duration
+     * @param  int   $duration
      * @return $this
      */
     public function setDuration($duration)
     {
         $this->duration = $duration;
+
         return $this;
     }
 
@@ -102,12 +106,13 @@ class Audio extends AbstractMediaFile
     }
 
     /**
-     * @param string $origin
+     * @param  string $origin
      * @return $this
      */
     public function setOrigin($origin)
     {
         $this->origin = $origin;
+
         return $this;
     }
 
@@ -120,12 +125,13 @@ class Audio extends AbstractMediaFile
     }
 
     /**
-     * @param int $seconds
+     * @param  int   $seconds
      * @return $this
      */
     public function setSeconds($seconds)
     {
         $this->seconds = $seconds;
+
         return $this;
     }
 

@@ -212,13 +212,13 @@ class SocketAdapter implements AdapterInterface
             }
 
             if (strlen($buff) != $treeLength) {
-                throw new RuntimeException("Tree length did not match received length (buff = " . strlen($buff) . " & treeLength = $treeLength)");
+                throw new RuntimeException("Tree length did not match received length (buff = ".strlen($buff)." & treeLength = $treeLength)");
             } elseif (@feof($this->socket)) {
                     @fclose($this->socket);
                     $this->socket = null;
                     throw new RuntimeException("Socket EOF, connection closed");
                 }
-            $buff = $header . $buff;
+            $buff = $header.$buff;
         } else {
             throw new RuntimeException("Socket closed");
         }

@@ -13,9 +13,9 @@ class MediaFactory implements MediaFactoryInterface
     const TYPE_AUDIO = 'audio';
     const TYPE_VCARD = 'vcard';
     const TYPE_LOCATION = 'location';
-    
+
     /**
-     * @param NodeInterface $node
+     * @param  NodeInterface    $node
      * @return MediaInterface
      * @throws RuntimeException
      */
@@ -49,7 +49,7 @@ class MediaFactory implements MediaFactoryInterface
         if (!$factory) {
             throw new RuntimeException("Media type unknown");
         }
+
         return $factory->createMedia($node);
     }
 }
- 

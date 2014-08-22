@@ -8,7 +8,7 @@ class VcardFactory implements MediaFactoryInterface
 {
 
     /**
-     * @param NodeInterface $node
+     * @param  NodeInterface  $node
      * @return MediaInterface
      */
     public function createMedia(NodeInterface $node)
@@ -17,7 +17,7 @@ class VcardFactory implements MediaFactoryInterface
         $media->setType($node->getAttribute('type'));
         $media->setName($node->getChild('vcard')->getAttribute('name'));
         $media->setData($node->getChild('vcard')->getData());
+
         return $media;
     }
 }
- 

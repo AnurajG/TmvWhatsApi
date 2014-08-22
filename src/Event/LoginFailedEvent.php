@@ -6,4 +6,3 @@ class LoginFailedEvent extends AbstractPublicEvent
 {
 
 }
- 

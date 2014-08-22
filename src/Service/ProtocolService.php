@@ -22,7 +22,7 @@ class ProtocolService
         $phone2 = substr($phone->getPhoneNumber(), 3);
 
         // This AES secret is not really needed right now
-        $id = base64_decode($waString) . $country . $phone2;
+        $id = base64_decode($waString).$country.$phone2;
         $salt = substr(base64_decode($noMediaHash),2,4);
         $key = static::pbkdf2('sha1', $id, $salt, 16, 16, true);
         $iv = substr(base64_decode($noMediaHash),6,16);
@@ -34,20 +34,20 @@ class ProtocolService
 
         // We xor this file because I don't want to have a copyrighted png
         // on my repository
-        $f =  file_get_contents(__DIR__ . "/../../../data/magic.dat");
+        $f =  file_get_contents(__DIR__."/../../../data/magic.dat");
         $count = 0;
         $strlen = strlen($f);
-        for ($i=0; $i < $strlen; $i++) {
+        for ($i = 0; $i < $strlen; $i++) {
             $f[$i] = $f[$i] ^ $KEY[$count++];
             if ($count == strlen($KEY) -1) {
                 $count = 0;
             }
         }
 
-        $d = base64_decode($waPrefix) . $f;
+        $d = base64_decode($waPrefix).$f;
         $key2 = static::pbkdf2('sha1', $d, base64_decode($k), 128, 80, true);
 
-        $data = base64_decode($signature) . base64_decode($classesMd5) . $phone->getPhoneNumber();
+        $data = base64_decode($signature).base64_decode($classesMd5).$phone->getPhoneNumber();
 
         $opad = str_repeat(chr(0x5C), 64);
         $ipad = str_repeat(chr(0x36), 64);
@@ -56,7 +56,7 @@ class ProtocolService
             $ipad[$i] = $ipad[$i] ^ $key2[$i];
         }
 
-        $output = hash("sha1", $opad . hash("sha1", $ipad . $data, true), true);
+        $output = hash("sha1", $opad.hash("sha1", $ipad.$data, true), true);
 
         return base64_encode($output);
     }
@@ -76,7 +76,7 @@ class ProtocolService
 
         $output = "";
         for ($i = 1; $i <= $block_count; $i++) {
-            $last = $salt . pack("N", $i);
+            $last = $salt.pack("N", $i);
             $last = $xorsum = hash_hmac($algorithm, $last, $password, true);
             for ($j = 1; $j < $count; $j++) {
                 $xorsum ^= ($last = hash_hmac($algorithm, $last, $password, true));

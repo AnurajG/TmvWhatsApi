@@ -12,12 +12,13 @@ class MessageMedia extends AbstractMessage
     protected $media;
 
     /**
-     * @param MediaInterface $media
+     * @param  MediaInterface $media
      * @return $this
      */
     public function setMedia($media)
     {
         $this->media = $media;
+
         return $this;
     }
 
@@ -29,4 +30,3 @@ class MessageMedia extends AbstractMessage
         return $this->media;
     }
 }
- 

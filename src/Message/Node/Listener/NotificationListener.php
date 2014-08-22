@@ -34,34 +34,20 @@ class NotificationListener extends AbstractListener
         // @todo: handle notifications public events
 
         $type = $node->getAttribute("type");
-        switch($type)
-        {
+        switch ($type) {
             case "status":
-
                 break;
 
             case "picture":
-                if ($node->hasChild('set')) {
-
-                } elseif ($node->hasChild('delete')) {
-
-                }
                 break;
 
             case "contacts":
-
                 break;
 
             case "participant":
-                if ($node->hasChild('remove')) {
-
-                } elseif ($node->hasChild('add')) {
-
-                }
                 break;
 
             case "subject":
-
                 break;
 
             default:

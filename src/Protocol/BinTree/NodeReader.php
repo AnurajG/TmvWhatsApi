@@ -147,7 +147,7 @@ class NodeReader
             $user = $this->readString($this->readInt8());
             $server = $this->readString($this->readInt8());
             if ((strlen($user) > 0) && (strlen($server) > 0)) {
-                $ret = $user . "@" . $server;
+                $ret = $user."@".$server;
             } elseif (strlen($server) > 0) {
                 $ret = $server;
             }

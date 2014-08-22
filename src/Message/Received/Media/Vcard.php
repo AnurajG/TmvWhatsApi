@@ -10,12 +10,13 @@ class Vcard extends AbstractMedia implements MediaInterface
     protected $name;
 
     /**
-     * @param string $name
+     * @param  string $name
      * @return $this
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -27,4 +28,3 @@ class Vcard extends AbstractMedia implements MediaInterface
         return $this->name;
     }
 }
- 

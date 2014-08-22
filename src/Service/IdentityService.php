@@ -51,7 +51,7 @@ class IdentityService
         $token = $this->generateRequestToken($phone->getPhone());
 
         // Build the url.
-        $host = 'https://' . Client::WHATSAPP_REQUEST_HOST;
+        $host = 'https://'.Client::WHATSAPP_REQUEST_HOST;
         $query = array(
             'cc' => $phone->getCc(),
             'in' => $phone->getPhone(),
@@ -104,7 +104,7 @@ class IdentityService
     public function codeRegister(Identity $identity, $code)
     {
         // Build the url.
-        $host = 'https://' . Client::WHATSAPP_REGISTER_HOST;
+        $host = 'https://'.Client::WHATSAPP_REGISTER_HOST;
         $query = array(
             'cc' => $identity->getPhone()->getCc(),
             'in' => $identity->getPhone()->getPhoneNumber(),
@@ -116,7 +116,7 @@ class IdentityService
         $response = $this->getResponse($host, $query);
 
         if ($response['status'] != 'ok') {
-            $message = 'An error occurred registering the registration code from WhatsApp. ' . $response['reason'];
+            $message = 'An error occurred registering the registration code from WhatsApp. '.$response['reason'];
             throw new RuntimeException($message);
         }
 
@@ -149,7 +149,7 @@ class IdentityService
     public function checkCredentials(Identity $identity)
     {
 
-        $host = 'https://' . Client::WHATSAPP_CHECK_HOST;
+        $host = 'https://'.Client::WHATSAPP_CHECK_HOST;
         $query = array(
             'cc' => $identity->getPhone()->getCc(),
             'in' => $identity->getPhone()->getPhoneNumber(),
@@ -160,7 +160,7 @@ class IdentityService
         $response = $this->getResponse($host, $query);
 
         if ($response['status'] != 'ok') {
-            $message = 'There was a problem trying to request the code. ' . $response['reason'];
+            $message = 'There was a problem trying to request the code. '.$response['reason'];
             throw new \RuntimeException($message);
         }
 
@@ -177,12 +177,12 @@ class IdentityService
     protected function getResponse($host, array $query)
     {
         // Build the url.
-        $url = $host . '?';
+        $url = $host.'?';
         if (function_exists('http_build_query')) {
             $url .= http_build_query($query);
         } else {
             foreach ($query as $key => $value) {
-                $url .= $key . '=' . $value . '&';
+                $url .= $key.'='.$value.'&';
             }
             $url = rtrim($url, '&');
         }
@@ -218,7 +218,7 @@ class IdentityService
         $classesMd5 = "pZ3J/O+F3HXOyx8YixzvPQ==";
 
         $key2 = base64_decode("/UIGKU1FVQa+ATM2A0za7G2KI9S/CwPYjgAbc67v7ep42eO/WeTLx1lb1cHwxpsEgF4+PmYpLd2YpGUdX/A2JQitsHzDwgcdBpUf7psX1BU=");
-        $data = base64_decode($signature) . base64_decode($classesMd5) . $phone;
+        $data = base64_decode($signature).base64_decode($classesMd5).$phone;
 
         $opad = str_repeat(chr(0x5C), 64);
         $ipad = str_repeat(chr(0x36), 64);
@@ -227,7 +227,7 @@ class IdentityService
             $ipad[$i] = $ipad[$i] ^ $key2[$i];
         }
 
-        $output = hash("sha1", $opad . hash("sha1", $ipad . $data, true), true);
+        $output = hash("sha1", $opad.hash("sha1", $ipad.$data, true), true);
 
         return base64_encode($output);
     }

@@ -53,7 +53,7 @@ class NodeWriter
 
         $this->output .= "\x01";
         $this->writeAttributes($attributes);
-        $ret = $header . $this->flushBuffer();
+        $ret = $header.$this->flushBuffer();
 
         return $ret;
     }
@@ -120,7 +120,7 @@ class NodeWriter
             $bsize[2] = chr($len & 255);
             $size = $this->parseInt24($bsize);
         }
-        $ret = $this->writeInt24($size) . $data;
+        $ret = $this->writeInt24($size).$data;
         $this->output = '';
 
         return $ret;
@@ -154,7 +154,7 @@ class NodeWriter
         if ($token < 0xf5) {
             $this->output .= chr($token);
         } elseif ($token <= 0x1f4) {
-            $this->output .= "\xfe" . chr($token - 0xf5);
+            $this->output .= "\xfe".chr($token - 0xf5);
         }
 
         return $this;
@@ -286,9 +286,9 @@ class NodeWriter
         if ($len == 0) {
             $this->output .= "\x00";
         } elseif ($len < 256) {
-            $this->output .= "\xf8" . chr($len);
+            $this->output .= "\xf8".chr($len);
         } else {
-            $this->output .= "\xf9" . chr($len);
+            $this->output .= "\xf9".chr($len);
         }
 
         return $this;

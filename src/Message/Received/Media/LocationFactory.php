@@ -8,7 +8,7 @@ class LocationFactory implements MediaFactoryInterface
 {
 
     /**
-     * @param NodeInterface $node
+     * @param  NodeInterface  $node
      * @return MediaInterface
      */
     public function createMedia(NodeInterface $node)
@@ -17,11 +17,11 @@ class LocationFactory implements MediaFactoryInterface
         $media->setType($node->getAttribute('type'));
         $media->setEncoding($node->getAttribute('encoding'));
         $media->setName($node->getAttribute('name'));
-        $media->setLongitude((float)$node->getAttribute('longitude'));
-        $media->setLatitude((float)$node->getAttribute('latitude'));
+        $media->setLongitude((float) $node->getAttribute('longitude'));
+        $media->setLatitude((float) $node->getAttribute('latitude'));
         $media->setUrl($node->getAttribute('url'));
         $media->setData($node->getData());
+
         return $media;
     }
 }
- 
