@@ -126,6 +126,6 @@ class Identity
      */
     protected function checkIdentity($identity)
     {
-        return (strlen(urldecode($identity)) == 20);
+        return strlen(urldecode($identity)) == 20;
     }
 }
