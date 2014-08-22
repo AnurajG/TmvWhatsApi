@@ -61,6 +61,16 @@ class ProtocolService
         return base64_encode($output);
     }
 
+    /**
+     * @param  string                   $algorithm
+     * @param  string                   $password
+     * @param  string                   $salt
+     * @param  integer                  $count
+     * @param  integer                  $key_length
+     * @param  bool                     $raw_output
+     * @return string
+     * @throws InvalidArgumentException
+     */
     public static function pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output = false)
     {
         $algorithm = strtolower($algorithm);

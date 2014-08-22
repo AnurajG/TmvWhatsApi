@@ -10,7 +10,7 @@ class MessageMediaFactory implements MessageFactoryInterface
 {
     /**
      * @param  NodeInterface $node
-     * @return MessageText
+     * @return MessageMedia
      */
     public function createMessage(NodeInterface $node)
     {
@@ -49,7 +49,7 @@ class MessageMediaFactory implements MessageFactoryInterface
     }
 
     /**
-     * @param string$jid
+     * @param  string $jid
      * @return string
      */
     protected function getNumberFromJID($jid)

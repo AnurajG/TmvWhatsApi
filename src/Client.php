@@ -399,8 +399,8 @@ class Client
     /**
      * Create a keystream
      *
-     * @param $key
-     * @param $macKey
+     * @param  string    $key
+     * @param  string    $macKey
      * @return KeyStream
      */
     protected function createKeyStream($key, $macKey)

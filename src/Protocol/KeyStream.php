@@ -17,8 +17,13 @@ class KeyStream
      * @var string
      */
     protected $macKey;
+    /**
+     * @var int
+     */
     protected $seq;
-    /** @var ProtocolService */
+    /**
+     * @var ProtocolService
+     */
     protected $protocolService;
 
     public function __construct($key, $macKey)
@@ -27,6 +32,11 @@ class KeyStream
         $this->macKey = $macKey;
     }
 
+    /**
+     * @param  string $password
+     * @param  string $nonce
+     * @return array
+     */
     public static function generateKeys($password, $nonce)
     {
         $array = array(
@@ -47,6 +57,14 @@ class KeyStream
         return $array;
     }
 
+    /**
+     * @param  string           $buffer
+     * @param  integer          $macOffset
+     * @param  integer          $offset
+     * @param  integer          $length
+     * @return string
+     * @throws RuntimeException
+     */
     public function decodeMessage($buffer, $macOffset, $offset, $length)
     {
         $mac = $this->computeMac($buffer, $offset, $length);
@@ -62,6 +80,13 @@ class KeyStream
         return $this->rc4->cipher($buffer, $offset, $length);
     }
 
+    /**
+     * @param  string  $buffer
+     * @param  integer $macOffset
+     * @param  integer $offset
+     * @param  integer $length
+     * @return string
+     */
     public function encodeMessage($buffer, $macOffset, $offset, $length)
     {
         $data = $this->rc4->cipher($buffer, $offset, $length);
@@ -70,6 +95,12 @@ class KeyStream
         return substr($data, 0, $macOffset).substr($mac, 0, 4).substr($data, $macOffset + 4);
     }
 
+    /**
+     * @param  string $buffer
+     * @param  int    $offset
+     * @param  int    $length
+     * @return string
+     */
     private function computeMac($buffer, $offset, $length)
     {
         $hmac = hash_init("sha1", HASH_HMAC, $this->macKey);
@@ -85,10 +116,10 @@ class KeyStream
     }
 
     /**
-     * @param  \Tmv\WhatsApi\Service\ProtocolService $protocolService
+     * @param  ProtocolService $protocolService
      * @return $this
      */
-    public function setProtocolService($protocolService)
+    public function setProtocolService(ProtocolService $protocolService)
     {
         $this->protocolService = $protocolService;
 
@@ -96,7 +127,7 @@ class KeyStream
     }
 
     /**
-     * @return \Tmv\WhatsApi\Service\ProtocolService
+     * @return ProtocolService
      */
     public function getProtocolService()
     {

@@ -37,7 +37,7 @@ class Message extends AbstractNode implements MessageIdAwareInterface
      */
     public function getTimestamp()
     {
-        return $this->getAttribute('t');
+        return $this->getAttribute('t') ? (int) $this->getAttribute('t') : null;
     }
 
     /**

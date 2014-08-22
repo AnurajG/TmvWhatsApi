@@ -36,8 +36,8 @@ class NodeWriter
     }
 
     /**
-     * @param $domain
-     * @param $resource
+     * @param  string $domain
+     * @param  string $resource
      * @return string
      */
     public function startStream($domain, $resource)
@@ -126,6 +126,10 @@ class NodeWriter
         return $ret;
     }
 
+    /**
+     * @param  string $data
+     * @return int
+     */
     protected function parseInt24($data)
     {
         $ret = ord(substr($data, 0, 1)) << 16;
@@ -135,6 +139,10 @@ class NodeWriter
         return $ret;
     }
 
+    /**
+     * @param  integer $length
+     * @return int
+     */
     protected function getInt24($length)
     {
         $ret = '';
@@ -161,8 +169,8 @@ class NodeWriter
     }
 
     /**
-     * @param $user
-     * @param $server
+     * @param  string $user
+     * @param  string $server
      * @return $this
      */
     protected function writeJid($user, $server)
@@ -179,7 +187,7 @@ class NodeWriter
     }
 
     /**
-     * @param $v
+     * @param  integer $v
      * @return string
      */
     protected function writeInt8($v)
@@ -202,7 +210,7 @@ class NodeWriter
     }
 
     /**
-     * @param $v
+     * @param  integer $v
      * @return string
      */
     protected function writeInt24($v)
@@ -278,7 +286,7 @@ class NodeWriter
     }
 
     /**
-     * @param $len
+     * @param  integer $len
      * @return $this
      */
     protected function writeListStart($len)

@@ -7,9 +7,8 @@ use Tmv\WhatsApi\Message\Node\NodeInterface;
 interface MessageFactoryInterface
 {
     /**
-     * @param  NodeInterface             $node
-     * @return MessageMedia|MessageText
-     * @throws \InvalidArgumentException
+     * @param  NodeInterface    $node
+     * @return MessageInterface
      */
     public function createMessage(NodeInterface $node);
 }

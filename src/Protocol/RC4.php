@@ -17,6 +17,10 @@ class RC4
      */
     protected $j;
 
+    /**
+     * @param string int
+     * @param integer $drop
+     */
     public function __construct($key, $drop)
     {
         $this->s = range(0, 255);
@@ -53,8 +57,8 @@ class RC4
     }
 
     /**
-     * @param $i
-     * @param $j
+     * @param integer $i
+     * @param integer $j
      */
     protected function swap($i, $j)
     {

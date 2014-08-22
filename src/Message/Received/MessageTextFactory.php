@@ -37,7 +37,7 @@ class MessageTextFactory implements MessageFactoryInterface
     }
 
     /**
-     * @param string$jid
+     * @param  string $jid
      * @return string
      */
     protected function getNumberFromJID($jid)

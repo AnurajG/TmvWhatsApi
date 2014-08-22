@@ -23,7 +23,7 @@ interface NodeInterface
     public function getAttributes();
 
     /**
-     * @param $name
+     * @param  string $name
      * @return bool
      */
     public function hasAttribute($name);
@@ -34,7 +34,7 @@ interface NodeInterface
     public function getData();
 
     /**
-     * @return array|NodeInterface[]
+     * @return NodeInterface[]
      */
     public function getChildren();
 

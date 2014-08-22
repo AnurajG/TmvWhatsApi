@@ -101,7 +101,7 @@ class NodeReader
 
     /**
      * @param  int                                      $token
-     * @return mixed
+     * @return string
      * @throws \Tmv\WhatsApi\Exception\RuntimeException
      */
     protected function getToken($token)

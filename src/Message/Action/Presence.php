@@ -27,6 +27,9 @@ class Presence extends AbstractAction
      */
     protected $last;
 
+    /**
+     * @param string $name
+     */
     public function __construct($name = null)
     {
         $this->name = $name;
