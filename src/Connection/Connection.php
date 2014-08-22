@@ -3,7 +3,6 @@
 namespace Tmv\WhatsApi\Connection;
 
 use Tmv\WhatsApi\Connection\Adapter\AdapterInterface;
-
 use Tmv\WhatsApi\Protocol\BinTree\NodeReader;
 use Tmv\WhatsApi\Protocol\BinTree\NodeWriter;
 use Tmv\WhatsApi\Protocol\KeyStream;
@@ -34,13 +33,16 @@ class Connection
      */
     protected $outputKey;
 
+    /**
+     * @param AdapterInterface $adapter
+     */
     public function __construct(AdapterInterface $adapter)
     {
         $this->adapter = $adapter;
     }
 
     /**
-     * @param  \Tmv\WhatsApi\Connection\Adapter\AdapterInterface $adapter
+     * @param  AdapterInterface $adapter
      * @return $this
      */
     public function setAdapter($adapter)
@@ -51,7 +53,7 @@ class Connection
     }
 
     /**
-     * @return \Tmv\WhatsApi\Connection\Adapter\AdapterInterface
+     * @return AdapterInterface
      */
     public function getAdapter()
     {
@@ -59,7 +61,7 @@ class Connection
     }
 
     /**
-     * @param  \Tmv\WhatsApi\Protocol\BinTree\NodeReader $nodeReader
+     * @param  NodeReader $nodeReader
      * @return $this
      */
     public function setNodeReader($nodeReader)
@@ -70,7 +72,7 @@ class Connection
     }
 
     /**
-     * @return \Tmv\WhatsApi\Protocol\BinTree\NodeReader
+     * @return NodeReader
      */
     public function getNodeReader()
     {
@@ -82,7 +84,7 @@ class Connection
     }
 
     /**
-     * @param  \Tmv\WhatsApi\Protocol\BinTree\NodeWriter $nodeWriter
+     * @param  NodeWriter $nodeWriter
      * @return $this
      */
     public function setNodeWriter($nodeWriter)
@@ -93,7 +95,7 @@ class Connection
     }
 
     /**
-     * @return \Tmv\WhatsApi\Protocol\BinTree\NodeWriter
+     * @return NodeWriter
      */
     public function getNodeWriter()
     {

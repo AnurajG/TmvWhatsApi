@@ -20,6 +20,14 @@ class InjectIdListener extends AbstractListener
     protected $receivedId;
 
     /**
+     * @return int
+     */
+    public function getMessageCounter()
+    {
+        return $this->messageCounter;
+    }
+
+    /**
      * Attach one or more listeners
      *
      * Implementors may add an optional $priority argument; the EventManager
@@ -50,7 +58,7 @@ class InjectIdListener extends AbstractListener
     {
         $node = $e->getParam('node');
         if ($node instanceof NodeInterface && $node instanceof MessageIdAwareInterface) {
-            $this->waitForServer($e->getTarget(), $node->getId());
+            $this->waitForServer($this->getClient(), $node->getId());
         }
     }
 
@@ -66,7 +74,7 @@ class InjectIdListener extends AbstractListener
      * @param string $id
      * @param int    $timeout
      */
-    public function waitForServer(Client $client, $id, $timeout = 5)
+    protected function waitForServer(Client $client, $id, $timeout = 5)
     {
         $time = time();
         do {
