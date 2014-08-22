@@ -18,7 +18,7 @@ class RC4
     protected $j;
 
     /**
-     * @param string int
+     * @param string  $key
      * @param integer $drop
      */
     public function __construct($key, $drop)
@@ -36,9 +36,9 @@ class RC4
     }
 
     /**
-     * @param $data
-     * @param $offset
-     * @param $length
+     * @param  string $data
+     * @param  int    $offset
+     * @param  int    $length
      * @return string
      */
     public function cipher($data, $offset, $length)

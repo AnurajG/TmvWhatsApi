@@ -141,7 +141,7 @@ class NodeWriter
 
     /**
      * @param  integer $length
-     * @return int
+     * @return string
      */
     protected function getInt24($length)
     {

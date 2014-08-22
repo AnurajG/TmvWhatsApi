@@ -26,6 +26,10 @@ class KeyStream
      */
     protected $protocolService;
 
+    /**
+     * @param string $key
+     * @param string $macKey
+     */
     public function __construct($key, $macKey)
     {
         $this->rc4 = new RC4($key, static::DROP);
@@ -33,9 +37,9 @@ class KeyStream
     }
 
     /**
-     * @param  string $password
-     * @param  string $nonce
-     * @return array
+     * @param  string   $password
+     * @param  string   $nonce
+     * @return string[]
      */
     public static function generateKeys($password, $nonce)
     {
