@@ -15,6 +15,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
     public function testSettersAndGetters()
     {
         $adapterMock = m::mock('Tmv\\WhatsApi\\Connection\\Adapter\\AdapterInterface');
+        $adapterMock2 = m::mock('Tmv\\WhatsApi\\Connection\\Adapter\\AdapterInterface');
 
         $nodeReaderMock = m::mock('Tmv\\WhatsApi\\Protocol\\BinTree\\NodeReader');
         $nodeWriterMock = m::mock('Tmv\\WhatsApi\\Protocol\\BinTree\\NodeWriter');
@@ -23,6 +24,9 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $object = new Connection($adapterMock);
 
         $this->assertEquals($adapterMock, $object->getAdapter());
+
+        $object->setAdapter($adapterMock2);
+        $this->assertEquals($adapterMock2, $object->getAdapter());
 
         // Lazy loading
         $this->assertInstanceOf('Tmv\\WhatsApi\\Protocol\\BinTree\\NodeReader', $object->getNodeReader());

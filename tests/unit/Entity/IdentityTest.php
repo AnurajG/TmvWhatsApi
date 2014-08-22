@@ -41,4 +41,16 @@ class IdentityTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data['token'], $this->object->getToken());
         $this->assertEquals($phoneMock, $this->object->getPhone());
     }
+
+    public function testGetIdentityString()
+    {
+        $this->object->setToken('identity20identity20');
+        $ret = $this->object->getIdentityString();
+        $this->assertEquals('identity20identity20', $ret);
+
+        $this->object->setToken('test-token');
+
+        $ret = $this->object->getIdentityString();
+        $this->assertEquals('%28%e2%bc%a8%9d%8c%60%c5%11z%5b%9efcq%9e%c2%c9%90%3c', $ret);
+    }
 }
