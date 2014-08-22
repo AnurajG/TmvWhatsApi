@@ -36,7 +36,7 @@ class RC4
     }
 
     /**
-     * @param  string $data
+     * @param  array  $data
      * @param  int    $offset
      * @param  int    $length
      * @return string
