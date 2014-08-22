@@ -1,6 +1,6 @@
 {
     "name": "thomasvargiu/tmv-whatsapi",
-    "description": "Library to communicate with WhatsApp service",
+    "description": "Full OOP library to communicate with WhatsApp service",
     "type": "library",
     "keywords": [
         "whatsapp",
