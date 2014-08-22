@@ -10,7 +10,9 @@ use Tmv\WhatsApi\Protocol\TokenMap;
 
 class NodeReader
 {
-
+    /**
+     * @var string
+     */
     private $input;
     /**
      * @var KeyStream

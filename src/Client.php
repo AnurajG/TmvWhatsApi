@@ -428,7 +428,7 @@ class Client
 
             $this->challengeData = null;
 
-            return $this->getConnection()->getOutputKey()->encodeMessage($array, 0, strlen($array), false);
+            return $this->getConnection()->getOutputKey()->encodeMessage($array, 0, strlen($array), 0);
         }
 
         return null;
