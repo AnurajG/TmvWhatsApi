@@ -2,6 +2,7 @@
 
 namespace Tmv\WhatsApi\Message\Action;
 
+use Tmv\WhatsApi\Entity\Identity;
 use Tmv\WhatsApi\Message\Action;
 use Tmv\WhatsApi\Message\Node\MessageText as MessageNode;
 use Tmv\WhatsApi\Message\Node\Node;
@@ -41,7 +42,7 @@ class MessageTextFactory extends AbstractFactory implements FactoryInterface
 
         $node = new MessageNode();
         $node->setName('message')
-            ->setAttribute('to', $this->getJID($action->getTo()))
+            ->setAttribute('to', Identity::createJID($action->getTo()))
             ->setAttribute('type', 'text')
             ->addChild($x)
             ->addChild($notify)

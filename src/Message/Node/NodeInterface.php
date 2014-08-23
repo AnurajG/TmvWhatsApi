@@ -13,6 +13,14 @@ interface NodeInterface
     public static function fromArray(array $data, NodeFactory $factory);
 
     /**
+     * Exchange internal values from provided array
+     *
+     * @param  array $array
+     * @return void
+     */
+    public function exchangeArray(array $array);
+
+    /**
      * @return string
      */
     public function getName();

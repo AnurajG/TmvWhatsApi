@@ -2,6 +2,7 @@
 
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
+use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Tmv\WhatsApi\Client;
@@ -71,5 +72,25 @@ abstract class AbstractListener implements ListenerAggregateInterface, ListenerI
     public function getListeners()
     {
         return $this->listeners;
+    }
+
+    /**
+     * @param  NodeInterface $node
+     * @return bool
+     */
+    protected function isNodeFromMyNumber(NodeInterface $node)
+    {
+        $currentPhoneNumber = $this->getClient()->getIdentity()->getPhone()->getPhoneNumber();
+
+        return 0 === strncmp($node->getAttribute('from'), $currentPhoneNumber, strlen($currentPhoneNumber));
+    }
+
+    /**
+     * @param  NodeInterface $node
+     * @return bool
+     */
+    protected function isNodeFromGroup(NodeInterface $node)
+    {
+        return false !== strpos($node->getAttribute('from'), "-");
     }
 }

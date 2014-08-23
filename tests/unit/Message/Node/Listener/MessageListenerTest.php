@@ -46,7 +46,7 @@ class MessageListenerTest extends \PHPUnit_Framework_TestCase
 
         $event = m::mock('Zend\\EventManager\\Event');
         $eventManagerMock = m::mock('Zend\\EventManager\\EventManagerInterface');
-        $eventManagerMock->shouldReceive('trigger')->once();
+        $eventManagerMock->shouldReceive('trigger')->twice();
 
         $client = m::mock('Tmv\\WhatsApi\\Client');
 

@@ -37,8 +37,8 @@ class RC4
 
     /**
      * @param  string $data
-     * @param  int          $offset
-     * @param  int          $length
+     * @param  int    $offset
+     * @param  int    $length
      * @return string
      */
     public function cipher($data, $offset, $length)

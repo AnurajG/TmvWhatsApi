@@ -2,6 +2,8 @@
 
 namespace Tmv\WhatsApi\Entity;
 
+use Tmv\WhatsApi\Client;
+
 class Identity
 {
     /**
@@ -127,5 +129,38 @@ class Identity
     protected function checkIdentity($identity)
     {
         return strlen(urldecode($identity)) == 20;
+    }
+
+    /**
+     * Process number/jid and turn it into a JID if necessary
+     *
+     * @param  string $number Number to process
+     * @return string
+     */
+    public static function createJID($number)
+    {
+        if (!stristr($number, '@')) {
+            //check if group message
+            if (stristr($number, '-')) {
+                //to group
+                $number .= "@".Client::WHATSAPP_GROUP_SERVER;
+            } else {
+                //to normal user
+                $number .= "@".Client::WHATSAPP_SERVER;
+            }
+        }
+
+        return $number;
+    }
+
+    /**
+     * @param  string $jid
+     * @return string
+     */
+    public static function parseJID($jid)
+    {
+        list($number) = explode('@', $jid, 2);
+
+        return $number;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Tmv\WhatsApi\Message\Received;
 
+use Tmv\WhatsApi\Entity\Identity;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 use DateTime;
 
@@ -20,10 +21,10 @@ class MessageTextFactory implements MessageFactoryInterface
         $from = $node->getAttribute('from');
 
         if ($participant) {
-            $message->setFrom($this->getNumberFromJID($participant));
-            $message->setGroupId($this->getNumberFromJID($from));
+            $message->setFrom(Identity::parseJID($participant));
+            $message->setGroupId(Identity::parseJID($from));
         } else {
-            $message->setFrom($this->getNumberFromJID($from));
+            $message->setFrom(Identity::parseJID($from));
         }
 
         $message->setId($node->getAttribute('id'));
@@ -34,16 +35,5 @@ class MessageTextFactory implements MessageFactoryInterface
         $message->setType($node->getAttribute('type'));
 
         return $message;
-    }
-
-    /**
-     * @param  string $jid
-     * @return string
-     */
-    protected function getNumberFromJID($jid)
-    {
-        list($number) = explode('@', $jid, 2);
-
-        return $number;
     }
 }

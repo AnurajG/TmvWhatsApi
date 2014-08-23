@@ -39,6 +39,7 @@ class ReceiptListenerTest extends \PHPUnit_Framework_TestCase
 
         $eventManagerMock->shouldReceive('trigger')->once();
         $nodeMock->shouldReceive('getAttribute')->with('class')->once()->andReturn('message');
+        $nodeMock->shouldReceive('getAttribute')->with('id')->once()->andReturn('testid');
         $eventMock->shouldReceive('getParam')->with('node')->once()->andReturn($nodeMock);
 
         $this->object->setClient($client);
@@ -50,6 +51,7 @@ class ReceiptListenerTest extends \PHPUnit_Framework_TestCase
     {
         $eventMock = m::mock('Zend\\EventManager\\Event');
         $nodeMock = m::mock('Tmv\\WhatsApi\\Message\\Node\\NodeInterface');
+        $nodeMock->shouldReceive('getAttribute')->with('id')->once()->andReturn('testid');
         $eventManagerMock = m::mock('Zend\\EventManager\\EventManagerInterface');
         $client = m::mock('Tmv\\WhatsApi\\Client');
         $client->shouldReceive('getEventManager')->once()->andReturn($eventManagerMock);

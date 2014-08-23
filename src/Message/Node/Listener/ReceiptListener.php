@@ -29,14 +29,15 @@ class ReceiptListener extends AbstractListener
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
-        $client = $this->getClient();
         if ($node->getAttribute("class") != "message") {
             return;
         }
+
         $params = array(
+            'id' => $node->getAttribute('id'),
             'node' => $node
         );
-        $this->getClient()->getEventManager()->trigger('onReceiptServer', $client, $params);
+        $this->getClient()->getEventManager()->trigger('onReceiptServer', $this, $params);
     }
 
     public function onReceivedNodeReceipt(Event $e)
@@ -44,9 +45,9 @@ class ReceiptListener extends AbstractListener
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
         $params = array(
+            'id' => $node->getAttribute('id'),
             'node' => $node
         );
-        // todo: creare evento pubblico
         $this->getClient()->getEventManager()->trigger('onReceiptClient', $this, $params);
     }
 }

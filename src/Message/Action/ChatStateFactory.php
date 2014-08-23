@@ -2,6 +2,7 @@
 
 namespace Tmv\WhatsApi\Message\Action;
 
+use Tmv\WhatsApi\Entity\Identity;
 use Tmv\WhatsApi\Message\Node\Node;
 
 class ChatStateFactory extends AbstractFactory implements FactoryInterface
@@ -22,7 +23,7 @@ class ChatStateFactory extends AbstractFactory implements FactoryInterface
 
         $node = new Node();
         $node->setName('chatstate')
-            ->setAttribute('to', $this->getJID($action->getTo()))
+            ->setAttribute('to', Identity::createJID($action->getTo()))
             ->addChild($state);
 
         return $node;

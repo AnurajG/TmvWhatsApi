@@ -8,6 +8,7 @@ use Tmv\WhatsApi\Message\Action\Receipt;
 use Tmv\WhatsApi\Message\Node\Message;
 use Tmv\WhatsApi\Message\Received\MessageFactory;
 use Tmv\WhatsApi\Message\Received\MessageFactoryInterface;
+use Tmv\WhatsApi\Message\Received\MessageMedia;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManagerInterface;
 
@@ -89,7 +90,19 @@ class MessageListener extends AbstractListener
         $factory = $this->getMessageReceivedFactory();
         $message = $factory->createMessage($node);
 
-        $event = $this->createMessageReceivedEvent();
+        // Generic event
+        $event = $this->createMessageReceivedEvent('onMessageReceived');
+        $event->setClient($client);
+        $event->setMessage($message);
+        $client->getEventManager()->trigger($event);
+
+        $type = 'Text';
+        if ($message instanceof MessageMedia) {
+            $type = 'Media'.ucfirst($message->getType());
+        }
+
+        // Type event
+        $event = $this->createMessageReceivedEvent(sprintf('onMessage%sReceived', ucfirst($type)));
         $event->setClient($client);
         $event->setMessage($message);
         $client->getEventManager()->trigger($event);
@@ -111,10 +124,11 @@ class MessageListener extends AbstractListener
     }
 
     /**
+     * @param  string               $eventName
      * @return MessageReceivedEvent
      */
-    protected function createMessageReceivedEvent()
+    protected function createMessageReceivedEvent($eventName)
     {
-        return new MessageReceivedEvent('onMessageReceived', $this);
+        return new MessageReceivedEvent($eventName, $this);
     }
 }

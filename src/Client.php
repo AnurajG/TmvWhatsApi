@@ -90,6 +90,9 @@ class Client
         $this->getEventManager()->attachAggregate($listenerFactory->factory('Success', $this), 100);
         $this->getEventManager()->attachAggregate($listenerFactory->factory('Message', $this), 100);
         $this->getEventManager()->attachAggregate($listenerFactory->factory('Receipt', $this), 100);
+        $this->getEventManager()->attachAggregate($listenerFactory->factory('Presence', $this), 100);
+        $this->getEventManager()->attachAggregate($listenerFactory->factory('ChatState', $this), 100);
+        $this->getEventManager()->attachAggregate($listenerFactory->factory('Iq', $this), 100);
         $this->getEventManager()->attachAggregate($listenerFactory->factory('InjectId', $this), 100);
 
         $this->setIdentity($identity);

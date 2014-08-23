@@ -145,3 +145,24 @@ $client->getEventManager()->attach(
     }
 );
 ```
+
+## Public Events ##
+
+onMessageReceived
+onMessageTextReceived
+onMessageMediaImageReceived
+onMessageMediaAudioReceived
+onMessageMediaVideoReceived
+onMessageMediaVcardReceived
+onMessageMediaLocationReceived
+
+onLoginSuccess
+onLoginFailed
+
+onReceiptServer
+onReceiptClient
+
+onPresenceReceived
+
+onGroupParticipantAdded
+onGroupParticipantRemoved
