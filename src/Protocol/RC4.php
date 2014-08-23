@@ -32,18 +32,18 @@ class RC4
 
         $this->i = 0;
         $this->j = 0;
-        $this->cipher(range(0, $drop), 0, $drop);
+        $this->cipher(implode('', range(0, $drop)), 0, $drop);
     }
 
     /**
-     * @param  string|array $data
+     * @param  string $data
      * @param  int          $offset
      * @param  int          $length
      * @return string
      */
     public function cipher($data, $offset, $length)
     {
-        $out = $data;
+        $out = str_split($data);
         for ($n = $length; $n > 0; $n--) {
             $this->i = ($this->i + 1) & 0xff;
             $this->j = ($this->j + $this->s[$this->i]) & 0xff;
@@ -53,7 +53,7 @@ class RC4
             $offset++;
         }
 
-        return $out;
+        return implode('', $out);
     }
 
     /**

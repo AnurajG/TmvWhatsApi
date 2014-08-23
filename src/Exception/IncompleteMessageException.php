@@ -10,6 +10,9 @@ class IncompleteMessageException extends \RuntimeException implements ExceptionI
 
     protected $input;
 
+    /**
+     * @param string $input
+     */
     public function setInput($input)
     {
         $this->input = $input;
