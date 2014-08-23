@@ -1,14 +1,19 @@
 <?php
 
 namespace Tmv\WhatsApi\Message\Action;
+use Tmv\WhatsApi\Message\Node\Node;
 
 /**
  * Class Receipt
  *
  * @package Tmv\WhatsApi\Message\Action
  */
-class Receipt extends AbstractAction
+class Receipt extends AbstractAction implements IdAwareInterface
 {
+    /**
+     * @var string
+     */
+    protected $id;
     /**
      * @var string
      */
@@ -22,6 +27,25 @@ class Receipt extends AbstractAction
     {
         $this->setTo($to);
         $this->setId($id);
+    }
+
+    /**
+     * @param  string $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -41,5 +65,18 @@ class Receipt extends AbstractAction
     public function getTo()
     {
         return $this->to;
+    }
+
+    /**
+     * @return Node
+     */
+    public function createNode()
+    {
+        $node = new Node();
+        $node->setName('receipt')
+            ->setAttribute('id', $this->getId())
+            ->setAttribute('to', $this->getTo());
+
+        return $node;
     }
 }

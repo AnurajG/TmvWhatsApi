@@ -4,7 +4,7 @@ namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Event\LoginSuccessEvent;
 use Tmv\WhatsApi\Message\Action\Presence;
-use Tmv\WhatsApi\Message\Node\Success;
+use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManagerInterface;
 
@@ -28,7 +28,7 @@ class SuccessListener extends AbstractListener
 
     public function onReceivedNode(Event $e)
     {
-        /** @var Success $node */
+        /** @var NodeInterface $node */
         $node = $e->getParam('node');
         $client = $this->getClient();
 

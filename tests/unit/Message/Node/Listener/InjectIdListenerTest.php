@@ -33,19 +33,22 @@ class InjectIdListenerTest extends \PHPUnit_Framework_TestCase
     {
         $eventMock = m::mock('Zend\\EventManager\\Event');
         $nodeMock = m::mock(
-            'Tmv\\WhatsApi\\Message\\Node\\NodeInterface',
-            'Tmv\\WhatsApi\\Message\\Node\\MessageIdAwareInterface'
+            'Tmv\\WhatsApi\\Message\\Node\\NodeInterface'
         );
         $client = m::mock('Tmv\\WhatsApi\\Client');
 
         $this->object->setClient($client);
 
-        $nodeMock->shouldReceive('setId')
-            ->once()
-            ->with(sprintf('%s-%s-%s', 'testname', time(), $this->object->getMessageCounter()));
-        $nodeMock->shouldReceive('setTimestamp')
-            ->once()
-            ->with(time());
+        $nodeMock->shouldReceive('hasAttribute')->with('id')->andReturn(true);
+        $nodeMock->shouldReceive('hasAttribute')->with('t')->andReturn(true);
+        $nodeMock->shouldReceive('getAttribute')->with('id')->andReturn(null);
+        $nodeMock->shouldReceive('getAttribute')->with('t')->andReturn(null);
+        $nodeMock->shouldReceive('setAttribute')
+            ->with('id', sprintf('%s-%s-%s', 'testname', time(), $this->object->getMessageCounter()))
+            ->once();
+        $nodeMock->shouldReceive('setAttribute')
+            ->with('t', time())
+            ->once();
         $nodeMock->shouldReceive('getName')->once()->andReturn('testname');
 
         $eventMock->shouldReceive('getParam')->with('node')->once()->andReturn($nodeMock);
@@ -55,12 +58,11 @@ class InjectIdListenerTest extends \PHPUnit_Framework_TestCase
         $this->object->onSendingNode($eventMock);
     }
 
-    public function testOnNodeSentNodeMethod()
+    public function testOnNodeSentMethod()
     {
         $eventMock = m::mock('Zend\\EventManager\\Event');
         $nodeMock = m::mock(
-            'Tmv\\WhatsApi\\Message\\Node\\NodeInterface',
-            'Tmv\\WhatsApi\\Message\\Node\\MessageIdAwareInterface'
+            'Tmv\\WhatsApi\\Message\\Node\\NodeInterface'
         );
         $client = m::mock('Tmv\\WhatsApi\\Client');
         $client->shouldReceive('pollMessages');
@@ -68,7 +70,8 @@ class InjectIdListenerTest extends \PHPUnit_Framework_TestCase
         $this->object->setClient($client);
 
         $eventMock->shouldReceive('getParam')->with('node')->once()->andReturn($nodeMock);
-        $nodeMock->shouldReceive('getId')->once()->andReturn('testid');
+        $nodeMock->shouldReceive('hasAttribute')->with('id')->andReturn(true);
+        $nodeMock->shouldReceive('getAttribute')->with('id')->once()->andReturn('testid');
 
         // Setting received with to avoid timeout wait
         $this->object->setReceivedId('testid');

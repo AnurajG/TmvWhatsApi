@@ -34,7 +34,7 @@ class MessageListenerTest extends \PHPUnit_Framework_TestCase
     {
 
         $object = $this->object;
-        $node = m::mock('Tmv\\WhatsApi\\Message\\Node\\Message');
+        $node = m::mock('Tmv\\WhatsApi\\Message\\Node\\Node');
         $node->shouldReceive('getAttribute')->with('from')->andReturn('from-value');
         $node->shouldReceive('getAttribute')->with('id')->andReturn('id-value');
         $messageMock = m::mock('Tmv\\WhatsApi\\Message\\Received\\MessageInterface');

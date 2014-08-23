@@ -24,16 +24,10 @@ abstract class AbstractNode implements NodeInterface
     protected $data;
 
     /**
-     * @var NodeFactory
-     */
-    protected $nodeFactory;
-
-    /**
      * @param  array         $data
-     * @param  NodeFactory   $factory
      * @return NodeInterface
      */
-    public static function fromArray(array $data, NodeFactory $factory)
+    public static function fromArray(array $data)
     {
         /** @var NodeInterface $node */
         $node = new static();
@@ -41,7 +35,7 @@ abstract class AbstractNode implements NodeInterface
         if (isset($data['children']) && is_array($data['children'])) {
             foreach ($data['children'] as $child) {
                 if (is_array($child)) {
-                    $child = $factory->fromArray($child);
+                    $child = Node::fromArray($child);
                 }
                 $children[] = $child;
             }
@@ -165,7 +159,7 @@ abstract class AbstractNode implements NodeInterface
     public function addChild($child)
     {
         if (is_array($child)) {
-            $child = $this->getNodeFactory()->fromArray($child);
+            $child = Node::fromArray($child);
         }
         if (!$child instanceof NodeInterface) {
             throw new InvalidArgumentException("Argument passed is not an instance of NodeInterface");
@@ -215,29 +209,6 @@ abstract class AbstractNode implements NodeInterface
     }
 
     /**
-     * @param  \Tmv\WhatsApi\Message\Node\NodeFactory $nodeFactory
-     * @return $this
-     */
-    public function setNodeFactory($nodeFactory)
-    {
-        $this->nodeFactory = $nodeFactory;
-
-        return $this;
-    }
-
-    /**
-     * @return \Tmv\WhatsApi\Message\Node\NodeFactory
-     */
-    public function getNodeFactory()
-    {
-        if (!$this->nodeFactory) {
-            $this->nodeFactory = new NodeFactory();
-        }
-
-        return $this->nodeFactory;
-    }
-
-    /**
      * @return array
      */
     public function toArray()
@@ -267,7 +238,7 @@ abstract class AbstractNode implements NodeInterface
         foreach ($array as $key => $value) {
             switch ($key) {
                 case 'name':
-                    $this->setName($value);
+                    $this->setName($value ?: 'void');
                     break;
                 case 'attributes':
                     $this->setAttributes($value);

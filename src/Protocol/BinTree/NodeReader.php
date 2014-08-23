@@ -4,7 +4,7 @@ namespace Tmv\WhatsApi\Protocol\BinTree;
 
 use Tmv\WhatsApi\Exception\IncompleteMessageException;
 use Tmv\WhatsApi\Exception\RuntimeException;
-use Tmv\WhatsApi\Message\Node\NodeFactory;
+use Tmv\WhatsApi\Message\Node\Node;
 use Tmv\WhatsApi\Protocol\KeyStream;
 use Tmv\WhatsApi\Protocol\TokenMap;
 
@@ -18,34 +18,6 @@ class NodeReader
      * @var KeyStream
      */
     private $key;
-
-    /**
-     * @var NodeFactory
-     */
-    protected $nodeFactory;
-
-    /**
-     * @param  \Tmv\WhatsApi\Message\Node\NodeFactory $nodeFactory
-     * @return $this
-     */
-    public function setNodeFactory($nodeFactory)
-    {
-        $this->nodeFactory = $nodeFactory;
-
-        return $this;
-    }
-
-    /**
-     * @return \Tmv\WhatsApi\Message\Node\NodeFactory
-     */
-    public function getNodeFactory()
-    {
-        if (!$this->nodeFactory) {
-            $this->nodeFactory = new NodeFactory();
-        }
-
-        return $this->nodeFactory;
-    }
 
     /**
      * @return $this
@@ -186,7 +158,7 @@ class NodeReader
         if ($token == 1) {
             $attributes = $this->readAttributes($size);
 
-            return $this->getNodeFactory()->fromArray(
+            return Node::fromArray(
                 array(
                     'name'       => 'start',
                     'attributes' => $attributes
@@ -198,7 +170,7 @@ class NodeReader
         $tag = $this->readString($token);
         $attributes = $this->readAttributes($size);
         if (($size % 2) == 1) {
-            return $this->getNodeFactory()->fromArray(
+            return Node::fromArray(
                 array(
                     'name'       => $tag,
                     'attributes' => $attributes
@@ -209,7 +181,7 @@ class NodeReader
         if ($this->isListTag($token)) {
             $children = $this->readList($token);
 
-            return $this->getNodeFactory()->fromArray(
+            return Node::fromArray(
                 array(
                     'name'       => $tag,
                     'attributes' => $attributes,
@@ -218,7 +190,7 @@ class NodeReader
             );
         }
 
-        return $this->getNodeFactory()->fromArray(
+        return Node::fromArray(
             array(
                 'name'       => $tag,
                 'attributes' => $attributes,

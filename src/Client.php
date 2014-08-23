@@ -8,7 +8,7 @@ use Tmv\WhatsApi\Entity\Identity;
 use Tmv\WhatsApi\Exception\RuntimeException;
 use Tmv\WhatsApi\Message\Action;
 use Tmv\WhatsApi\Message\Node\Listener\ListenerFactory;
-use Tmv\WhatsApi\Message\Node\NodeFactory;
+use Tmv\WhatsApi\Message\Node\Node;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Tmv\WhatsApi\Protocol\KeyStream;
 use Tmv\WhatsApi\Service\ProtocolService;
@@ -58,10 +58,6 @@ class Client
     protected $challengeDataFilepath;
 
     /**
-     * @var NodeFactory
-     */
-    protected $nodeFactory;
-    /**
      * @var Identity
      */
     protected $identity;
@@ -69,11 +65,6 @@ class Client
      * @var Connection
      */
     protected $connection;
-
-    /**
-     * @var \Tmv\WhatsApi\Message\Action\NodeFactory
-     */
-    protected $nodeActionFactory;
 
     /**
      * Default class constructor.
@@ -253,7 +244,7 @@ class Client
         $auth = $this->createAuthNode();
 
         $this->sendData($data);
-        $this->sendNode($this->getNodeFactory()->fromArray(
+        $this->sendNode(Node::fromArray(
             array(
                 'name' => 'stream:features'
             )
@@ -288,8 +279,7 @@ class Client
 
         $this->getEventManager()->trigger('action.send.pre', $this, array('action' => $action));
 
-        $nodeFactory = $this->getNodeActionFactory();
-        $node = $nodeFactory->createNode($action);
+        $node = $action->createNode();
 
         $node = $this->sendNode($node);
         if ($node->hasAttribute('id')) {
@@ -388,7 +378,7 @@ class Client
         $authHash["user"] = $this->getIdentity()->getPhone()->getPhoneNumber();
         $data = $this->createAuthBlob();
 
-        $node = $this->getNodeFactory()->fromArray(
+        $node = Node::fromArray(
             array(
                 'name' => 'auth',
                 'attributes' => $authHash,
@@ -448,7 +438,7 @@ class Client
         $respHash = array();
         $respHash["xmlns"] = "urn:ietf:params:xml:ns:xmpp-sasl";
 
-        $node = $this->getNodeFactory()->fromArray(
+        $node = Node::fromArray(
             array(
                 'name' => 'response',
                 'attributes' => $respHash,
@@ -564,29 +554,6 @@ class Client
     }
 
     /**
-     * @param  \Tmv\WhatsApi\Message\Action\NodeFactory $nodeActionFactory
-     * @return $this
-     */
-    public function setNodeActionFactory($nodeActionFactory)
-    {
-        $this->nodeActionFactory = $nodeActionFactory;
-
-        return $this;
-    }
-
-    /**
-     * @return \Tmv\WhatsApi\Message\Action\NodeFactory
-     */
-    public function getNodeActionFactory()
-    {
-        if (!$this->nodeActionFactory) {
-            $this->nodeActionFactory = new Action\NodeFactory();
-        }
-
-        return $this->nodeActionFactory;
-    }
-
-    /**
      * @param  \Tmv\WhatsApi\Connection\Connection $connection
      * @return $this
      */
@@ -631,28 +598,5 @@ class Client
     public function getIdentity()
     {
         return $this->identity;
-    }
-
-    /**
-     * @param  \Tmv\WhatsApi\Message\Node\NodeFactory $nodeFactory
-     * @return $this
-     */
-    public function setNodeFactory($nodeFactory)
-    {
-        $this->nodeFactory = $nodeFactory;
-
-        return $this;
-    }
-
-    /**
-     * @return \Tmv\WhatsApi\Message\Node\NodeFactory
-     */
-    public function getNodeFactory()
-    {
-        if (!$this->nodeFactory) {
-            $this->nodeFactory = new NodeFactory();
-        }
-
-        return $this->nodeFactory;
     }
 }

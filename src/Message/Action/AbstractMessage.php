@@ -13,15 +13,38 @@ abstract class AbstractMessage extends AbstractAction implements MessageInterfac
     /**
      * @var string
      */
+    protected $id;
+    /**
+     * @var int
+     */
+    protected $timestamp;
+    /**
+     * @var string
+     */
     protected $to;
     /**
      * @var string
      */
     protected $fromName = '';
+
     /**
-     * @var int
+     * @param  string $id
+     * @return $this
      */
-    protected $timestamp;
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * @param  string $to
@@ -77,10 +100,6 @@ abstract class AbstractMessage extends AbstractAction implements MessageInterfac
      */
     public function getTimestamp()
     {
-        if (!$this->timestamp) {
-            $this->timestamp = time();
-        }
-
         return $this->timestamp;
     }
 }

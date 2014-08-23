@@ -2,16 +2,13 @@
 
 namespace Tmv\WhatsApi\Message\Action;
 
+use Tmv\WhatsApi\Message\Node\Node;
+
 interface ActionInterface
 {
-    /**
-     * @param  string $id
-     * @return $this
-     */
-    public function setId($id);
 
     /**
-     * @return string
+     * @return Node
      */
-    public function getId();
+    public function createNode();
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace Tmv\WhatsApi\Message\Action;
+use Tmv\WhatsApi\Message\Node\Node;
 
 /**
  * Class Presence
@@ -90,5 +91,25 @@ class Presence extends AbstractAction
     public function getLast()
     {
         return $this->last;
+    }
+
+    /**
+     * @return Node
+     */
+    public function createNode()
+    {
+        $node = new Node();
+        $node->setName('presence');
+        if ($this->getName()) {
+            $node->setAttribute('name', $this->getName());
+        }
+        if ($this->getType()) {
+            $node->setAttribute('type', $this->getType());
+        }
+        if ($this->getLast()) {
+            $node->setAttribute('last', $this->getLast());
+        }
+
+        return $node;
     }
 }

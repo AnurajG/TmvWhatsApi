@@ -7,10 +7,9 @@ interface NodeInterface
 
     /**
      * @param  array         $data
-     * @param  NodeFactory   $factory
      * @return NodeInterface
      */
-    public static function fromArray(array $data, NodeFactory $factory);
+    public static function fromArray(array $data);
 
     /**
      * Exchange internal values from provided array
@@ -40,6 +39,12 @@ interface NodeInterface
      * @return string
      */
     public function getData();
+
+    /**
+     * @param  string $data
+     * @return $this
+     */
+    public function setData($data);
 
     /**
      * @return NodeInterface[]

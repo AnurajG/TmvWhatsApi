@@ -3,7 +3,6 @@
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Client;
-use Tmv\WhatsApi\Message\Node\MessageIdAwareInterface;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManagerInterface;
@@ -47,18 +46,20 @@ class InjectIdListener extends AbstractListener
     public function onSendingNode(Event $e)
     {
         $node = $e->getParam('node');
-        if ($node instanceof NodeInterface && $node instanceof MessageIdAwareInterface) {
-            $node->setId($node->getName().'-'.time().'-'.$this->messageCounter++);
-            $node->setTimestamp(time());
-            $e->setParam('node', $node);
+        if ($node->hasAttribute('id') && null == $node->getAttribute('id')) {
+            $node->setAttribute('id', $node->getName().'-'.time().'-'.$this->messageCounter++);
         }
+        if ($node->hasAttribute('t') && null == $node->getAttribute('t')) {
+            $node->setAttribute('t', time());
+        }
+        $e->setParam('node', $node);
     }
 
     public function onNodeSent(Event $e)
     {
         $node = $e->getParam('node');
-        if ($node instanceof NodeInterface && $node instanceof MessageIdAwareInterface) {
-            $this->waitForServer($this->getClient(), $node->getId());
+        if ($node->hasAttribute('id')) {
+            $this->waitForServer($this->getClient(), $node->getAttribute('id'));
         }
     }
 

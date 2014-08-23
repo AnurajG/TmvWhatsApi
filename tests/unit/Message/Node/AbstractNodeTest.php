@@ -16,17 +16,8 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
         $this->object = new AbstractNodeMock();
     }
 
-    public function testGetNodeFactory()
-    {
-        $this->assertInstanceOf('\Tmv\WhatsApi\Message\Node\NodeFactory', $this->object->getNodeFactory());
-    }
-
     public function testFromArrayMethod()
     {
-        $nodeMock = m::mock('\Tmv\WhatsApi\Message\Node\Node');
-        $nodeFactoryMock = m::mock('\Tmv\WhatsApi\Message\Node\NodeFactory');
-        $nodeFactoryMock->shouldReceive('fromArray')->once()->andReturn($nodeMock);
-
         $data = array(
             'name' => 'nodename',
             'data' => 'mydata',
@@ -37,11 +28,13 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
-        $object = AbstractNodeMock::fromArray($data, $nodeFactoryMock);
+        $object = AbstractNodeMock::fromArray($data);
         $this->assertEquals($data['name'], $object->getName());
         $this->assertEquals($data['data'], $object->getData());
         $this->assertEquals($data['attributes'], $object->getAttributes());
-        $this->assertEquals(array($nodeMock), $object->getChildren());
+        $children = $object->getChildren();
+        $this->assertCount(1, $children);
+        $this->assertInstanceOf('Tmv\\WhatsApi\\Message\\Node\\Node', $children[0]);
     }
 
     /**
@@ -80,12 +73,6 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $this->object->getAttribute('first'));
         $this->assertEquals('foo2', $this->object->getAttribute('second'));
 
-        $nodeMock = m::mock('\Tmv\WhatsApi\Message\Node\Node');
-        $nodeMock->shouldReceive('getName')->andReturn('iq');
-        $nodeFactoryMock = m::mock('\Tmv\WhatsApi\Message\Node\NodeFactory');
-        $nodeFactoryMock->shouldReceive('fromArray')->once()->andReturn($nodeMock);
-
-        $this->object->setNodeFactory($nodeFactoryMock);
         $this->object->setChildren(
             array(
                 array(
@@ -94,8 +81,9 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->assertEquals($nodeMock, $this->object->getChild('iq'));
-        $this->assertEquals(array($nodeMock), $this->object->getChildren());
+        $children = $this->object->getChildren();
+        $this->assertCount(1, $children);
+        $this->assertInstanceOf('Tmv\\WhatsApi\\Message\\Node\\Node', $children[0]);
         $this->assertTrue($this->object->hasChild('iq'));
         $this->assertFalse($this->object->hasChild('iq2'));
     }

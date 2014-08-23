@@ -5,7 +5,7 @@ namespace Tmv\WhatsApi\Message\Node;
 class NodeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Iq
+     * @var Node
      */
     protected $object;
 

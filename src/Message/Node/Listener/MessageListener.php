@@ -5,7 +5,7 @@ namespace Tmv\WhatsApi\Message\Node\Listener;
 use Tmv\WhatsApi\Client;
 use Tmv\WhatsApi\Event\MessageReceivedEvent;
 use Tmv\WhatsApi\Message\Action\Receipt;
-use Tmv\WhatsApi\Message\Node\Message;
+use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Tmv\WhatsApi\Message\Received\MessageFactory;
 use Tmv\WhatsApi\Message\Received\MessageFactoryInterface;
 use Tmv\WhatsApi\Message\Received\MessageMedia;
@@ -83,7 +83,7 @@ class MessageListener extends AbstractListener
 
     public function onReceivedNode(Event $e)
     {
-        /** @var Message $node */
+        /** @var NodeInterface $node */
         $node = $e->getParam('node');
         $client = $this->getClient();
 
@@ -113,7 +113,7 @@ class MessageListener extends AbstractListener
         }
     }
 
-    protected function sendReceipt(Client $client, Message $node)
+    protected function sendReceipt(Client $client, NodeInterface $node)
     {
         $receipt = new Receipt();
         $receipt->setTo($node->getAttribute('from'));

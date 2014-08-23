@@ -1,6 +1,8 @@
 <?php
 
 namespace Tmv\WhatsApi\Message\Action;
+use Tmv\WhatsApi\Entity\Identity;
+use Tmv\WhatsApi\Message\Node\Node;
 
 /**
  * Class MessageText
@@ -43,5 +45,45 @@ class MessageText extends AbstractMessage
     public function getBody()
     {
         return $this->body;
+    }
+
+    /**
+     * @return Node
+     */
+    public function createNode()
+    {
+        $server = new Node();
+        $server->setName('server');
+
+        $x = new Node();
+        $x->setName('x')
+            ->setAttribute('xmlns', 'jabber:x:event')
+            ->addChild($server);
+
+        $notify = new Node();
+        $notify->setName('notify')
+            ->setAttribute('xmlns', 'urn:xmpp:whatsapp')
+            ->setAttribute('name', $this->getFromName());
+
+        $request = new Node();
+        $request->setName('request')
+            ->setAttribute('xmlns', 'urn:xmpp:receipts');
+
+        $body = new Node();
+        $body->setName('body')
+            ->setData($this->getBody());
+
+        $node = new Node();
+        $node->setName('message')
+            ->setAttribute('id', null)
+            ->setAttribute('t', null)
+            ->setAttribute('to', Identity::createJID($this->getTo()))
+            ->setAttribute('type', 'text')
+            ->addChild($x)
+            ->addChild($notify)
+            ->addChild($request)
+            ->addChild($body);
+
+        return $node;
     }
 }

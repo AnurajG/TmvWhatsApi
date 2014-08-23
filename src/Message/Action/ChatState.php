@@ -2,6 +2,9 @@
 
 namespace Tmv\WhatsApi\Message\Action;
 
+use Tmv\WhatsApi\Entity\Identity;
+use Tmv\WhatsApi\Message\Node\Node;
+
 /**
  * Class ChatState
  *
@@ -67,5 +70,21 @@ class ChatState extends AbstractAction
     public function getState()
     {
         return $this->state;
+    }
+
+    /**
+     * @return Node
+     */
+    public function createNode()
+    {
+        $state = new Node();
+        $state->setName($this->getState());
+
+        $node = new Node();
+        $node->setName('chatstate')
+            ->setAttribute('to', Identity::createJID($this->getTo()))
+            ->addChild($state);
+
+        return $node;
     }
 }
