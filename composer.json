@@ -2,6 +2,7 @@
     "name": "thomasvargiu/tmv-whatsapi",
     "description": "Full OOP library to communicate with WhatsApp service",
     "type": "library",
+    "license": "MIT",
     "keywords": [
         "whatsapp",
         "whatsapi",
