@@ -51,7 +51,7 @@ class ClearDirty extends AbstractAction implements IdAwareInterface
     }
 
     /**
-     * @param  array $categories
+     * @param  string[] $categories
      * @return $this
      */
     public function setCategories($categories)
