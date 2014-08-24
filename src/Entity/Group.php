@@ -3,7 +3,6 @@
 namespace Tmv\WhatsApi\Entity;
 
 use DateTime;
-use Tmv\WhatsApi\Message\Node\NodeInterface;
 
 class Group
 {
