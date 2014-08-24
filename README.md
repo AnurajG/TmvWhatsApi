@@ -5,7 +5,8 @@
 # WhatsAPI
 
 **Status: development**
-**Not use it in production environment!**
+
+**Do not use it in production environment!**
 
 ## About WhatsAPI
 
@@ -148,21 +149,17 @@ $client->getEventManager()->attach(
 
 ## Public Events ##
 
-onMessageReceived
-onMessageTextReceived
-onMessageMediaImageReceived
-onMessageMediaAudioReceived
-onMessageMediaVideoReceived
-onMessageMediaVcardReceived
-onMessageMediaLocationReceived
-
-onLoginSuccess
-onLoginFailed
-
-onReceiptServer
-onReceiptClient
-
-onPresenceReceived
-
-onGroupParticipantAdded
-onGroupParticipantRemoved
+- onMessageReceived (generic event for all messages)
+- onMessageTextReceived
+- onMessageMediaImageReceived
+- onMessageMediaAudioReceived
+- onMessageMediaVideoReceived
+- onMessageMediaVcardReceived
+- onMessageMediaLocationReceived
+- onLoginSuccess
+- onLoginFailed
+- onReceiptServer
+- onReceiptClient
+- onPresenceReceived
+- onGroupParticipantAdded
+- onGroupParticipantRemoved
