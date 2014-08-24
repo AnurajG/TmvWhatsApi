@@ -29,6 +29,9 @@ class LocalizationService
      */
     public function getCountriesPath()
     {
+        if (!$this->countriesPath) {
+            $this->countriesPath = __DIR__ . '/../../data/countries.csv';
+        }
         return $this->countriesPath;
     }
 
