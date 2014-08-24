@@ -2,7 +2,6 @@
 
 namespace Tmv\WhatsApi\Message\Action;
 
-use Tmv\WhatsApi\Client;
 use Tmv\WhatsApi\Message\Node\Node;
 
 /**
@@ -25,7 +24,7 @@ class ClearDirty extends AbstractAction implements IdAwareInterface
     protected $categories = array();
 
     /**
-     * @param array $categories
+     * @param string[] $categories
      */
     public function __construct(array $categories)
     {
