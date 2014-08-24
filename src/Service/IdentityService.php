@@ -62,7 +62,7 @@ class IdentityService
             'mcc' => $phone->getMcc(),
             'mnc' => '001',
             'token' => urlencode($token),
-            'id' => $identity->getToken(),
+            'id' => $identity->getIdentityToken(),
         );
 
         $response = $this->getResponse($host, $query);
@@ -108,7 +108,7 @@ class IdentityService
         $query = array(
             'cc' => $identity->getPhone()->getCc(),
             'in' => $identity->getPhone()->getPhoneNumber(),
-            'id' => $identity->getToken(),
+            'id' => $identity->getIdentityToken(),
             'code' => $code,
             'c' => 'cookie',
         );
@@ -153,7 +153,7 @@ class IdentityService
         $query = array(
             'cc' => $identity->getPhone()->getCc(),
             'in' => $identity->getPhone()->getPhoneNumber(),
-            'id' => $identity->getToken(),
+            'id' => $identity->getIdentityToken(),
             'c' => 'cookie',
         );
 

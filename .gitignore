@@ -11,3 +11,4 @@ php-cs-fixer.phar
 composer.lock
 composer.phar
 test.php
+*.test.php

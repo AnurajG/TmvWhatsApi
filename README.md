@@ -43,7 +43,7 @@ $localizationService->injectPhoneProperties($phone);
 // Creating identity
 $identity = new Identity();
 $identity->setNickname(''); // your name
-$identity->setToken('');    // your token
+$identity->setIdentityToken('');    // your token
 $identity->setPassword(''); // your password
 $identity->setPhone($phone);
 

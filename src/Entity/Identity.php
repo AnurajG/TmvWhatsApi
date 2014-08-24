@@ -13,7 +13,7 @@ class Identity
     /**
      * @var string
      */
-    protected $token;
+    protected $identityToken;
     /**
      * @var string
      */
@@ -66,23 +66,41 @@ class Identity
     }
 
     /**
+     * @deprecated
      * @param  string $token
      * @return $this
      */
     public function setToken($token)
     {
-        $this->identityString = null;
-        $this->token = $token;
+        return $this->setIdentityToken($token);
+    }
 
+    /**
+     * @deprecated
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->getIdentityToken();
+    }
+
+    /**
+     * @param string $identityToken
+     * @return $this
+     */
+    public function setIdentityToken($identityToken)
+    {
+        $this->identityString = null;
+        $this->identityToken = $identityToken;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getToken()
+    public function getIdentityToken()
     {
-        return $this->token;
+        return $this->identityToken;
     }
 
     /**
@@ -110,10 +128,10 @@ class Identity
     public function getIdentityString()
     {
         if (!$this->identityString) {
-            if (!$this->checkIdentity($this->getToken())) {
-                $this->identityString = strtolower(urlencode(sha1($this->getToken(), true)));
+            if (!$this->checkIdentity($this->getIdentityToken())) {
+                $this->identityString = strtolower(urlencode(sha1($this->getIdentityToken(), true)));
             } else {
-                $this->identityString = $this->getToken();
+                $this->identityString = $this->getIdentityToken();
             }
         }
 
