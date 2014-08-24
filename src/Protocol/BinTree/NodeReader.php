@@ -42,7 +42,7 @@ class NodeReader
 
     /**
      * @param  string|null                                        $input
-     * @return null|\Tmv\WhatsApi\Message\Node\Node
+     * @return \Tmv\WhatsApi\Message\Node\NodeInterface|null
      * @throws \Tmv\WhatsApi\Exception\IncompleteMessageException
      * @throws \Tmv\WhatsApi\Exception\RuntimeException
      */
@@ -148,7 +148,7 @@ class NodeReader
     }
 
     /**
-     * @return null|\Tmv\WhatsApi\Message\Node\Node
+     * @return \Tmv\WhatsApi\Message\Node\NodeInterface|null
      */
     protected function nextTreeInternal()
     {

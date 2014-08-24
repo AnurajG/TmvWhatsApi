@@ -504,7 +504,7 @@ class Client
     }
 
     /**
-     * @param $data
+     * @param string $data
      * @return $this
      */
     public function writeChallengeData($data)
