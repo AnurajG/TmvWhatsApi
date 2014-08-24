@@ -163,3 +163,5 @@ $client->getEventManager()->attach(
 - onPresenceReceived
 - onGroupParticipantAdded
 - onGroupParticipantRemoved
+- onGetGroupsResult
+- onGetGroupInfoResult

@@ -28,6 +28,16 @@ abstract class AbstractMessage extends AbstractAction implements MessageInterfac
     protected $fromName = '';
 
     /**
+     * @param string $from
+     * @param string $to
+     */
+    public function __construct($from = null, $to = null)
+    {
+        $this->setFromName($from);
+        $this->setTo($to);
+    }
+
+    /**
      * @param  string $id
      * @return $this
      */

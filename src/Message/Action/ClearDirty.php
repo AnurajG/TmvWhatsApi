@@ -75,23 +75,19 @@ class ClearDirty extends AbstractAction implements IdAwareInterface
      */
     public function createNode()
     {
-        $clean = new Node();
-        $clean->setName('clean')
+        $node = new Node();
+        $node->setName('iq')
+            ->setAttribute('type', 'set')
+            ->setAttribute('to', "s.whatsapp.net")
+            ->setAttribute('id', null)
             ->setAttribute('xmlns', 'urn:xmpp:whatsapp:dirty');
 
         foreach ($this->getCategories() as $category) {
             $categoryNode = new Node();
-            $categoryNode->setName('category')
-                ->setAttribute('name', $category);
-            $clean->addChild($categoryNode);
+            $categoryNode->setName('clean')
+                ->setAttribute('type', $category);
+            $node->addChild($categoryNode);
         }
-
-        $node = new Node();
-        $node->setName('iq')
-            ->setAttribute('type', 'set')
-            ->setAttribute('to', Client::WHATSAPP_HOST)
-            ->setAttribute('id', null)
-            ->addChild($clean);
 
         return $node;
     }

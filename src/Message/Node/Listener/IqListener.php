@@ -3,6 +3,7 @@
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Client;
+use Tmv\WhatsApi\Entity\Group;
 use Tmv\WhatsApi\Message\Node\Node;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Zend\EventManager\Event;
@@ -39,11 +40,76 @@ class IqListener extends AbstractListener
                 break;
             case 'result':
                 // todo: handle iq result
+
+                // group responses
+                switch (true) {
+                    case (false !== strpos($node->getAttribute("id"), 'creategroup-')):
+                        // todo
+                        break;
+
+                    case (false !== strpos($node->getAttribute("id"), 'endgroup-')):
+                        // todo
+                        break;
+
+                    case (false !== strpos($node->getAttribute("id"), 'getgroupparticipants-')):
+                        // todo
+                        break;
+
+                    case (false !== strpos($node->getAttribute("id"), 'getgroups-')):
+                        $this->processGetGroupsResult($node);
+                        break;
+
+                    case (false !== strpos($node->getAttribute("id"), 'getgroupinfo-')):
+                        $this->processGetGroupInfoResult($node);
+                        break;
+                }
                 break;
         }
         if ($node->hasChild('sync')) {
             // todo: handle sync result
         }
+    }
+
+    /**
+     * @param NodeInterface $node
+     * @return $this
+     */
+    protected function processGetGroupsResult(NodeInterface $node)
+    {
+        $groupList = array();
+        if ($node->getChild(0) != null) {
+            foreach ($node->getChildren() as $child) {
+                $groupList[] = Group::factory($child->getAttributes());
+            }
+        }
+        $this->getClient()->getEventManager()->trigger('onGetGroupsResult',
+            $this,
+            array(
+                'groups' => $groupList
+            )
+        );
+        return $this;
+    }
+
+    /**
+     * @param NodeInterface $node
+     * @return $this
+     */
+    protected function processGetGroupInfoResult(NodeInterface $node)
+    {
+        $groupList = array();
+        if ($node->getChild(0) != null) {
+            foreach ($node->getChildren() as $child) {
+                $groupList[] = Group::factory($child->getAttributes());
+            }
+        }
+        $this->getClient()->getEventManager()->trigger('onGetGroupInfoResult',
+            $this,
+            array(
+                'groups' => $groupList
+            )
+        );
+        return $this;
     }
 
     /**

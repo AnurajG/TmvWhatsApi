@@ -2,15 +2,11 @@
 
 namespace Tmv\WhatsApi\Message\Action;
 
+use Tmv\WhatsApi\Entity\Identity;
 use Tmv\WhatsApi\Message\Node\Node;
 
-/**
- * Class GetGroups
- * @package Tmv\WhatsApi\Message\Action
- */
-class GetGroups extends AbstractAction implements IdAwareInterface
+class GetGroupInfo extends AbstractAction implements IdAwareInterface
 {
-    const TYPE_PARTICIPATING = 'participating';
 
     /**
      * @var string
@@ -19,7 +15,7 @@ class GetGroups extends AbstractAction implements IdAwareInterface
     /**
      * @var string
      */
-    protected $type = 'participating';
+    protected $groupId;
 
     /**
      * @param  string $id
@@ -41,21 +37,21 @@ class GetGroups extends AbstractAction implements IdAwareInterface
     }
 
     /**
-     * @param string $type
+     * @param string $groupId
      * @return $this
      */
-    public function setType($type)
+    public function setGroupId($groupId)
     {
-        $this->type = $type;
+        $this->groupId = $groupId;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getType()
+    public function getGroupId()
     {
-        return $this->type;
+        return $this->groupId;
     }
 
     /**
@@ -63,19 +59,19 @@ class GetGroups extends AbstractAction implements IdAwareInterface
      */
     public function createNode()
     {
-        $listNode = new Node();
-        $listNode->setName('list');
-        $listNode->setAttribute('type', $this->getType());
+        $child = new Node();
+        $child->setName('query');
 
         $node = new Node();
         $node->setName('iq');
         $node->setAttributes(array(
-            "id" => 'getgroups-',
+            "id" => 'getgroupinfo-',
             "type" => "get",
             "xmlns" => "w:g",
-            "to" => "g.us"
+            "to" => Identity::createJID($this->getGroupId())
         ));
-        $node->addChild($listNode);
+
+        $node->addChild($child);
 
         return $node;
     }

@@ -2,14 +2,14 @@
 
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
+use Tmv\WhatsApi\Message\Action\ClearDirty;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManagerInterface;
 use RuntimeException;
 
-class StreamErrorListener extends AbstractListener
+class IbListener extends AbstractListener
 {
-
     /**
      * Attach one or more listeners
      *
@@ -22,19 +22,27 @@ class StreamErrorListener extends AbstractListener
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach('received.node.stream:error', array($this, 'onReceivedNode'));
+        $this->listeners[] = $events->attach('received.node.ib', array($this, 'onReceivedNode'));
     }
 
     public function onReceivedNode(Event $e)
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
-        if ($node->hasChild("system-shutdown")) {
-            throw new RuntimeException('Stream error: system shutdown');
+        foreach ($node->getChildren() as $child) {
+            switch ($child->getName()) {
+                case "dirty":
+                    $action = new ClearDirty(array($child->getAttribute("type")));
+                    $this->getClient()->send($action);
+                    break;
+
+                case "offline":
+
+                    break;
+
+                default:
+                    throw new RuntimeException("ib handler for " . $child->getName() . " not implemented");
+            }
         }
-        if ($node->hasChild('text') && $node->getChild('text')->getData() !== '') {
-            throw new RuntimeException("Stream error:" . $node->getChild('text')->getData());
-        }
-        throw new RuntimeException("Stream error: an error occurred");
     }
 }

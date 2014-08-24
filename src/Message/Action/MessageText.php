@@ -19,16 +19,6 @@ class MessageText extends AbstractMessage
     protected $body = '';
 
     /**
-     * @param string $from
-     * @param string $to
-     */
-    public function __construct($from = null, $to = null)
-    {
-        $this->setFromName($from);
-        $this->setTo($to);
-    }
-
-    /**
      * @param  string $body
      * @return $this
      */

@@ -45,9 +45,11 @@ class InjectIdListener extends AbstractListener
 
     public function onSendingNode(Event $e)
     {
+        /** @var NodeInterface $node */
         $node = $e->getParam('node');
-        if ($node->hasAttribute('id') && null == $node->getAttribute('id')) {
-            $node->setAttribute('id', $node->getName().'-'.time().'-'.$this->messageCounter++);
+        if ($this->canInjectId($node)) {
+            $prefix = $node->getAttribute('id') ?: '';
+            $node->setAttribute('id', $prefix . $node->getName().'-'.time().'-'.$this->messageCounter++);
         }
         if ($node->hasAttribute('t') && null == $node->getAttribute('t')) {
             $node->setAttribute('t', time());
@@ -68,6 +70,19 @@ class InjectIdListener extends AbstractListener
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
         $this->receivedId = $node->hasAttribute('id') ? $node->getAttribute('id') : null;
+    }
+
+    /**
+     * @param NodeInterface $node
+     * @return bool
+     */
+    protected function canInjectId(NodeInterface $node)
+    {
+        if (!$node->hasAttribute('id')) {
+            return false;
+        }
+        $id = $node->getAttribute('id');
+        return null === $id || '-' === substr($id, -1, 1);
     }
 
     /**
