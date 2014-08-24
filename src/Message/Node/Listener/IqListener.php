@@ -42,32 +42,52 @@ class IqListener extends AbstractListener
                 // todo: handle iq result
 
                 // group responses
-                switch (true) {
-                    case (false !== strpos($node->getAttribute("id"), 'creategroup-')):
-                        // todo
-                        break;
-
-                    case (false !== strpos($node->getAttribute("id"), 'endgroup-')):
-                        // todo
-                        break;
-
-                    case (false !== strpos($node->getAttribute("id"), 'getgroupparticipants-')):
-                        // todo
-                        break;
-
-                    case (false !== strpos($node->getAttribute("id"), 'getgroups-')):
-                        $this->processGetGroupsResult($node);
-                        break;
-
-                    case (false !== strpos($node->getAttribute("id"), 'getgroupinfo-')):
-                        $this->processGetGroupInfoResult($node);
-                        break;
-                }
+                $this->processGroupsResult($node);
                 break;
         }
         if ($node->hasChild('sync')) {
             // todo: handle sync result
         }
+    }
+
+    /**
+     * @param NodeInterface $node
+     * @param string $needle
+     * @return bool
+     */
+    protected function nodeIdContains(NodeInterface $node, $needle)
+    {
+        return false !== strpos($node->getAttribute("id"), $needle);
+    }
+
+    /**
+     * @param NodeInterface $node
+     * @return $this
+     */
+    protected function processGroupsResult(NodeInterface $node)
+    {
+        switch (true) {
+            case ($this->nodeIdContains($node, 'creategroup-')):
+                // todo
+                break;
+
+            case ($this->nodeIdContains($node, 'endgroup-')):
+                // todo
+                break;
+
+            case ($this->nodeIdContains($node, 'getgroupparticipants-')):
+                // todo
+                break;
+
+            case ($this->nodeIdContains($node, 'getgroups-')):
+                $this->processGetGroupsResult($node);
+                break;
+
+            case ($this->nodeIdContains($node, 'getgroupinfo-')):
+                $this->processGetGroupInfoResult($node);
+                break;
+        }
+        return $this;
     }
 
     /**
