@@ -272,7 +272,7 @@ class Client
      * Send an action to the WhatsApp server.
      *
      * @param  Action\ActionInterface $action
-     * @return Action\ActionInterface
+     * @return $this
      */
     public function send(Action\ActionInterface $action)
     {
@@ -282,14 +282,17 @@ class Client
         $node = $action->createNode();
 
         $node = $this->sendNode($node);
-        if ($node->hasAttribute('id')) {
+        if ($node->hasAttribute('id') && $action instanceof Action\IdAwareInterface) {
             $action->setId($node->getAttribute('id'));
+        }
+        if ($node->hasAttribute('t') && $action instanceof Action\TimestampAwareInterface) {
+            $action->setTimestamp($node->getAttribute('t'));
         }
 
         $eventParams = array('action' => $action, 'node' => $node);
         $this->getEventManager()->trigger('action.send.post', $this, $eventParams);
 
-        return $action;
+        return $this;
     }
 
     /**
