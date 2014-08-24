@@ -2,6 +2,9 @@
 
 namespace Tmv\WhatsApi\Message\Received\Media;
 
+use Tmv\WhatsApi\Message\Received\Media\Info\AudioInfo;
+use Tmv\WhatsApi\Message\Received\Media\Info\VideoInfo;
+
 class Video extends AbstractMediaFile
 {
     /**
@@ -17,41 +20,49 @@ class Video extends AbstractMediaFile
      */
     protected $duration;
     /**
-     * @var string
+     * @var AudioInfo
      */
-    protected $videoCodec;
+    protected $audioInfo;
     /**
-     * @var string
+     * @var VideoInfo
      */
-    protected $audioCodec;
+    protected $videoInfo;
+
     /**
-     * @var int
+     * @param AudioInfo $audioInfo
+     * @return $this
      */
-    protected $width;
+    public function setAudioInfo(AudioInfo $audioInfo)
+    {
+        $this->audioInfo = $audioInfo;
+        return $this;
+    }
+
     /**
-     * @var int
+     * @return AudioInfo
      */
-    protected $height;
+    public function getAudioInfo()
+    {
+        return $this->audioInfo;
+    }
+
     /**
-     * @var int
+     * @param VideoInfo $videoInfo
+     * @return $this
      */
-    protected $fps;
+    public function setVideoInfo(VideoInfo $videoInfo)
+    {
+        $this->videoInfo = $videoInfo;
+        return $this;
+    }
+
     /**
-     * @var int
+     * @return VideoInfo
      */
-    protected $videoBitrate;
-    /**
-     * @var int
-     */
-    protected $audioBitrate;
-    /**
-     * @var int
-     */
-    protected $audioSampFreq;
-    /**
-     * @var int
-     */
-    protected $audioSampFmt;
+    public function getVideoInfo()
+    {
+        return $this->videoInfo;
+    }
 
     /**
      * @param  int   $seconds
@@ -70,82 +81,6 @@ class Video extends AbstractMediaFile
     public function getSeconds()
     {
         return $this->seconds;
-    }
-
-    /**
-     * @param  int   $audioBitrate
-     * @return $this
-     */
-    public function setAudioBitrate($audioBitrate)
-    {
-        $this->audioBitrate = $audioBitrate;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAudioBitrate()
-    {
-        return $this->audioBitrate;
-    }
-
-    /**
-     * @param  string $audioCodec
-     * @return $this
-     */
-    public function setAudioCodec($audioCodec)
-    {
-        $this->audioCodec = $audioCodec;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAudioCodec()
-    {
-        return $this->audioCodec;
-    }
-
-    /**
-     * @param  int   $audioSampFmt
-     * @return $this
-     */
-    public function setAudioSampFmt($audioSampFmt)
-    {
-        $this->audioSampFmt = $audioSampFmt;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAudioSampFmt()
-    {
-        return $this->audioSampFmt;
-    }
-
-    /**
-     * @param  int   $audioSampFreq
-     * @return $this
-     */
-    public function setAudioSampFreq($audioSampFreq)
-    {
-        $this->audioSampFreq = $audioSampFreq;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAudioSampFreq()
-    {
-        return $this->audioSampFreq;
     }
 
     /**
@@ -184,100 +119,5 @@ class Video extends AbstractMediaFile
     public function getEncoding()
     {
         return $this->encoding;
-    }
-
-    /**
-     * @param  int   $fps
-     * @return $this
-     */
-    public function setFps($fps)
-    {
-        $this->fps = $fps;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFps()
-    {
-        return $this->fps;
-    }
-
-    /**
-     * @param  int   $height
-     * @return $this
-     */
-    public function setHeight($height)
-    {
-        $this->height = $height;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getHeight()
-    {
-        return $this->height;
-    }
-
-    /**
-     * @param  int   $videoBitrate
-     * @return $this
-     */
-    public function setVideoBitrate($videoBitrate)
-    {
-        $this->videoBitrate = $videoBitrate;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getVideoBitrate()
-    {
-        return $this->videoBitrate;
-    }
-
-    /**
-     * @param  string $videoCodec
-     * @return $this
-     */
-    public function setVideoCodec($videoCodec)
-    {
-        $this->videoCodec = $videoCodec;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getVideoCodec()
-    {
-        return $this->videoCodec;
-    }
-
-    /**
-     * @param  int   $width
-     * @return $this
-     */
-    public function setWidth($width)
-    {
-        $this->width = $width;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getWidth()
-    {
-        return $this->width;
     }
 }

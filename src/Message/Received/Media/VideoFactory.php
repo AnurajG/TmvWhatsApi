@@ -3,9 +3,61 @@
 namespace Tmv\WhatsApi\Message\Received\Media;
 
 use Tmv\WhatsApi\Message\Node\NodeInterface;
+use Tmv\WhatsApi\Message\Received\Media\Info\AudioInfoFactory;
+use Tmv\WhatsApi\Message\Received\Media\Info\VideoInfoFactory;
 
 class VideoFactory extends AbstractMediaFactory implements MediaFactoryInterface
 {
+    /**
+     * @var AudioInfoFactory
+     */
+    protected $audioInfoFactory;
+    /**
+     * @var VideoInfoFactory
+     */
+    protected $videoInfoFactory;
+
+    /**
+     * @param AudioInfoFactory $audioInfoFactory
+     * @return $this
+     */
+    public function setAudioInfoFactory(AudioInfoFactory $audioInfoFactory)
+    {
+        $this->audioInfoFactory = $audioInfoFactory;
+        return $this;
+    }
+
+    /**
+     * @return AudioInfoFactory
+     */
+    public function getAudioInfoFactory()
+    {
+        if (!$this->audioInfoFactory) {
+            $this->audioInfoFactory = new AudioInfoFactory();
+        }
+        return $this->audioInfoFactory;
+    }
+
+    /**
+     * @param VideoInfoFactory $videoInfoFactory
+     * @return $this
+     */
+    public function setVideoInfoFactory(VideoInfoFactory $videoInfoFactory)
+    {
+        $this->videoInfoFactory = $videoInfoFactory;
+        return $this;
+    }
+
+    /**
+     * @return VideoInfoFactory
+     */
+    public function getVideoInfoFactory()
+    {
+        if (!$this->videoInfoFactory) {
+            $this->videoInfoFactory = new VideoInfoFactory();
+        }
+        return $this->videoInfoFactory;
+    }
 
     /**
      * @param  NodeInterface  $node
@@ -21,19 +73,12 @@ class VideoFactory extends AbstractMediaFactory implements MediaFactoryInterface
         $media->setFile($node->getAttribute('file'));
         $media->setMimeType($node->getAttribute('mimetype'));
         $media->setFileHash($node->getAttribute('filehash'));
-        $media->setWidth($this->convertIntIfValid($node->getAttribute('width')));
-        $media->setHeight($this->convertIntIfValid($node->getAttribute('height')));
         $media->setSize($this->convertIntIfValid($node->getAttribute('size')));
         $media->setSeconds($this->convertIntIfValid($node->getAttribute('seconds')));
         $media->setEncoding($node->getAttribute('encoding'));
         $media->setDuration($this->convertIntIfValid($node->getAttribute('duration')));
-        $media->setVideoCodec($node->getAttribute('vcodec'));
-        $media->setAudioCodec($node->getAttribute('acodec'));
-        $media->setFps($this->convertIntIfValid($node->getAttribute('fps')));
-        $media->setVideoBitrate($this->convertIntIfValid($node->getAttribute('vbitrate')));
-        $media->setAudioBitrate($this->convertIntIfValid($node->getAttribute('abitrate')));
-        $media->setAudioSampFreq($this->convertIntIfValid($node->getAttribute('asampfreq')));
-        $media->setAudioSampFmt($this->convertIntIfValid($node->getAttribute('asampfmt')));
+        $media->setVideoInfo($this->getVideoInfoFactory()->createInfo($node));
+        $media->setAudioInfo($this->getAudioInfoFactory()->createInfo($node));
 
         return $media;
     }

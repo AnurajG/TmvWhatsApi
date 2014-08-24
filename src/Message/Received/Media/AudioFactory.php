@@ -3,9 +3,36 @@
 namespace Tmv\WhatsApi\Message\Received\Media;
 
 use Tmv\WhatsApi\Message\Node\NodeInterface;
+use Tmv\WhatsApi\Message\Received\Media\Info\AudioInfoFactory;
 
 class AudioFactory extends AbstractMediaFactory implements MediaFactoryInterface
 {
+
+    /**
+     * @var AudioInfoFactory
+     */
+    protected $audioInfoFactory;
+
+    /**
+     * @param AudioInfoFactory $audioInfoFactory
+     * @return $this
+     */
+    public function setAudioInfoFactory(AudioInfoFactory $audioInfoFactory)
+    {
+        $this->audioInfoFactory = $audioInfoFactory;
+        return $this;
+    }
+
+    /**
+     * @return AudioInfoFactory
+     */
+    public function getAudioInfoFactory()
+    {
+        if (!$this->audioInfoFactory) {
+            $this->audioInfoFactory = new AudioInfoFactory();
+        }
+        return $this->audioInfoFactory;
+    }
 
     /**
      * @param  NodeInterface  $node
@@ -24,9 +51,7 @@ class AudioFactory extends AbstractMediaFactory implements MediaFactoryInterface
         $media->setSize($this->convertIntIfValid($node->getAttribute('size')));
         $media->setSeconds($this->convertIntIfValid($node->getAttribute('seconds')));
         $media->setDuration($this->convertIntIfValid($node->getAttribute('duration')));
-        $media->setAudioCodec($node->getAttribute('acodec'));
-        $media->setAudioBitrate($this->convertIntIfValid($node->getAttribute('abitrate')));
-        $media->setAudioSampFreq($this->convertIntIfValid($node->getAttribute('asampfreq')));
+        $media->setAudioInfo($this->getAudioInfoFactory()->createInfo($node));
 
         return $media;
     }

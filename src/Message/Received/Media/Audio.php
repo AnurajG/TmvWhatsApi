@@ -2,6 +2,8 @@
 
 namespace Tmv\WhatsApi\Message\Received\Media;
 
+use Tmv\WhatsApi\Message\Received\Media\Info\AudioInfo;
+
 class Audio extends AbstractMediaFile
 {
     /**
@@ -17,73 +19,26 @@ class Audio extends AbstractMediaFile
      */
     protected $duration;
     /**
-     * @var string
+     * @var AudioInfo
      */
-    protected $audioCodec;
-    /**
-     * @var int
-     */
-    protected $audioSampFreq;
-    /**
-     * @var int
-     */
-    protected $audioBitrate;
+    protected $audioInfo;
 
     /**
-     * @param  int   $audioBitrate
+     * @param AudioInfo $audioInfo
      * @return $this
      */
-    public function setAudioBitrate($audioBitrate)
+    public function setAudioInfo(AudioInfo $audioInfo)
     {
-        $this->audioBitrate = $audioBitrate;
-
+        $this->audioInfo = $audioInfo;
         return $this;
     }
 
     /**
-     * @return int
+     * @return AudioInfo
      */
-    public function getAudioBitrate()
+    public function getAudioInfo()
     {
-        return $this->audioBitrate;
-    }
-
-    /**
-     * @param  string $audioCodec
-     * @return $this
-     */
-    public function setAudioCodec($audioCodec)
-    {
-        $this->audioCodec = $audioCodec;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAudioCodec()
-    {
-        return $this->audioCodec;
-    }
-
-    /**
-     * @param  int   $audioSampFreq
-     * @return $this
-     */
-    public function setAudioSampFreq($audioSampFreq)
-    {
-        $this->audioSampFreq = $audioSampFreq;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAudioSampFreq()
-    {
-        return $this->audioSampFreq;
+        return $this->audioInfo;
     }
 
     /**
