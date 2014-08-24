@@ -176,47 +176,6 @@ class Client
     }
 
     /**
-     * Get a decoded JSON response from Whatsapp server
-     *
-     * @param  string $host  The host URL
-     * @param  array  $query A associative array of keys and values to send to server.
-     * @return object NULL is returned if the json cannot be decoded or if the encoded data is deeper than the recursion limit
-     */
-    protected function getResponse($host, array $query)
-    {
-        // Build the url.
-        $url = $host.'?';
-        if (function_exists('http_build_query')) {
-            $url .= http_build_query($query);
-        } else {
-            foreach ($query as $key => $value) {
-                $url .= $key.'='.$value.'&';
-            }
-            $url = rtrim($url, '&');
-        }
-
-        // Open connection.
-        $ch = curl_init();
-
-        // Configure the connection.
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_USERAGENT, static::WHATSAPP_USER_AGENT);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: text/json'));
-        // This makes CURL accept any peer!
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-        // Get the response.
-        $response = curl_exec($ch);
-
-        // Close the connection.
-        curl_close($ch);
-
-        return json_decode($response, true);
-    }
-
-    /**
      * Login to the Whatsapp server with your password
      *
      * If you already know your password you can log into the Whatsapp server

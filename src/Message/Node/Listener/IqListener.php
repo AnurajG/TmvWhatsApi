@@ -96,12 +96,7 @@ class IqListener extends AbstractListener
      */
     protected function processGetGroupsResult(NodeInterface $node)
     {
-        $groupList = array();
-        if ($node->getChild(0) != null) {
-            foreach ($node->getChildren() as $child) {
-                $groupList[] = Group::factory($child->getAttributes());
-            }
-        }
+        $groupList = $this->getGroupsFromNode($node);
         $this->getClient()->getEventManager()->trigger('onGetGroupsResult',
             $this,
             array(
@@ -117,12 +112,7 @@ class IqListener extends AbstractListener
      */
     protected function processGetGroupInfoResult(NodeInterface $node)
     {
-        $groupList = array();
-        if ($node->getChild(0) != null) {
-            foreach ($node->getChildren() as $child) {
-                $groupList[] = Group::factory($child->getAttributes());
-            }
-        }
+        $groupList = $this->getGroupsFromNode($node);
         $this->getClient()->getEventManager()->trigger('onGetGroupInfoResult',
             $this,
             array(
@@ -130,6 +120,21 @@ class IqListener extends AbstractListener
             )
         );
         return $this;
+    }
+
+    /**
+     * @param NodeInterface $node
+     * @return Group[]
+     */
+    protected function getGroupsFromNode(NodeInterface $node)
+    {
+        $groupList = array();
+        if ($node->getChild(0) != null) {
+            foreach ($node->getChildren() as $child) {
+                $groupList[] = Group::factory($child->getAttributes());
+            }
+        }
+        return $groupList;
     }
 
     /**
