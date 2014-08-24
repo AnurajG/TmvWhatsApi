@@ -6,7 +6,6 @@ use Tmv\WhatsApi\Event\LoginFailedEvent;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManagerInterface;
-use RuntimeException;
 
 class FailureListener extends AbstractListener
 {
@@ -36,7 +35,5 @@ class FailureListener extends AbstractListener
         $event = new LoginFailedEvent('onLoginFailed', $this, array('node' => $node));
         $event->setClient($this->getClient());
         $client->getEventManager()->trigger($event);
-
-        throw new RuntimeException("Login failed");
     }
 }
