@@ -44,7 +44,7 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
     {
         $this->object->setName('nodetest');
         $this->assertEquals('<nodetest></nodetest>', $this->object->toString());
-        $this->assertEquals('<nodetest></nodetest>', (string)$this->object);
+        $this->assertEquals('<nodetest></nodetest>', (string) $this->object);
     }
 
     /**

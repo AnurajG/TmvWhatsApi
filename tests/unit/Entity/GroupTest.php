@@ -27,7 +27,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $this->object->setSubject('testprop');
         $this->assertEquals('testprop', $this->object->getSubject());
 
-        $datetime = new DateTime;
+        $datetime = new DateTime();
         $this->object->setCreation($datetime);
         $this->assertEquals($datetime, $this->object->getCreation());
     }
@@ -45,7 +45,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data['id'], $ret->getId());
         $this->assertEquals($data['owner'], $ret->getOwner());
         $this->assertEquals($data['subject'], $ret->getSubject());
-        $datetime = new DateTime;
+        $datetime = new DateTime();
         $datetime->setTimestamp($data['creation']);
         $this->assertEquals($datetime, $ret->getCreation());
     }

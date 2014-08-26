@@ -46,12 +46,13 @@ class MessageMediaFactory implements MessageFactoryInterface
     }
 
     /**
-     * @param MediaFactory $mediaFactory
+     * @param  MediaFactory $mediaFactory
      * @return $this
      */
     public function setMediaFactory($mediaFactory)
     {
         $this->mediaFactory = $mediaFactory;
+
         return $this;
     }
 
@@ -63,6 +64,7 @@ class MessageMediaFactory implements MessageFactoryInterface
         if (!$this->mediaFactory) {
             $this->mediaFactory = new MediaFactory();
         }
+
         return $this->mediaFactory;
     }
 }

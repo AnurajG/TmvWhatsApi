@@ -44,7 +44,7 @@ class MessageTextFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($ret->isFromGroup());
         $this->assertEquals(null, $ret->getGroupId());
         $this->assertEquals('message-12234567', $ret->getId());
-        $dateTime = new DateTime;
+        $dateTime = new DateTime();
         $dateTime->setTimestamp($timestamp);
         $this->assertEquals($dateTime, $ret->getDateTime());
         $this->assertEquals('test-notify', $ret->getNotify());
@@ -74,7 +74,7 @@ class MessageTextFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($ret->isFromGroup());
         $this->assertEquals('393921234567-1234567', $ret->getGroupId());
         $this->assertEquals('message-12234567', $ret->getId());
-        $dateTime = new DateTime;
+        $dateTime = new DateTime();
         $dateTime->setTimestamp($timestamp);
         $this->assertEquals($dateTime, $ret->getDateTime());
         $this->assertEquals('test-notify', $ret->getNotify());
