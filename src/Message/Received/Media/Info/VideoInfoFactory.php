@@ -7,7 +7,7 @@ use Tmv\WhatsApi\Message\Node\NodeInterface;
 class VideoInfoFactory
 {
     /**
-     * @param  NodeInterface  $node
+     * @param  NodeInterface $node
      * @return VideoInfo
      */
     public function createInfo(NodeInterface $node)
@@ -37,4 +37,3 @@ class VideoInfoFactory
         return (int) $value;
     }
 }
- 

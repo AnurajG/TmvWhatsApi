@@ -23,6 +23,16 @@ class RC4
      */
     public function __construct($key, $drop)
     {
+        $this->init($key, $drop);
+    }
+
+    /**
+     * @param  string  $key
+     * @param  integer $drop
+     * @return string
+     */
+    protected function init($key, $drop)
+    {
         $this->s = range(0, 255);
         for ($i = 0, $j = 0; $i < 256; $i++) {
             $k = ord($key{$i % strlen($key)});
@@ -32,7 +42,8 @@ class RC4
 
         $this->i = 0;
         $this->j = 0;
-        $this->cipher(implode('', range(0, $drop)), 0, $drop);
+
+        return $this->cipher(implode('', range(0, $drop)), 0, $drop);
     }
 
     /**

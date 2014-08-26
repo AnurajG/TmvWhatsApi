@@ -14,12 +14,13 @@ class AudioFactory extends AbstractMediaFactory implements MediaFactoryInterface
     protected $audioInfoFactory;
 
     /**
-     * @param AudioInfoFactory $audioInfoFactory
+     * @param  AudioInfoFactory $audioInfoFactory
      * @return $this
      */
     public function setAudioInfoFactory(AudioInfoFactory $audioInfoFactory)
     {
         $this->audioInfoFactory = $audioInfoFactory;
+
         return $this;
     }
 
@@ -31,6 +32,7 @@ class AudioFactory extends AbstractMediaFactory implements MediaFactoryInterface
         if (!$this->audioInfoFactory) {
             $this->audioInfoFactory = new AudioInfoFactory();
         }
+
         return $this->audioInfoFactory;
     }
 

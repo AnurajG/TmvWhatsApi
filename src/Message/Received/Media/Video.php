@@ -29,12 +29,13 @@ class Video extends AbstractMediaFile
     protected $videoInfo;
 
     /**
-     * @param AudioInfo $audioInfo
+     * @param  AudioInfo $audioInfo
      * @return $this
      */
     public function setAudioInfo(AudioInfo $audioInfo)
     {
         $this->audioInfo = $audioInfo;
+
         return $this;
     }
 
@@ -47,12 +48,13 @@ class Video extends AbstractMediaFile
     }
 
     /**
-     * @param VideoInfo $videoInfo
+     * @param  VideoInfo $videoInfo
      * @return $this
      */
     public function setVideoInfo(VideoInfo $videoInfo)
     {
         $this->videoInfo = $videoInfo;
+
         return $this;
     }
 

@@ -33,7 +33,7 @@ class StreamErrorListener extends AbstractListener
             throw new RuntimeException('Stream error: system shutdown');
         }
         if ($node->hasChild('text') && $node->getChild('text')->getData() !== '') {
-            throw new RuntimeException("Stream error:" . $node->getChild('text')->getData());
+            throw new RuntimeException("Stream error:".$node->getChild('text')->getData());
         }
         throw new RuntimeException("Stream error: an error occurred");
     }

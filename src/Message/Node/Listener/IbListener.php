@@ -41,7 +41,7 @@ class IbListener extends AbstractListener
                     break;
 
                 default:
-                    throw new RuntimeException("ib handler for " . $child->getName() . " not implemented");
+                    throw new RuntimeException("ib handler for ".$child->getName()." not implemented");
             }
         }
     }

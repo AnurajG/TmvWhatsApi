@@ -2,11 +2,7 @@
 
 namespace Tmv\WhatsApi\Protocol;
 
-/**
- * Class TokenMap
- * @package Tmv\WhatsApi\Protocol
- */
-class TokenMap
+class TokenMapTest extends \PHPUnit_Framework_TestCase
 {
     protected static $primaryStrings = array(
         "",
@@ -402,60 +398,54 @@ class TokenMap
         "filehash"
     );
 
-    const SECOND_MAP_OFFSET = 236;
-
     /**
-     * @param  string    $string
-     * @param  bool      $subdict
-     * @return int|mixed
+     * @dataProvider tokenProvider
      */
-    public static function tryGetToken($string, &$subdict)
+    public function testTryGetToken($i, $token, $subdictExpected, $indexExpected)
     {
-        $index1 = array_search($string, static::$primaryStrings);
-        if (false !== $index1) {
-            return $index1;
+        // skip empty tokens
+        if (empty($token)) {
+            return;
         }
-        $index2 = array_search($string, static::$secondaryStrings);
-        if (false !== $index2) {
-            $subdict = true;
-
-            return $index2;
-        }
-
-        return -1;
+        $subdict = false;
+        $ret = TokenMap::tryGetToken($token, $subdict);
+        $this->assertEquals($indexExpected, $ret);
+        $this->assertEquals($subdictExpected, $subdict);
     }
 
     /**
-     * Check if token number match the 2nd map
-     *
-     * @param  int  $token
-     * @return bool
+     * @dataProvider tokenProvider
      */
-    protected static function checkSubdictionaryIndex($token)
+    public function testGetToken($token, $tokenExpected, $subdictExpected)
     {
-        $newIndex = $token - static::SECOND_MAP_OFFSET;
-
-        return isset(static::$secondaryStrings[$newIndex]);
+        $subdict = false;
+        $ret = TokenMap::getToken($token, $subdict);
+        $this->assertEquals($tokenExpected, $ret);
+        $this->assertEquals($subdictExpected, $subdict);
     }
 
-    /**
-     * @param  int         $token
-     * @param  bool        $subdict
-     * @return string|null
-     */
-    public static function getToken($token, &$subdict)
+    public function tokenProvider()
     {
-        //override subdict
-        if (!$subdict && static::checkSubdictionaryIndex($token)) {
-            $subdict = true;
+        $ret = array();
+
+        foreach (self::$primaryStrings as $key => $value) {
+            $ret[] = array(
+                $key,
+                $value,
+                false,
+                $key
+            );
         }
 
-        $tokenMap = static::$primaryStrings;
-        if ($subdict) {
-            $tokenMap = static::$secondaryStrings;
-            $token = $token - static::SECOND_MAP_OFFSET;
+        foreach (self::$secondaryStrings as $key => $value) {
+            $ret[] = array(
+                ($key + 236),
+                $value,
+                true,
+                $key
+            );
         }
 
-        return isset($tokenMap[$token]) ? $tokenMap[$token] : null;
+        return $ret;
     }
 }

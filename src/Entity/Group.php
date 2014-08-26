@@ -24,7 +24,7 @@ class Group
     protected $subject;
 
     /**
-     * @param array $data
+     * @param  array $data
      * @return Group
      */
     public static function factory(array $data)
@@ -34,7 +34,7 @@ class Group
         $group->setId($data['id']);
         $group->setOwner(Identity::parseJID($data['owner']));
         $creation = new DateTime();
-        $creation->setTimestamp((int)$data['creation']);
+        $creation->setTimestamp((int) $data['creation']);
         $group->setCreation($creation);
         $group->setSubject($data['subject']);
 
@@ -42,12 +42,13 @@ class Group
     }
 
     /**
-     * @param \DateTime $creation
+     * @param  \DateTime $creation
      * @return $this
      */
     public function setCreation($creation)
     {
         $this->creation = $creation;
+
         return $this;
     }
 
@@ -60,12 +61,13 @@ class Group
     }
 
     /**
-     * @param string $id
+     * @param  string $id
      * @return $this
      */
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -78,12 +80,13 @@ class Group
     }
 
     /**
-     * @param string $owner
+     * @param  string $owner
      * @return $this
      */
     public function setOwner($owner)
     {
         $this->owner = $owner;
+
         return $this;
     }
 
@@ -96,12 +99,13 @@ class Group
     }
 
     /**
-     * @param string $subject
+     * @param  string $subject
      * @return $this
      */
     public function setSubject($subject)
     {
         $this->subject = $subject;
+
         return $this;
     }
 
@@ -113,4 +117,3 @@ class Group
         return $this->subject;
     }
 }
- 

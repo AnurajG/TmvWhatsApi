@@ -41,12 +41,13 @@ class GetGroups extends AbstractAction implements IdAwareInterface
     }
 
     /**
-     * @param string $type
+     * @param  string $type
      * @return $this
      */
     public function setType($type)
     {
         $this->type = $type;
+
         return $this;
     }
 

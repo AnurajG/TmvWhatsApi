@@ -22,12 +22,13 @@ class AudioInfo
     protected $codec;
 
     /**
-     * @param int $bitrate
+     * @param  int   $bitrate
      * @return $this
      */
     public function setBitrate($bitrate)
     {
         $this->bitrate = $bitrate;
+
         return $this;
     }
 
@@ -40,12 +41,13 @@ class AudioInfo
     }
 
     /**
-     * @param string $codec
+     * @param  string $codec
      * @return $this
      */
     public function setCodec($codec)
     {
         $this->codec = $codec;
+
         return $this;
     }
 
@@ -58,12 +60,13 @@ class AudioInfo
     }
 
     /**
-     * @param int $sampFmt
+     * @param  int   $sampFmt
      * @return $this
      */
     public function setSampFmt($sampFmt)
     {
         $this->sampFmt = $sampFmt;
+
         return $this;
     }
 
@@ -76,12 +79,13 @@ class AudioInfo
     }
 
     /**
-     * @param int $sampFreq
+     * @param  int   $sampFreq
      * @return $this
      */
     public function setSampFreq($sampFreq)
     {
         $this->sampFreq = $sampFreq;
+
         return $this;
     }
 
@@ -93,4 +97,3 @@ class AudioInfo
         return $this->sampFreq;
     }
 }
- 

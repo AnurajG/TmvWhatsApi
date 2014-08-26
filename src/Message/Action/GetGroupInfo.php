@@ -37,12 +37,13 @@ class GetGroupInfo extends AbstractAction implements IdAwareInterface
     }
 
     /**
-     * @param string $groupId
+     * @param  string $groupId
      * @return $this
      */
     public function setGroupId($groupId)
     {
         $this->groupId = $groupId;
+
         return $this;
     }
 

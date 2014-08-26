@@ -18,12 +18,13 @@ class VideoFactory extends AbstractMediaFactory implements MediaFactoryInterface
     protected $videoInfoFactory;
 
     /**
-     * @param AudioInfoFactory $audioInfoFactory
+     * @param  AudioInfoFactory $audioInfoFactory
      * @return $this
      */
     public function setAudioInfoFactory(AudioInfoFactory $audioInfoFactory)
     {
         $this->audioInfoFactory = $audioInfoFactory;
+
         return $this;
     }
 
@@ -35,16 +36,18 @@ class VideoFactory extends AbstractMediaFactory implements MediaFactoryInterface
         if (!$this->audioInfoFactory) {
             $this->audioInfoFactory = new AudioInfoFactory();
         }
+
         return $this->audioInfoFactory;
     }
 
     /**
-     * @param VideoInfoFactory $videoInfoFactory
+     * @param  VideoInfoFactory $videoInfoFactory
      * @return $this
      */
     public function setVideoInfoFactory(VideoInfoFactory $videoInfoFactory)
     {
         $this->videoInfoFactory = $videoInfoFactory;
+
         return $this;
     }
 
@@ -56,6 +59,7 @@ class VideoFactory extends AbstractMediaFactory implements MediaFactoryInterface
         if (!$this->videoInfoFactory) {
             $this->videoInfoFactory = new VideoInfoFactory();
         }
+
         return $this->videoInfoFactory;
     }
 

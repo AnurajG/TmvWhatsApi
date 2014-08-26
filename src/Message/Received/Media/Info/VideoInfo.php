@@ -26,12 +26,13 @@ class VideoInfo
     protected $height;
 
     /**
-     * @param int $bitrate
+     * @param  int   $bitrate
      * @return $this
      */
     public function setBitrate($bitrate)
     {
         $this->bitrate = $bitrate;
+
         return $this;
     }
 
@@ -44,12 +45,13 @@ class VideoInfo
     }
 
     /**
-     * @param string $codec
+     * @param  string $codec
      * @return $this
      */
     public function setCodec($codec)
     {
         $this->codec = $codec;
+
         return $this;
     }
 
@@ -62,12 +64,13 @@ class VideoInfo
     }
 
     /**
-     * @param int $fps
+     * @param  int   $fps
      * @return $this
      */
     public function setFps($fps)
     {
         $this->fps = $fps;
+
         return $this;
     }
 
@@ -80,12 +83,13 @@ class VideoInfo
     }
 
     /**
-     * @param int $height
+     * @param  int   $height
      * @return $this
      */
     public function setHeight($height)
     {
         $this->height = $height;
+
         return $this;
     }
 
@@ -98,12 +102,13 @@ class VideoInfo
     }
 
     /**
-     * @param int $width
+     * @param  int   $width
      * @return $this
      */
     public function setWidth($width)
     {
         $this->width = $width;
+
         return $this;
     }
 
@@ -115,4 +120,3 @@ class VideoInfo
         return $this->width;
     }
 }
- 

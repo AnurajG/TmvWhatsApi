@@ -24,12 +24,13 @@ class Audio extends AbstractMediaFile
     protected $audioInfo;
 
     /**
-     * @param AudioInfo $audioInfo
+     * @param  AudioInfo $audioInfo
      * @return $this
      */
     public function setAudioInfo(AudioInfo $audioInfo)
     {
         $this->audioInfo = $audioInfo;
+
         return $this;
     }
 

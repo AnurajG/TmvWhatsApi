@@ -51,8 +51,8 @@ class IqListener extends AbstractListener
     }
 
     /**
-     * @param NodeInterface $node
-     * @param string $needle
+     * @param  NodeInterface $node
+     * @param  string        $needle
      * @return bool
      */
     protected function nodeIdContains(NodeInterface $node, $needle)
@@ -61,7 +61,7 @@ class IqListener extends AbstractListener
     }
 
     /**
-     * @param NodeInterface $node
+     * @param  NodeInterface $node
      * @return $this
      */
     protected function processGroupsResult(NodeInterface $node)
@@ -87,11 +87,12 @@ class IqListener extends AbstractListener
                 $this->processGetGroupInfoResult($node);
                 break;
         }
+
         return $this;
     }
 
     /**
-     * @param NodeInterface $node
+     * @param  NodeInterface $node
      * @return $this
      */
     protected function processGetGroupsResult(NodeInterface $node)
@@ -103,11 +104,12 @@ class IqListener extends AbstractListener
                 'groups' => $groupList
             )
         );
+
         return $this;
     }
 
     /**
-     * @param NodeInterface $node
+     * @param  NodeInterface $node
      * @return $this
      */
     protected function processGetGroupInfoResult(NodeInterface $node)
@@ -119,11 +121,12 @@ class IqListener extends AbstractListener
                 'groups' => $groupList
             )
         );
+
         return $this;
     }
 
     /**
-     * @param NodeInterface $node
+     * @param  NodeInterface $node
      * @return Group[]
      */
     protected function getGroupsFromNode(NodeInterface $node)
@@ -134,6 +137,7 @@ class IqListener extends AbstractListener
                 $groupList[] = Group::factory($child->getAttributes());
             }
         }
+
         return $groupList;
     }
 

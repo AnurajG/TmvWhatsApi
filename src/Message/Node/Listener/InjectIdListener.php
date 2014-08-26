@@ -49,7 +49,7 @@ class InjectIdListener extends AbstractListener
         $node = $e->getParam('node');
         if ($this->canInjectId($node)) {
             $prefix = $node->getAttribute('id') ?: '';
-            $node->setAttribute('id', $prefix . $node->getName().'-'.time().'-'.$this->messageCounter++);
+            $node->setAttribute('id', $prefix.$node->getName().'-'.time().'-'.$this->messageCounter++);
         }
         if ($node->hasAttribute('t') && null == $node->getAttribute('t')) {
             $node->setAttribute('t', time());
@@ -73,7 +73,7 @@ class InjectIdListener extends AbstractListener
     }
 
     /**
-     * @param NodeInterface $node
+     * @param  NodeInterface $node
      * @return bool
      */
     protected function canInjectId(NodeInterface $node)
@@ -82,6 +82,7 @@ class InjectIdListener extends AbstractListener
             return false;
         }
         $id = $node->getAttribute('id');
+
         return null === $id || '-' === substr($id, -1, 1);
     }
 

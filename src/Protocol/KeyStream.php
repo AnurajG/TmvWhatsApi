@@ -2,7 +2,7 @@
 
 namespace Tmv\WhatsApi\Protocol;
 
-use Tmv\WhatsApi\Exception\RuntimeException;
+use RuntimeException;
 use Tmv\WhatsApi\Service\ProtocolService;
 
 class KeyStream
@@ -21,10 +21,6 @@ class KeyStream
      * @var int
      */
     protected $seq;
-    /**
-     * @var ProtocolService
-     */
-    protected $protocolService;
 
     /**
      * @param string $key
@@ -81,7 +77,9 @@ class KeyStream
             }
         }
 
-        return $this->rc4->cipher($buffer, $offset, $length);
+        $ret = $this->rc4->cipher($buffer, $offset, $length);
+
+        return $ret;
     }
 
     /**
@@ -105,7 +103,7 @@ class KeyStream
      * @param  int    $length
      * @return string
      */
-    private function computeMac($buffer, $offset, $length)
+    protected function computeMac($buffer, $offset, $length)
     {
         $hmac = hash_init("sha1", HASH_HMAC, $this->macKey);
         hash_update($hmac, substr($buffer, $offset, $length));
@@ -117,24 +115,5 @@ class KeyStream
         $this->seq++;
 
         return hash_final($hmac, true);
-    }
-
-    /**
-     * @param  ProtocolService $protocolService
-     * @return $this
-     */
-    public function setProtocolService(ProtocolService $protocolService)
-    {
-        $this->protocolService = $protocolService;
-
-        return $this;
-    }
-
-    /**
-     * @return ProtocolService
-     */
-    public function getProtocolService()
-    {
-        return $this->protocolService;
     }
 }

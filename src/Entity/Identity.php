@@ -85,13 +85,14 @@ class Identity
     }
 
     /**
-     * @param string $identityToken
+     * @param  string $identityToken
      * @return $this
      */
     public function setIdentityToken($identityToken)
     {
         $this->identityString = null;
         $this->identityToken = $identityToken;
+
         return $this;
     }
 

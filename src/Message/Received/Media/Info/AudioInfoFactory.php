@@ -7,7 +7,7 @@ use Tmv\WhatsApi\Message\Node\NodeInterface;
 class AudioInfoFactory
 {
     /**
-     * @param  NodeInterface  $node
+     * @param  NodeInterface $node
      * @return AudioInfo
      */
     public function createInfo(NodeInterface $node)
@@ -36,4 +36,3 @@ class AudioInfoFactory
         return (int) $value;
     }
 }
- 
