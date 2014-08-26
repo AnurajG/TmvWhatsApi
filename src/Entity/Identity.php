@@ -158,15 +158,16 @@ class Identity
      */
     public static function createJID($number)
     {
-        if (!stristr($number, '@')) {
-            //check if group message
-            if (stristr($number, '-')) {
-                //to group
-                $number .= "@".Client::WHATSAPP_GROUP_SERVER;
-            } else {
-                //to normal user
-                $number .= "@".Client::WHATSAPP_SERVER;
-            }
+        if (stristr($number, '@')) {
+            return $number;
+        }
+
+        if (stristr($number, '-')) {
+            //to group
+            $number .= "@".Client::WHATSAPP_GROUP_SERVER;
+        } else {
+            //to normal user
+            $number .= "@".Client::WHATSAPP_SERVER;
         }
 
         return $number;

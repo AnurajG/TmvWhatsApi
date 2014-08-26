@@ -39,18 +39,6 @@ abstract class AbstractListener implements ListenerAggregateInterface, ListenerI
     }
 
     /**
-     * Attach one or more listeners
-     *
-     * Implementors may add an optional $priority argument; the EventManager
-     * implementation will pass this to the aggregate.
-     *
-     * @param EventManagerInterface $events
-     *
-     * @return void
-     */
-    abstract public function attach(EventManagerInterface $events);
-
-    /**
      * Detach all previously attached listeners
      *
      * @param EventManagerInterface $events

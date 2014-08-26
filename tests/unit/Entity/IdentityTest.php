@@ -53,4 +53,28 @@ class IdentityTest extends \PHPUnit_Framework_TestCase
         $ret = $this->object->getIdentityString();
         $this->assertEquals('%28%e2%bc%a8%9d%8c%60%c5%11z%5b%9efcq%9e%c2%c9%90%3c', $ret);
     }
+
+    public function testCreateJID()
+    {
+
+        $number = '393921234567@s.whatsapp.net';
+        $ret = Identity::createJID($number);
+        $this->assertEquals($number, $ret);
+
+        $number = '393921234567';
+        $ret = Identity::createJID($number);
+        $this->assertEquals($number.'@s.whatsapp.net', $ret);
+
+        // test group
+        $number = '393921234567-1425645';
+        $ret = Identity::createJID($number);
+        $this->assertEquals($number.'@g.us', $ret);
+    }
+
+    public function testParseJID()
+    {
+        $number = '393921234567';
+        $ret = Identity::parseJID($number);
+        $this->assertEquals($number, $ret);
+    }
 }

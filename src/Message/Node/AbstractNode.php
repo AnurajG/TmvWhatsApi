@@ -47,11 +47,6 @@ abstract class AbstractNode implements NodeInterface
     }
 
     /**
-     * @return string
-     */
-    abstract public function getName();
-
-    /**
      * @param  string                   $name
      * @return $this
      * @throws InvalidArgumentException
@@ -213,18 +208,7 @@ abstract class AbstractNode implements NodeInterface
      */
     public function toArray()
     {
-        $children = array();
-        foreach ($this->getChildren() as $child) {
-            $children[] = $child->toArray();
-        }
-        $array = array(
-            'name'       => $this->getName(),
-            'attributes' => $this->getAttributes(),
-            'data'       => $this->getData(),
-            'children'   => $children
-        );
-
-        return $array;
+        return $this->getArrayCopy();
     }
 
     /**
@@ -260,7 +244,18 @@ abstract class AbstractNode implements NodeInterface
      */
     public function getArrayCopy()
     {
-        return $this->toArray();
+        $children = array();
+        foreach ($this->getChildren() as $child) {
+            $children[] = $child->toArray();
+        }
+        $array = array(
+            'name'       => $this->getName(),
+            'attributes' => $this->getAttributes(),
+            'data'       => $this->getData(),
+            'children'   => $children
+        );
+
+        return $array;
     }
 
     /**

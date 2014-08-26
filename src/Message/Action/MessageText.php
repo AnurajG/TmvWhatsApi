@@ -1,6 +1,7 @@
 <?php
 
 namespace Tmv\WhatsApi\Message\Action;
+
 use Tmv\WhatsApi\Entity\Identity;
 use Tmv\WhatsApi\Message\Node\Node;
 

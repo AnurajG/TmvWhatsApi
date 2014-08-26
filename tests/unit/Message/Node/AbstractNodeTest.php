@@ -34,7 +34,17 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data['attributes'], $object->getAttributes());
         $children = $object->getChildren();
         $this->assertCount(1, $children);
+        $this->assertEquals('iq', $object->getChild('iq')->getName());
+        // child not found
+        $this->assertNull($object->getChild('iq2'));
         $this->assertInstanceOf('Tmv\\WhatsApi\\Message\\Node\\Node', $children[0]);
+    }
+
+    public function testToString()
+    {
+        $this->object->setName('nodetest');
+        $this->assertEquals('<nodetest></nodetest>', $this->object->toString());
+        $this->assertEquals('<nodetest></nodetest>', (string)$this->object);
     }
 
     /**

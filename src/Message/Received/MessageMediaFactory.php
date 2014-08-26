@@ -10,6 +10,11 @@ use Tmv\WhatsApi\Message\Received\Media\MediaFactory;
 class MessageMediaFactory implements MessageFactoryInterface
 {
     /**
+     * @var MediaFactory
+     */
+    protected $mediaFactory;
+
+    /**
      * @param  NodeInterface $node
      * @return MessageMedia
      */
@@ -34,18 +39,30 @@ class MessageMediaFactory implements MessageFactoryInterface
         $message->setNotify($node->getAttribute('notify'));
         $message->setType($node->getAttribute('type'));
 
-        $mediaFactory = $this->createMediaFactory();
-        $media = $mediaFactory->createMedia($node->getChild('media'));
+        $media = $this->getMediaFactory()->createMedia($node->getChild('media'));
         $message->setMedia($media);
 
         return $message;
     }
 
     /**
+     * @param MediaFactory $mediaFactory
+     * @return $this
+     */
+    public function setMediaFactory($mediaFactory)
+    {
+        $this->mediaFactory = $mediaFactory;
+        return $this;
+    }
+
+    /**
      * @return MediaFactory
      */
-    protected function createMediaFactory()
+    public function getMediaFactory()
     {
-        return new MediaFactory();
+        if (!$this->mediaFactory) {
+            $this->mediaFactory = new MediaFactory();
+        }
+        return $this->mediaFactory;
     }
 }
