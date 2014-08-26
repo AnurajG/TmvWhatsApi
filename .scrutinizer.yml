@@ -25,3 +25,13 @@ checks:
         avoid_useless_overridden_methods: true
         avoid_conflicting_incrementers: true
         assignment_of_null_return: true
+
+tools:
+    external_code_coverage: true
+    php_code_sniffer: true
+    sensiolabs_security_checker: true
+    php_pdepend: true
+    php_mess_detector: true
+    php_loc: true
+    php_cpd: true
+    php_analyzer: true
