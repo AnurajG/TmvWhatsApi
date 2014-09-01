@@ -453,7 +453,6 @@ class TokenMap
         $tokenMap = static::$primaryStrings;
         if ($subdict) {
             $tokenMap = static::$secondaryStrings;
-            $token = $token - static::SECOND_MAP_OFFSET;
         }
 
         return isset($tokenMap[$token]) ? $tokenMap[$token] : null;
