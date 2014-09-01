@@ -436,16 +436,6 @@ class TokenMapTest extends \PHPUnit_Framework_TestCase
                 $key
             );
         }
-
-        foreach (self::$secondaryStrings as $key => $value) {
-            $ret[] = array(
-                ($key + 236),
-                $value,
-                true,
-                $key
-            );
-        }
-
         return $ret;
     }
 }
