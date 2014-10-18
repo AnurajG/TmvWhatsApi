@@ -56,7 +56,7 @@ class IdentityService
             'method' => $method,
             'in' => $phone->getPhone(),
             'cc' => $phone->getCc(),
-            'id' => $identity->getIdentityToken(),
+            'id' => $identity->getIdentityString(),
             'lg' => $langCode,
             'lc' => $countryCode,
             'token' => urlencode($token),
@@ -66,7 +66,7 @@ class IdentityService
 
         $response = $this->getResponse($host, $query);
 
-        if ($response['status'] != 'sent') {
+        if ($response['status'] != 'sent' && $response['status'] != 'ok') {
             if (isset($response['reason']) && $response['reason'] == "too_recent") {
                 $minutes = round($response['retry_after'] / 60);
                 throw new RuntimeException("Code already sent. Retry after $minutes minutes.");
@@ -107,7 +107,7 @@ class IdentityService
         $query = array(
             'cc' => $identity->getPhone()->getCc(),
             'in' => $identity->getPhone()->getPhoneNumber(),
-            'id' => $identity->getIdentityToken(),
+            'id' => $identity->getIdentityString(),
             'code' => $code,
             'c' => 'cookie',
         );
@@ -152,7 +152,7 @@ class IdentityService
         $query = array(
             'cc' => $identity->getPhone()->getCc(),
             'in' => $identity->getPhone()->getPhoneNumber(),
-            'id' => $identity->getIdentityToken(),
+            'id' => $identity->getIdentityString(),
             'c' => 'cookie',
         );
 
@@ -176,15 +176,11 @@ class IdentityService
     protected function getResponse($host, array $query)
     {
         // Build the url.
-        $url = $host.'?';
-        if (function_exists('http_build_query')) {
-            $url .= http_build_query($query);
-        } else {
-            foreach ($query as $key => $value) {
-                $url .= $key.'='.$value.'&';
-            }
-            $url = rtrim($url, '&');
+        $url = $host . '?';
+        foreach ($query as $key => $value) {
+            $url .= $key . '=' . $value . '&';
         }
+        $url = rtrim($url, '&');
 
         // Open connection.
         $ch = curl_init();
