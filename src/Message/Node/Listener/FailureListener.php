@@ -9,7 +9,6 @@ use Zend\EventManager\EventManagerInterface;
 
 class FailureListener extends AbstractListener
 {
-
     /**
      * Attach one or more listeners
      *

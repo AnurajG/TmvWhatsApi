@@ -3,16 +3,13 @@
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Message\Node\NodeInterface;
-use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Tmv\WhatsApi\Client;
+use Zend\EventManager\ListenerAggregateTrait;
 
 abstract class AbstractListener implements ListenerAggregateInterface, ListenerInterface
 {
-    /**
-     * @var \Zend\Stdlib\CallbackHandler[]
-     */
-    protected $listeners = array();
+    use ListenerAggregateTrait;
 
     /**
      * @var Client
@@ -36,30 +33,6 @@ abstract class AbstractListener implements ListenerAggregateInterface, ListenerI
     public function getClient()
     {
         return $this->client;
-    }
-
-    /**
-     * Detach all previously attached listeners
-     *
-     * @param EventManagerInterface $events
-     *
-     * @return void
-     */
-    public function detach(EventManagerInterface $events)
-    {
-        foreach ($this->listeners as $index => $callback) {
-            if ($events->detach($callback)) {
-                unset($this->listeners[$index]);
-            }
-        }
-    }
-
-    /**
-     * @return \Zend\Stdlib\CallbackHandler[]
-     */
-    public function getListeners()
-    {
-        return $this->listeners;
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use \Mockery as m;
-use Tmv\WhatsApi\Client;
 
 class MessageListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,20 +18,13 @@ class MessageListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testAttachAndDetachMethod()
     {
-        $this->assertCount(0, $this->object->getListeners());
         $eventManagerMock = m::mock('\Zend\EventManager\EventManagerInterface');
         $eventManagerMock->shouldReceive('attach')->once();
         $this->object->attach($eventManagerMock);
-        $this->assertCount(1, $this->object->getListeners());
-
-        $eventManagerMock->shouldReceive('detach')->once()->andReturn(true);
-        $this->object->detach($eventManagerMock);
-        $this->assertCount(0, $this->object->getListeners());
     }
 
     public function testOnReceivedNodeMethod()
     {
-
         $object = $this->object;
         $node = m::mock('Tmv\\WhatsApi\\Message\\Node\\Node');
         $node->shouldReceive('getAttribute')->with('from')->andReturn('from-value');

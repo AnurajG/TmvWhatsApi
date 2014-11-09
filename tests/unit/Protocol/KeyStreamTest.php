@@ -4,7 +4,6 @@ namespace Tmv\WhatsApi\Protocol;
 
 class KeyStreamTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var KeyStream
      */
@@ -62,14 +61,14 @@ class KeyStreamTest extends \PHPUnit_Framework_TestCase
                 'testnonce',
                 array_map(
                     'hex2bin',
-                    array (
+                    array(
                         '9bf1e0a448ee46399718b4a69a34363636f36f71',
                         '4cf7f377147153771234e6dcee591643a1c566b2',
                         '95f2e6732237e696fe47231d860671ad1764c09a',
                         'df48238ab22eb03c395f59d1d391745288cf7105',
                     )
-                )
-            )
+                ),
+            ),
         );
 
         return $ret;

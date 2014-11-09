@@ -24,9 +24,9 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
             'attributes' => array('foo' => 'baz'),
             'children' => array(
                 array(
-                    'name' => 'iq'
-                )
-            )
+                    'name' => 'iq',
+                ),
+            ),
         );
         $object = AbstractNodeMock::fromArray($data);
         $this->assertEquals($data['name'], $object->getName());
@@ -57,8 +57,8 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
         $data = array(
             'name' => 'mynode',
             'children' => array(
-                new \stdClass()
-            )
+                new \stdClass(),
+            ),
         );
 
         AbstractNodeMock::fromArray($data, $nodeFactoryMock);
@@ -74,7 +74,7 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
 
         $attributes = array(
             'first' => 'foo',
-            'second' => 'foo2'
+            'second' => 'foo2',
         );
         $this->object->setAttributes($attributes);
         $this->assertEquals($attributes, $this->object->getAttributes());
@@ -86,8 +86,8 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
         $this->object->setChildren(
             array(
                 array(
-                    'name' => 'iq'
-                )
+                    'name' => 'iq',
+                ),
             )
         );
 
@@ -119,10 +119,10 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
     public function testToArrayMethod()
     {
         $attributes = array(
-            'foo' => 'baz'
+            'foo' => 'baz',
         );
         $childArray = array(
-            'name' => 'child'
+            'name' => 'child',
         );
         $childMock = m::mock('\Tmv\WhatsApi\Message\Node\Node');
         $childMock->shouldReceive('toArray')->once()->andReturn($childArray);
@@ -149,7 +149,7 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
     {
         $attributes = array(
             'foo' => 'baz',
-            'baz' => 'foo'
+            'baz' => 'foo',
         );
         $childString = '<child></child>';
         $childMock = m::mock('\Tmv\WhatsApi\Message\Node\Node');

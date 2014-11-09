@@ -7,7 +7,6 @@ use Tmv\WhatsApi\Message\Node\Node;
 
 class GetGroupInfo extends AbstractAction implements IdAwareInterface
 {
-
     /**
      * @var string
      */
@@ -69,11 +68,23 @@ class GetGroupInfo extends AbstractAction implements IdAwareInterface
             "id" => 'getgroupinfo-',
             "type" => "get",
             "xmlns" => "w:g",
-            "to" => Identity::createJID($this->getGroupId())
+            "to" => Identity::createJID($this->getGroupId()),
         ));
 
         $node->addChild($child);
 
         return $node;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        $data = [
+            $this->getGroupId(),
+        ];
+
+        return count(array_filter($data)) == count($data);
     }
 }

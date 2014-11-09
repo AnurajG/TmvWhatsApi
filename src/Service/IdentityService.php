@@ -8,7 +8,6 @@ use RuntimeException;
 
 class IdentityService
 {
-
     /**
      * Request a registration code from WhatsApp.
      *
@@ -147,7 +146,6 @@ class IdentityService
      */
     public function checkCredentials(Identity $identity)
     {
-
         $host = 'https://'.Client::WHATSAPP_CHECK_HOST;
         $query = array(
             'cc' => $identity->getPhone()->getCc(),
@@ -176,9 +174,9 @@ class IdentityService
     protected function getResponse($host, array $query)
     {
         // Build the url.
-        $url = $host . '?';
+        $url = $host.'?';
         foreach ($query as $key => $value) {
-            $url .= $key . '=' . $value . '&';
+            $url .= $key.'='.$value.'&';
         }
         $url = rtrim($url, '&');
 

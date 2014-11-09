@@ -4,7 +4,6 @@ namespace Tmv\WhatsApi\Message\Node;
 
 interface NodeInterface
 {
-
     /**
      * @param  array         $data
      * @return NodeInterface

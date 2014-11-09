@@ -13,7 +13,6 @@ use Tmv\WhatsApi\Message\Node\Node;
  */
 class MessageText extends AbstractMessage
 {
-
     /**
      * @var string
      */
@@ -76,5 +75,19 @@ class MessageText extends AbstractMessage
             ->addChild($body);
 
         return $node;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        $data = [
+            $this->getTo(),
+            $this->getFromName(),
+            $this->getBody(),
+        ];
+
+        return count(array_filter($data)) == count($data);
     }
 }

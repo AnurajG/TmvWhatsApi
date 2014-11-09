@@ -6,7 +6,6 @@ use DateTime;
 
 interface MessageInterface
 {
-
     /**
      * @return string
      */

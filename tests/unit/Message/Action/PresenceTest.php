@@ -30,20 +30,28 @@ class PresenceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Tmv\\WhatsApi\\Message\\Node\\Node', $ret);
 
-        $expected = array (
+        $expected = array(
             'name' => 'presence',
             'attributes' =>
-                array (
+                array(
                     'name' => 'test-name',
                     'type' => 'test-type',
                     'last' => 'test-last',
                 ),
             'data' => NULL,
             'children' =>
-                array (
+                array(
                 ),
         );
 
         $this->assertEquals($expected, $ret->toArray());
+    }
+
+    public function testIsValid()
+    {
+        $this->assertFalse($this->object->isValid());
+
+        $this->object->setName(['test']);
+        $this->assertTrue($this->object->isValid());
     }
 }

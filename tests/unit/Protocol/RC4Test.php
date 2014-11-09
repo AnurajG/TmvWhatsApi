@@ -27,5 +27,4 @@ class RC4Test extends \PHPUnit_Framework_TestCase
     {
         m::close();
     }
-
 }

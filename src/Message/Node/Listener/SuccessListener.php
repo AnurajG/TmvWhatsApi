@@ -10,7 +10,6 @@ use Zend\EventManager\EventManagerInterface;
 
 class SuccessListener extends AbstractListener
 {
-
     /**
      * Attach one or more listeners
      *
@@ -32,15 +31,15 @@ class SuccessListener extends AbstractListener
         $node = $e->getParam('node');
         $client = $this->getClient();
 
-        // triggering public event
-        $event = new LoginSuccessEvent('onLoginSuccess', $this, array('node' => $node));
-        $event->setClient($this->getClient());
-        $client->getEventManager()->trigger($event);
-
         $client->setConnected(true);
         $client->writeChallengeData($node->getData());
         $client->getConnection()->getNodeWriter()->setKey($client->getConnection()->getOutputKey());
 
         $client->send(new Presence($client->getIdentity()->getNickname()));
+
+        // triggering public event
+        $event = new LoginSuccessEvent('onConnected', $client, array('node' => $node));
+        $event->setClient($this->getClient());
+        $client->getEventManager()->trigger($event);
     }
 }

@@ -51,4 +51,14 @@ class ChatStateTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $ret->toArray());
     }
+
+    public function testIsValid()
+    {
+        $this->assertFalse($this->object->isValid());
+        $this->object->setTo('to-id');
+        $this->assertFalse($this->object->isValid());
+
+        $this->object->setState(ChatState::STATE_COMPOSING);
+        $this->assertTrue($this->object->isValid());
+    }
 }

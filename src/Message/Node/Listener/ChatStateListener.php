@@ -4,8 +4,9 @@ namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Entity\Identity;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
-use Zend\EventManager\Event;
+use Zend\EventManager\EventInterface;
 use Zend\EventManager\EventManagerInterface;
+use Tmv\WhatsApi\Client;
 
 class ChatStateListener extends AbstractListener
 {
@@ -24,32 +25,34 @@ class ChatStateListener extends AbstractListener
         $this->listeners[] = $events->attach('received.node.chatstate', array($this, 'onReceivedNode'));
     }
 
-    public function onReceivedNode(Event $e)
+    public function onReceivedNode(EventInterface $e)
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
+        /** @var Client $client */
+        $client = $e->getTarget();
         if ($this->isNodeFromMyNumber($node) || $this->isNodeFromGroup($node)) {
             return;
         }
 
         if ($node->hasChild('composing')) {
-            $this->getClient()->getEventManager()->trigger('onMessageComposing',
-                $this,
+            $client->getEventManager()->trigger('onMessageComposing',
+                $client,
                 array(
                     'node' => $node,
                     'from' => Identity::parseJID($node->getAttribute('from')),
                     'id' => $node->getAttribute('id'),
-                    'timestamp' => (int) $node->getAttribute('t')
+                    'timestamp' => (int) $node->getAttribute('t'),
                 )
             );
         } elseif ($node->hasChild('paused')) {
-            $this->getClient()->getEventManager()->trigger('onMessagePaused',
-                $this,
+            $client->getEventManager()->trigger('onMessagePaused',
+                $client,
                 array(
                     'node' => $node,
                     'from' => Identity::parseJID($node->getAttribute('from')),
                     'id' => $node->getAttribute('id'),
-                    'timestamp' => (int) $node->getAttribute('t')
+                    'timestamp' => (int) $node->getAttribute('t'),
                 )
             );
         }

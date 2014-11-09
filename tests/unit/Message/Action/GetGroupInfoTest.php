@@ -59,4 +59,12 @@ class GetGroupInfoTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $ret->toArray());
     }
+
+    public function testIsValid()
+    {
+        $this->assertFalse($this->object->isValid());
+
+        $this->object->setGroupId(['group-id']);
+        $this->assertTrue($this->object->isValid());
+    }
 }

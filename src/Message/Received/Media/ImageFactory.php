@@ -6,7 +6,6 @@ use Tmv\WhatsApi\Message\Node\NodeInterface;
 
 class ImageFactory extends AbstractMediaFactory implements MediaFactoryInterface
 {
-
     /**
      * @param  NodeInterface  $node
      * @return MediaInterface

@@ -71,4 +71,13 @@ class ClearDirtyTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $ret->toArray());
     }
+
+    public function testIsValid()
+    {
+        $this->object->setCategories([]);
+        $this->assertFalse($this->object->isValid());
+
+        $this->object->setCategories(['category']);
+        $this->assertTrue($this->object->isValid());
+    }
 }

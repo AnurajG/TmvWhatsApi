@@ -18,15 +18,9 @@ class ReceiptListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testAttachAndDetachMethod()
     {
-        $this->assertCount(0, $this->object->getListeners());
         $eventManagerMock = m::mock('Zend\\EventManager\\EventManagerInterface');
         $eventManagerMock->shouldReceive('attach')->twice();
         $this->object->attach($eventManagerMock);
-        $this->assertCount(2, $this->object->getListeners());
-
-        $eventManagerMock->shouldReceive('detach')->twice()->andReturn(true);
-        $this->object->detach($eventManagerMock);
-        $this->assertCount(0, $this->object->getListeners());
     }
 
     public function testOnReceivedNodeVoid()

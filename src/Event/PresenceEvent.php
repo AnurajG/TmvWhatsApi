@@ -6,7 +6,6 @@ use Tmv\WhatsApi\Message\Received\Presence;
 
 class PresenceEvent extends AbstractPublicEvent
 {
-
     /**
      * @var Presence
      */

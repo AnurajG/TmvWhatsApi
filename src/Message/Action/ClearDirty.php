@@ -12,7 +12,6 @@ use Tmv\WhatsApi\Message\Node\Node;
  */
 class ClearDirty extends AbstractAction implements IdAwareInterface
 {
-
     /**
      * @var string
      */
@@ -54,7 +53,7 @@ class ClearDirty extends AbstractAction implements IdAwareInterface
      * @param  string[] $categories
      * @return $this
      */
-    public function setCategories($categories)
+    public function setCategories(array $categories)
     {
         $this->categories = $categories;
 
@@ -89,5 +88,13 @@ class ClearDirty extends AbstractAction implements IdAwareInterface
         }
 
         return $node;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        return count($this->getCategories()) > 0;
     }
 }

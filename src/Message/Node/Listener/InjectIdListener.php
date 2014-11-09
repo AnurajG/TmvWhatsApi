@@ -3,8 +3,12 @@
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Client;
+use Tmv\WhatsApi\Message\Action\ActionInterface;
+use Tmv\WhatsApi\Message\Action\IdAwareInterface;
+use Tmv\WhatsApi\Message\Action\TimestampAwareInterface;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Zend\EventManager\Event;
+use Zend\EventManager\EventInterface;
 use Zend\EventManager\EventManagerInterface;
 
 class InjectIdListener extends AbstractListener
@@ -38,9 +42,53 @@ class InjectIdListener extends AbstractListener
      */
     public function attach(EventManagerInterface $events)
     {
+        $this->listeners[] = $events->attach('action.send.pre', array($this, 'onSendingAction'));
         $this->listeners[] = $events->attach('node.send.pre', array($this, 'onSendingNode'));
         $this->listeners[] = $events->attach('node.send.post', array($this, 'onNodeSent'));
         $this->listeners[] = $events->attach('node.received', array($this, 'onNodeReceived'));
+    }
+
+    public function onSendingAction(EventInterface $e)
+    {
+        /** @var NodeInterface $node */
+        $node = $e->getParam('node');
+        /** @var ActionInterface $action */
+        $action = $e->getParam('action');
+        if ($this->canInjectId($node)) {
+            $this->injectNodeId($node);
+            if ($action instanceof IdAwareInterface) {
+                $action->setId($node->getAttribute('id'));
+            }
+        }
+        if ($node->hasAttribute('t') && null == $node->getAttribute('t')) {
+            $this->injectNodeTimestamp($node);
+            if ($node instanceof TimestampAwareInterface) {
+                $action->setTimestamp($node->getAttribute('t'));
+            }
+        }
+    }
+
+    /**
+     * @param  NodeInterface $node
+     * @return $this
+     */
+    protected function injectNodeId(NodeInterface $node)
+    {
+        $prefix = $node->getAttribute('id') ?: '';
+        $node->setAttribute('id', $prefix.$node->getName().'-'.time().'-'.$this->messageCounter++);
+
+        return $this;
+    }
+
+    /**
+     * @param  NodeInterface $node
+     * @return $this
+     */
+    protected function injectNodeTimestamp(NodeInterface $node)
+    {
+        $node->setAttribute('t', time());
+
+        return $this;
     }
 
     public function onSendingNode(Event $e)
@@ -48,11 +96,10 @@ class InjectIdListener extends AbstractListener
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
         if ($this->canInjectId($node)) {
-            $prefix = $node->getAttribute('id') ?: '';
-            $node->setAttribute('id', $prefix.$node->getName().'-'.time().'-'.$this->messageCounter++);
+            $this->injectNodeId($node);
         }
         if ($node->hasAttribute('t') && null == $node->getAttribute('t')) {
-            $node->setAttribute('t', time());
+            $this->injectNodeTimestamp($node);
         }
         $e->setParam('node', $node);
     }
@@ -97,5 +144,24 @@ class InjectIdListener extends AbstractListener
         do {
             $client->pollMessages();
         } while ($this->receivedId !== $id && time() - $time < $timeout);
+    }
+
+    /**
+     * @return string
+     */
+    public function getReceivedId()
+    {
+        return $this->receivedId;
+    }
+
+    /**
+     * @param  string $receivedId
+     * @return $this
+     */
+    public function setReceivedId($receivedId)
+    {
+        $this->receivedId = $receivedId;
+
+        return $this;
     }
 }

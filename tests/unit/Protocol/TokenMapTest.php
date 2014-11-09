@@ -209,7 +209,7 @@ class TokenMapTest extends \PHPUnit_Framework_TestCase
         "w:g2",
         "promote",
         "demote",
-        "creator"
+        "creator",
     );
 
     protected static $secondaryStrings = array(
@@ -395,7 +395,7 @@ class TokenMapTest extends \PHPUnit_Framework_TestCase
         "popcorn.m4r",
         "pulse.m4r",
         "synth.m4r",
-        "filehash"
+        "filehash",
     );
 
     /**
@@ -433,9 +433,10 @@ class TokenMapTest extends \PHPUnit_Framework_TestCase
                 $key,
                 $value,
                 false,
-                $key
+                $key,
             );
         }
+
         return $ret;
     }
 }

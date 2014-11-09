@@ -9,7 +9,6 @@ use RuntimeException;
 
 class StreamErrorListener extends AbstractListener
 {
-
     /**
      * Attach one or more listeners
      *

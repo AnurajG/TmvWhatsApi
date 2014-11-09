@@ -11,6 +11,7 @@ use Tmv\WhatsApi\Message\Node\Listener\ListenerFactory;
 use Tmv\WhatsApi\Message\Node\Node;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Tmv\WhatsApi\Protocol\KeyStream;
+use Tmv\WhatsApi\Service\MediaService;
 use Tmv\WhatsApi\Service\ProtocolService;
 use Zend\EventManager\EventManager;
 
@@ -20,7 +21,6 @@ use Zend\EventManager\EventManager;
  */
 class Client
 {
-
     const PORT = 443; // The port of the WhatsApp server.
     const TIMEOUT_SEC = 2; // The timeout for the connection with the WhatsApp servers.
     const TIMEOUT_USEC = 0; //
@@ -67,13 +67,17 @@ class Client
     protected $connection;
 
     /**
+     * @var MediaService
+     */
+    protected $mediaService;
+
+    /**
      * Default class constructor.
      *
      * @param Identity $identity
      */
     public function __construct(Identity $identity)
     {
-
         $listenerFactory = new ListenerFactory();
         $this->getEventManager()->attachAggregate($listenerFactory->factory('StreamError', $this), 100);
         $this->getEventManager()->attachAggregate($listenerFactory->factory('Notification', $this), 100);
@@ -87,8 +91,33 @@ class Client
         $this->getEventManager()->attachAggregate($listenerFactory->factory('Ib', $this), 100);
         $this->getEventManager()->attachAggregate($listenerFactory->factory('InjectId', $this), 100);
 
+        $this->getEventManager()->attachAggregate(new Action\Listener\RequestFileUploadListener(), 100);
+
         $this->setIdentity($identity);
         $this->setConnected(false);
+    }
+
+    /**
+     * @return MediaService
+     */
+    public function getMediaService()
+    {
+        if (!$this->mediaService) {
+            $this->mediaService = new MediaService();
+        }
+
+        return $this->mediaService;
+    }
+
+    /**
+     * @param  MediaService $mediaService
+     * @return $this
+     */
+    public function setMediaService(MediaService $mediaService)
+    {
+        $this->mediaService = $mediaService;
+
+        return $this;
     }
 
     /**
@@ -111,10 +140,17 @@ class Client
 
     /**
      * Connect (create a socket) to the WhatsApp network.
+     * @param  bool   $login Automatically login
+     * @return $this;
      */
-    public function connect()
+    public function connect($login = true)
     {
         $this->getConnection()->connect();
+        if ($login) {
+            $this->login();
+        }
+
+        return $this;
     }
 
     /**
@@ -190,6 +226,8 @@ class Client
             $this->challengeData = $challengeData;
         }
         $this->doLogin();
+
+        return $this;
     }
 
     /**
@@ -206,7 +244,7 @@ class Client
         $this->sendData($data);
         $this->sendNode(Node::fromArray(
             array(
-                'name' => 'stream:features'
+                'name' => 'stream:features',
             )
         ));
         $this->sendNode($auth);
@@ -236,10 +274,24 @@ class Client
      */
     public function send(Action\ActionInterface $action)
     {
-
-        $this->getEventManager()->trigger('action.send.pre', $this, array('action' => $action));
-
         $node = $action->createNode();
+
+        $argv = compact('action', 'node');
+        $eventParams = $this->getEventManager()->prepareArgs($argv);
+        $results = $this->getEventManager()->trigger('action.send.pre', $this, $eventParams);
+        if ($results->stopped()) {
+            return $this;
+        }
+
+        /** @var Action\ActionInterface|Action\IdAwareInterface|Action\TimestampAwareInterface $action */
+        $action = $argv['action'];
+        $node = $argv['node'];
+
+        if (!$action->isValid()) {
+            throw new \RuntimeException(
+                sprintf("Action is not valid or missing parameters for action '%s'", get_class($action))
+            );
+        }
 
         $node = $this->sendNode($node);
         if ($node->hasAttribute('id') && $action instanceof Action\IdAwareInterface) {
@@ -296,14 +348,46 @@ class Client
      */
     public function pollMessages($autoReceipt = true)
     {
+        $this->getEventManager()->trigger(__FUNCTION__.'.pre', $this);
+
         $data = $this->getConnection()->readData();
         if ($data) {
             $this->processInboundData($data, $autoReceipt);
-
-            return true;
         }
 
-        return false;
+        $this->getEventManager()->trigger(__FUNCTION__.'.post', $this);
+
+        return !empty($data);
+    }
+
+    /**
+     * Connect, Login and start loop for reading data
+     *
+     * @param  bool  $sendPresence Automatically send presence
+     * @return $this
+     */
+    public function run($sendPresence = true)
+    {
+        $this->getEventManager()->trigger(__FUNCTION__.'.start', $this);
+        $this->connect(true);
+        $time = time();
+        $stopped = false;
+        while (!$stopped) {
+            $this->pollMessages();
+            if ($sendPresence && (time() - $time >= 10)) {
+                $time = time();
+                $this->send(new Action\Presence($this->getIdentity()->getNickname()));
+            }
+            $results = $this->getEventManager()->trigger(__FUNCTION__, $this);
+            $stopped = $results->stopped();
+            usleep(1000);
+        }
+
+        $this->getEventManager()->trigger(__FUNCTION__.'.stop', $this);
+
+        $this->getConnection()->disconnect();
+
+        return $this;
     }
 
     /**
@@ -345,7 +429,7 @@ class Client
             array(
                 'name' => 'auth',
                 'attributes' => $authHash,
-                'data' => $data
+                'data' => $data,
             )
         );
 
@@ -405,7 +489,7 @@ class Client
             array(
                 'name' => 'response',
                 'attributes' => $respHash,
-                'data' => $resp
+                'data' => $resp,
             )
         );
 
@@ -535,7 +619,7 @@ class Client
         if (!$this->connection) {
             $adapter = SocketAdapterFactory::factory(array(
                 'hostname' => static::WHATSAPP_HOST,
-                'port' => static::PORT
+                'port' => static::PORT,
             ));
             $connection = new Connection($adapter);
             $this->connection = $connection;

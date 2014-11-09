@@ -16,6 +16,33 @@ class SyncContactsTest extends \PHPUnit_Framework_TestCase
         $this->object = new SyncContacts('mynumber');
     }
 
+    public function testSetters()
+    {
+        $this->object->setContext('test');
+        $this->assertEquals('test', $this->object->getContext());
+
+        $this->object->setMode('test');
+        $this->assertEquals('test', $this->object->getMode());
+
+        $this->object->setTo('test');
+        $this->assertEquals('test', $this->object->getTo());
+
+        $this->object->setId('test');
+        $this->assertEquals('test', $this->object->getId());
+
+        $this->object->setIndex(1);
+        $this->assertEquals(1, $this->object->getIndex());
+
+        $this->object->setLast('test');
+        $this->assertEquals('test', $this->object->isLast());
+
+        $this->object->setNumbers(['number1']);
+        $this->assertEquals(['number1'], $this->object->getNumbers());
+
+        $this->object->addNumber('number2');
+        $this->assertEquals(['number1', 'number2'], $this->object->getNumbers());
+    }
+
     protected function tearDown()
     {
         m::close();
@@ -25,7 +52,7 @@ class SyncContactsTest extends \PHPUnit_Framework_TestCase
     {
         $this->object->setNumbers(array(
             '+393921234567',
-            '+393921234568'
+            '+393921234568',
         ));
         $ret = $this->object->createNode();
 
@@ -78,5 +105,10 @@ class SyncContactsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($expected, $ret->toArray());
+    }
+
+    public function testIsValid()
+    {
+        $this->assertTrue($this->object->isValid());
     }
 }

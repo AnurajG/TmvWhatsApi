@@ -14,7 +14,6 @@ use Zend\EventManager\EventManagerInterface;
 
 class MessageListener extends AbstractListener
 {
-
     /**
      * @var bool
      */

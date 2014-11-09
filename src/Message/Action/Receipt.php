@@ -1,6 +1,7 @@
 <?php
 
 namespace Tmv\WhatsApi\Message\Action;
+
 use Tmv\WhatsApi\Message\Node\Node;
 
 /**
@@ -78,5 +79,18 @@ class Receipt extends AbstractAction implements IdAwareInterface
             ->setAttribute('to', $this->getTo());
 
         return $node;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        $data = [
+            $this->getId(),
+            $this->getTo(),
+        ];
+
+        return count(array_filter($data)) == count($data);
     }
 }

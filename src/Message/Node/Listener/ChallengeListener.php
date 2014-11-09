@@ -8,7 +8,6 @@ use Zend\EventManager\EventManagerInterface;
 
 class ChallengeListener extends AbstractListener
 {
-
     /**
      * Attach one or more listeners
      *

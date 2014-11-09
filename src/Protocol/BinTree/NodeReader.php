@@ -161,7 +161,7 @@ class NodeReader
             return Node::fromArray(
                 array(
                     'name'       => 'start',
-                    'attributes' => $attributes
+                    'attributes' => $attributes,
                 )
             );
         } elseif ($token == 2) {
@@ -173,7 +173,7 @@ class NodeReader
             return Node::fromArray(
                 array(
                     'name'       => $tag,
-                    'attributes' => $attributes
+                    'attributes' => $attributes,
                 )
             );
         }
@@ -185,7 +185,7 @@ class NodeReader
                 array(
                     'name'       => $tag,
                     'attributes' => $attributes,
-                    'children'   => is_array($children) ? $children : array()
+                    'children'   => is_array($children) ? $children : array(),
                 )
             );
         }
@@ -194,7 +194,7 @@ class NodeReader
             array(
                 'name'       => $tag,
                 'attributes' => $attributes,
-                'data'       => $this->readString($token)
+                'data'       => $this->readString($token),
             )
         );
     }

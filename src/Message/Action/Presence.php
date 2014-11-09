@@ -1,6 +1,7 @@
 <?php
 
 namespace Tmv\WhatsApi\Message\Action;
+
 use Tmv\WhatsApi\Message\Node\Node;
 
 /**
@@ -10,7 +11,6 @@ use Tmv\WhatsApi\Message\Node\Node;
  */
 class Presence extends AbstractAction
 {
-
     const TYPE_ACTIVE = 'active';
     const TYPE_INACTIVE = 'inactive';
     const TYPE_UNAVAILABLE = 'unavailable';
@@ -111,5 +111,17 @@ class Presence extends AbstractAction
         }
 
         return $node;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        $data = [
+            $this->getName(),
+        ];
+
+        return count(array_filter($data)) == count($data);
     }
 }

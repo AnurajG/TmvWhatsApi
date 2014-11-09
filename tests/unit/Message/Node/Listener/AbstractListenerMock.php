@@ -6,7 +6,6 @@ use Zend\EventManager\EventManagerInterface;
 
 class AbstractListenerMock extends AbstractListener
 {
-
     /**
      * @param EventManagerInterface $events
      */

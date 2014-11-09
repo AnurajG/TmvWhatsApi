@@ -6,7 +6,6 @@ use Tmv\WhatsApi\Message\Node\NodeInterface;
 
 class VcardFactory implements MediaFactoryInterface
 {
-
     /**
      * @param  NodeInterface  $node
      * @return MediaInterface

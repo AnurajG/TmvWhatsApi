@@ -8,7 +8,6 @@ use Zend\EventManager\EventManagerInterface;
 
 class ReceiptListener extends AbstractListener
 {
-
     /**
      * Attach one or more listeners
      *
@@ -35,7 +34,7 @@ class ReceiptListener extends AbstractListener
 
         $params = array(
             'id' => $node->getAttribute('id'),
-            'node' => $node
+            'node' => $node,
         );
         $this->getClient()->getEventManager()->trigger('onReceiptServer', $this, $params);
     }
@@ -46,7 +45,7 @@ class ReceiptListener extends AbstractListener
         $node = $e->getParam('node');
         $params = array(
             'id' => $node->getAttribute('id'),
-            'node' => $node
+            'node' => $node,
         );
         $this->getClient()->getEventManager()->trigger('onReceiptClient', $this, $params);
     }

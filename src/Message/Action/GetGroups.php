@@ -74,10 +74,22 @@ class GetGroups extends AbstractAction implements IdAwareInterface
             "id" => 'getgroups-',
             "type" => "get",
             "xmlns" => "w:g",
-            "to" => "g.us"
+            "to" => "g.us",
         ));
         $node->addChild($listNode);
 
         return $node;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        $data = [
+            $this->getType(),
+        ];
+
+        return count(array_filter($data)) == count($data);
     }
 }

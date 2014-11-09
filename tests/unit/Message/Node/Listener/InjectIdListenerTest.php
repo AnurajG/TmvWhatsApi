@@ -7,26 +7,20 @@ use \Mockery as m;
 class InjectIdListenerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var InjectIdListenerMock
+     * @var InjectIdListener
      */
     protected $object;
 
     public function setUp()
     {
-        $this->object = new InjectIdListenerMock();
+        $this->object = new InjectIdListener();
     }
 
     public function testAttachAndDetachMethod()
     {
-        $this->assertCount(0, $this->object->getListeners());
         $eventManagerMock = m::mock('Zend\\EventManager\\EventManagerInterface');
-        $eventManagerMock->shouldReceive('attach')->times(3);
+        $eventManagerMock->shouldReceive('attach')->times(4);
         $this->object->attach($eventManagerMock);
-        $this->assertCount(3, $this->object->getListeners());
-
-        $eventManagerMock->shouldReceive('detach')->times(3)->andReturn(true);
-        $this->object->detach($eventManagerMock);
-        $this->assertCount(0, $this->object->getListeners());
     }
 
     public function testOnSendingNodeNodeMethod()

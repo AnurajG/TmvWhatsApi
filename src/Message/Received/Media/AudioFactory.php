@@ -7,7 +7,6 @@ use Tmv\WhatsApi\Message\Received\Media\Info\AudioInfoFactory;
 
 class AudioFactory extends AbstractMediaFactory implements MediaFactoryInterface
 {
-
     /**
      * @var AudioInfoFactory
      */

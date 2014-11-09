@@ -7,7 +7,6 @@ namespace Tmv\WhatsApi\Exception;
  */
 class IncompleteMessageException extends \RuntimeException implements ExceptionInterface
 {
-
     protected $input;
 
     /**

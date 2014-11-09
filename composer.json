@@ -22,9 +22,10 @@
         }
     },
     "require": {
-        "php": ">=5.3.6",
+        "php": ">=5.4",
         "ext-curl": "*",
-        "zendframework/zend-eventmanager": "~2.0"
+        "zendframework/zend-eventmanager": "~2.0",
+        "zendframework/zend-stdlib": "~2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",

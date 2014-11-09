@@ -10,7 +10,6 @@ use RuntimeException;
 
 class NotificationListener extends AbstractListener
 {
-
     /**
      * Attach one or more listeners
      *

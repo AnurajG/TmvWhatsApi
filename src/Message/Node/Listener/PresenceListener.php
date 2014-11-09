@@ -87,7 +87,7 @@ class PresenceListener extends AbstractListener
                 $this,
                 array(
                     'group' => $groupId,
-                    'participant' => $added
+                    'participant' => $added,
                 )
             );
         } elseif (null != $node->getAttribute('remove')) {
@@ -98,7 +98,7 @@ class PresenceListener extends AbstractListener
                 array(
                     'group' => $groupId,
                     'participant' => $removed,
-                    'author' => $author
+                    'author' => $author,
                 )
             );
         }

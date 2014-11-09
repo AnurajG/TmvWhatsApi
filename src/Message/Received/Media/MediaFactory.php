@@ -7,7 +7,6 @@ use RuntimeException;
 
 class MediaFactory implements MediaFactoryInterface
 {
-
     const TYPE_IMAGE = 'image';
     const TYPE_VIDEO = 'video';
     const TYPE_AUDIO = 'audio';

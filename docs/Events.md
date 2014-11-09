@@ -9,7 +9,7 @@
 - onMessageMediaVideoReceived
 - onMessageMediaVcardReceived
 - onMessageMediaLocationReceived
-- onLoginSuccess
+- onConnected
 - onLoginFailed
 - onReceiptServer
 - onReceiptClient

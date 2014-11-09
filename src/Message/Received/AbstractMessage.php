@@ -6,7 +6,6 @@ use DateTime;
 
 abstract class AbstractMessage implements MessageInterface
 {
-
     const TYPE_TEXT = 'text';
     const TYPE_MEDIA = 'media';
 

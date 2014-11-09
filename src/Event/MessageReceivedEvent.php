@@ -6,7 +6,6 @@ use Tmv\WhatsApi\Message\Received\MessageInterface;
 
 class MessageReceivedEvent extends AbstractPublicEvent
 {
-
     /**
      * @var MessageInterface
      */

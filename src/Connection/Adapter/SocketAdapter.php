@@ -153,7 +153,7 @@ class SocketAdapter implements AdapterInterface
     public function disconnect()
     {
         if (null !== $this->socket) {
-            fclose($this->socket);
+            @fclose($this->socket);
             $this->socket = null;
         }
 
@@ -214,10 +214,10 @@ class SocketAdapter implements AdapterInterface
             if (strlen($buff) != $treeLength) {
                 throw new RuntimeException("Tree length did not match received length (buff = ".strlen($buff)." & treeLength = $treeLength)");
             } elseif (@feof($this->socket)) {
-                    @fclose($this->socket);
-                    $this->socket = null;
-                    throw new RuntimeException("Socket EOF, connection closed");
-                }
+                @fclose($this->socket);
+                $this->socket = null;
+                throw new RuntimeException("Socket EOF, connection closed");
+            }
             $buff = $header.$buff;
         } else {
             throw new RuntimeException("Socket closed");

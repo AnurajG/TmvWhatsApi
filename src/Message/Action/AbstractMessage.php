@@ -9,7 +9,6 @@ namespace Tmv\WhatsApi\Message\Action;
  */
 abstract class AbstractMessage extends AbstractAction implements MessageInterface
 {
-
     /**
      * @var string
      */

@@ -16,7 +16,7 @@ class SocketAdapterFactory
             'hostname' => 'c.whatsapp.net',
             'port' => 443,
             'timeout_sec' => 2,
-            'timeout_usec' => 0
+            'timeout_usec' => 0,
         );
         $config = array_merge($defaults, $config);
         $adapter = new SocketAdapter();

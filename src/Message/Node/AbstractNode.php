@@ -252,7 +252,7 @@ abstract class AbstractNode implements NodeInterface
             'name'       => $this->getName(),
             'attributes' => $this->getAttributes(),
             'data'       => $this->getData(),
-            'children'   => $children
+            'children'   => $children,
         );
 
         return $array;

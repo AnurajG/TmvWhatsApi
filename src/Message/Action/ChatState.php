@@ -87,4 +87,17 @@ class ChatState extends AbstractAction
 
         return $node;
     }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        $data = [
+            $this->getTo(),
+            $this->getState(),
+        ];
+
+        return count(array_filter($data)) == count($data);
+    }
 }

@@ -6,7 +6,6 @@ use Mockery as m;
 
 class ConnectionTest extends \PHPUnit_Framework_TestCase
 {
-
     protected function tearDown()
     {
         m::close();

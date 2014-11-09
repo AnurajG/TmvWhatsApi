@@ -107,4 +107,19 @@ class MessageTextTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $ret->toArray());
     }
+
+    public function testIsValid()
+    {
+        $this->assertFalse($this->object->isValid());
+
+        $this->object->setTo(['test']);
+        $this->assertFalse($this->object->isValid());
+
+        $this->object->setFromName(['test']);
+        $this->assertFalse($this->object->isValid());
+
+        $this->object->setBody(['test']);
+
+        $this->assertTrue($this->object->isValid());
+    }
 }

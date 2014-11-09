@@ -30,6 +30,8 @@ class IqListener extends AbstractListener
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
+        /** @var Client $client */
+        $client = $e->getTarget();
 
         if ($this->isPing($node)) {
             $this->sendPong($node);
@@ -42,7 +44,7 @@ class IqListener extends AbstractListener
                 // todo: handle iq result
 
                 // group responses
-                $this->processGroupsResult($node);
+                $this->processGroupsResult($client, $node);
                 break;
         }
         if ($node->hasChild('sync')) {
@@ -61,10 +63,11 @@ class IqListener extends AbstractListener
     }
 
     /**
+     * @param  Client        $client
      * @param  NodeInterface $node
      * @return $this
      */
-    protected function processGroupsResult(NodeInterface $node)
+    protected function processGroupsResult(Client $client, NodeInterface $node)
     {
         switch (true) {
             case ($this->nodeIdContains($node, 'creategroup-')):
@@ -101,7 +104,7 @@ class IqListener extends AbstractListener
         $this->getClient()->getEventManager()->trigger('onGetGroupsResult',
             $this,
             array(
-                'groups' => $groupList
+                'groups' => $groupList,
             )
         );
 
@@ -118,7 +121,7 @@ class IqListener extends AbstractListener
         $this->getClient()->getEventManager()->trigger('onGetGroupInfoResult',
             $this,
             array(
-                'groups' => $groupList
+                'groups' => $groupList,
             )
         );
 

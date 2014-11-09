@@ -1,6 +1,7 @@
 <?php
 
 namespace Tmv\WhatsApi\Message\Received;
+
 use InvalidArgumentException;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 

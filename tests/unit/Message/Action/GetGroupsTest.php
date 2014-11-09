@@ -61,4 +61,9 @@ class GetGroupsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $ret->toArray());
     }
+
+    public function testIsValid()
+    {
+        $this->assertTrue($this->object->isValid());
+    }
 }

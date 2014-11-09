@@ -213,7 +213,7 @@ class TokenMap
         "w:g2",
         "promote",
         "demote",
-        "creator"
+        "creator",
     );
 
     protected static $secondaryStrings = array(
@@ -399,7 +399,7 @@ class TokenMap
         "popcorn.m4r",
         "pulse.m4r",
         "synth.m4r",
-        "filehash"
+        "filehash",
     );
 
     const SECOND_MAP_OFFSET = 236;

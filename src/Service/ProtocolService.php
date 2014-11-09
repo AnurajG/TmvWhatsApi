@@ -23,9 +23,9 @@ class ProtocolService
 
         // This AES secret is not really needed right now
         $id = base64_decode($waString).$country.$phone2;
-        $salt = substr(base64_decode($noMediaHash),2,4);
+        $salt = substr(base64_decode($noMediaHash), 2, 4);
         $key = static::pbkdf2('sha1', $id, $salt, 16, 16, true);
-        $iv = substr(base64_decode($noMediaHash),6,16);
+        $iv = substr(base64_decode($noMediaHash), 6, 16);
         //$data = substr(base64_decode($noMediaHash),22);
         $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', 'nofb', '');
         mcrypt_generic_init($td, $key, $iv);

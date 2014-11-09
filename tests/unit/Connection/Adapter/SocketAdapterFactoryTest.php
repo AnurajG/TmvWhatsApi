@@ -6,7 +6,6 @@ use Mockery as m;
 
 class SocketAdapterFactoryTest extends \PHPUnit_Framework_TestCase
 {
-
     protected function tearDown()
     {
         m::close();
@@ -18,7 +17,7 @@ class SocketAdapterFactoryTest extends \PHPUnit_Framework_TestCase
             'hostname' => 'c.whatsapp.net',
             'port' => 443,
             'timeout_sec' => 2,
-            'timeout_usec' => 0
+            'timeout_usec' => 0,
         );
         $data = array();
         $ret = SocketAdapterFactory::factory($data);
@@ -35,7 +34,7 @@ class SocketAdapterFactoryTest extends \PHPUnit_Framework_TestCase
             'hostname' => 'my-hostname',
             'port' => 8080,
             'timeout_sec' => 5,
-            'timeout_usec' => 10
+            'timeout_usec' => 10,
         );
         $ret = SocketAdapterFactory::factory($data);
         $this->assertInstanceOf(__NAMESPACE__.'\\SocketAdapter', $ret);

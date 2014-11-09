@@ -29,19 +29,29 @@ class ReceiptTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Tmv\\WhatsApi\\Message\\Node\\Node', $ret);
 
-        $expected = array (
+        $expected = array(
             'name' => 'receipt',
             'attributes' =>
-                array (
+                array(
                     'id' => '393921234567@server',
                     'to' => '393921234567',
                 ),
             'data' => NULL,
             'children' =>
-                array (
+                array(
                 ),
         );
 
         $this->assertEquals($expected, $ret->toArray());
+    }
+
+    public function testIsValid()
+    {
+        $this->assertFalse($this->object->isValid());
+
+        $this->object->setId(['test']);
+        $this->assertFalse($this->object->isValid());
+        $this->object->setTo(['test']);
+        $this->assertTrue($this->object->isValid());
     }
 }

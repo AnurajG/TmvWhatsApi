@@ -56,7 +56,6 @@ class IdentityTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateJID()
     {
-
         $number = '393921234567@s.whatsapp.net';
         $ret = Identity::createJID($number);
         $this->assertEquals($number, $ret);

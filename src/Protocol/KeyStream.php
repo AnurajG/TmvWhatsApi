@@ -43,7 +43,7 @@ class KeyStream
             "key", //placeholders
             "key",
             "key",
-            "key"
+            "key",
         );
         $array2 = array(1, 2, 3, 4);
         $nonce .= '0';
