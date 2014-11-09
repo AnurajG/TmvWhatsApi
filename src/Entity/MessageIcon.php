@@ -5,7 +5,7 @@ namespace Tmv\WhatsApi\Entity;
 class MessageIcon
 {
     /**
-     * @var resource|string
+     * @var resource
      */
     protected $resource;
 
@@ -27,7 +27,7 @@ class MessageIcon
     }
 
     /**
-     * @return resource|string
+     * @return resource
      * @codeCoverageIgnore
      */
     public function getResource()
@@ -36,7 +36,7 @@ class MessageIcon
     }
 
     /**
-     * @param  resource|string $resource
+     * @param  resource $resource
      * @return $this
      * @codeCoverageIgnore
      */

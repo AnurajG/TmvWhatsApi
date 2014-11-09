@@ -14,7 +14,7 @@ interface ActionInterface
     /**
      * Validate the action parameters
      *
-     * @return ActionInterface
+     * @return bool
      */
     public function isValid();
 }

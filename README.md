@@ -2,6 +2,10 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/thomasvargiu/TmvWhatsApi/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/thomasvargiu/TmvWhatsApi/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/thomasvargiu/TmvWhatsApi/badges/quality-score.png?s=c66994bc72499c4771de0e22fb8f257b75685552)](https://scrutinizer-ci.com/g/thomasvargiu/TmvWhatsApi/)
 [![Dependency Status](https://www.versioneye.com/user/projects/545f82008683321bc8000036/badge.svg?style=flat)](https://www.versioneye.com/user/projects/545f82008683321bc8000036)
+[![Latest Stable Version](https://poser.pugx.org/thomasvargiu/tmv-whatsapi/v/stable.svg)](https://packagist.org/packages/thomasvargiu/tmv-whatsapi)
+[![Total Downloads](https://poser.pugx.org/thomasvargiu/tmv-whatsapi/downloads.svg)](https://packagist.org/packages/thomasvargiu/tmv-whatsapi)
+[![Latest Unstable Version](https://poser.pugx.org/thomasvargiu/tmv-whatsapi/v/unstable.svg)](https://packagist.org/packages/thomasvargiu/tmv-whatsapi)
+[![License](https://poser.pugx.org/thomasvargiu/tmv-whatsapi/license.svg)](https://packagist.org/packages/thomasvargiu/tmv-whatsapi)
 
 # WhatsAPI
 
