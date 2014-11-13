@@ -11,7 +11,7 @@
 
 **Status: development**
 
-**Last update: 09/11/2014 (See changelist below)**
+**Last update: 13/11/2014 (See changelist below)**
 
 **Do not use it in production environment!**
 
@@ -198,6 +198,11 @@ $client->getEventManager()->attach(
 - onGetGroupInfoResult
 
 ## Changelist ##
+
+### 13 November 2014 ###
+
+- Icons generation for images and videos
+- Optional dependency suggested in composer for video icons generation
 
 ### 9 November 2014 ###
 
