@@ -283,7 +283,7 @@ class Client
             return $this;
         }
 
-        /** @var Action\ActionInterface|Action\IdAwareInterface|Action\TimestampAwareInterface $action */
+        /** @var Action\ActionInterface $action */
         $action = $argv['action'];
         $node = $argv['node'];
 

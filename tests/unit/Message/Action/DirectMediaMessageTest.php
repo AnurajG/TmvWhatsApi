@@ -23,8 +23,6 @@ class DirectMediaMessageTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateNode()
     {
-        $icon = m::mock('Tmv\WhatsApi\Entity\MessageIcon');
-        $icon->shouldReceive('getBase64')->andReturn('base64');
         $this->action->setTo('test-to')
             ->setType('image')
             ->setFile('test-file')
@@ -34,7 +32,7 @@ class DirectMediaMessageTest extends \PHPUnit_Framework_TestCase
             ->setFromName('test-nickname')
             ->setId('test-id')
             ->setTimestamp(1)
-            ->setIcon($icon);
+            ->setIconData('base64');
 
         $node = $this->action->createNode();
 

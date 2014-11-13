@@ -2,7 +2,6 @@
 
 namespace Tmv\WhatsApi\Message\Action\Listener;
 
-use Tmv\WhatsApi\Entity\MessageIcon;
 use Tmv\WhatsApi\Message\Action\DirectMediaMessage;
 use Mockery as m;
 
@@ -81,10 +80,9 @@ class RequestFileUploadListenerTest extends \PHPUnit_Framework_TestCase
         /** @var \Tmv\WhatsApi\Entity\MediaFile $mediaFile */
         $mediaFile = m::mock('Tmv\WhatsApi\Entity\MediaFile[]');
         /** @var \Tmv\WhatsApi\Service\MediaService $mediaService */
-        $mediaService = m::mock('Tmv\WhatsApi\Service\MediaService[uploadMediaFile,getDefaultImageIcon,getDefaultVideoIcon]');
-        $icon = m::mock('Tmv\WhatsApi\Entity\MessageIcon');
-        $mediaService->shouldReceive('getDefaultImageIcon')->andReturn($icon);
-        $mediaService->shouldReceive('getDefaultVideoIcon')->andReturn($icon);
+        $mediaService = m::mock('Tmv\WhatsApi\Service\MediaService[uploadMediaFile,createImageIcon,createVideoIcon]');
+        $mediaService->shouldReceive('createImageIcon')->andReturn(null);
+        $mediaService->shouldReceive('createVideoIcon')->andReturn(null);
         $identity = m::mock('Tmv\WhatsApi\Entity\Identity');
         $identity->shouldReceive('getNickname')->andReturn('test-nickname');
         $client = m::mock('Tmv\WhatsApi\Client');
@@ -133,7 +131,6 @@ class RequestFileUploadListenerTest extends \PHPUnit_Framework_TestCase
                 ($action->getSize() == 1024),
                 ($action->getHash() == 'test-hash'),
                 ($action->getType() == 'image'),
-                ($action->getIcon() instanceof MessageIcon),
             ];
 
             $result = array_filter(array_map(
@@ -161,10 +158,9 @@ class RequestFileUploadListenerTest extends \PHPUnit_Framework_TestCase
         $mediaNode = m::mock('Tmv\WhatsApi\Message\Node\Node[]');
         /** @var \Tmv\WhatsApi\Entity\MediaFile $mediaFile */
         $mediaFile = m::mock('Tmv\WhatsApi\Entity\MediaFile[]');
-        $mediaService = m::mock('Tmv\WhatsApi\Service\MediaService[uploadMediaFile,getDefaultImageIcon,getDefaultVideoIcon]');
-        $icon = m::mock('Tmv\WhatsApi\Entity\MessageIcon');
-        $mediaService->shouldReceive('getDefaultImageIcon')->andReturn($icon);
-        $mediaService->shouldReceive('getDefaultVideoIcon')->andReturn($icon);
+        $mediaService = m::mock('Tmv\WhatsApi\Service\MediaService[uploadMediaFile,createImageIcon,createVideoIcon]');
+        $mediaService->shouldReceive('createImageIcon')->andReturn(null);
+        $mediaService->shouldReceive('createVideoIcon')->andReturn(null);
         $identity = m::mock('Tmv\WhatsApi\Entity\Identity');
         $identity->shouldReceive('getNickname')->andReturn('test-nickname');
         $client = m::mock('Tmv\WhatsApi\Client');
@@ -207,7 +203,6 @@ class RequestFileUploadListenerTest extends \PHPUnit_Framework_TestCase
                 ($action->getSize() == 1024),
                 ($action->getHash() == 'test-hash'),
                 ($action->getType() == 'video'),
-                ($action->getIcon() instanceof MessageIcon),
             ];
 
             $result = array_filter(array_map(

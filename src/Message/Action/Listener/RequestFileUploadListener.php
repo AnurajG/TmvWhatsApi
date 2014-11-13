@@ -109,21 +109,48 @@ class RequestFileUploadListener implements ListenerAggregateInterface
             ->setHash($results['filehash'])
             ->setType($results['type']);
 
-        if (!$mediaAction->getIcon()) {
+        $icon = null;
+        if (!$mediaAction->getIconData()) {
             $icon = null;
             switch ($results['type']) {
                 case 'image':
-                    // @todo: create icon
-                    $icon = $client->getMediaService()->getDefaultImageIcon();
+                    if ($action->getIcon()) {
+                        $icon = base64_encode($client->getMediaService()->createImageIcon($action->getIcon()));
+                    } else {
+                        $icon = base64_encode(
+                            $client->getMediaService()->createImageIcon($action->getMediaFile()->getFilepath())
+                        );
+                    }
+
+                    if (!$icon) {
+                        $icon = base64_encode(
+                            file_get_contents(
+                                $client->getMediaService()->getOptions()->getDefaultImageIconFilepath()
+                            )
+                        );
+                    }
                     break;
 
                 case 'video':
-                    // @todo: create icon
-                    $icon = $client->getMediaService()->getDefaultVideoIcon();
+                    if ($action->getIcon()) {
+                        $icon = base64_encode($client->getMediaService()->createImageIcon($action->getIcon()));
+                    } else {
+                        $icon = base64_encode(
+                            $client->getMediaService()->createVideoIcon($action->getMediaFile()->getFilepath())
+                        );
+                    }
+
+                    if (!$icon) {
+                        $icon = base64_encode(
+                            file_get_contents(
+                                $client->getMediaService()->getOptions()->getDefaultVideoIconFilepath()
+                            )
+                        );
+                    }
                     break;
             }
             if ($icon) {
-                $mediaAction->setIcon($icon);
+                $mediaAction->setIconData($icon);
             }
         }
 

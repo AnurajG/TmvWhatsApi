@@ -2,11 +2,12 @@
 
 namespace Tmv\WhatsApi\Service;
 
+use FFMpeg\Coordinate\TimeCode;
+use FFMpeg\FFMpeg;
 use Tmv\WhatsApi\Client;
 use Tmv\WhatsApi\Entity\Identity;
 use Tmv\WhatsApi\Entity\MediaFile;
 use Tmv\WhatsApi\Entity\RemoteMediaFile;
-use Tmv\WhatsApi\Entity\MessageIcon;
 use Tmv\WhatsApi\Entity\MediaFileFactory;
 use Tmv\WhatsApi\Options\MediaService as ServiceOptions;
 
@@ -21,11 +22,11 @@ class MediaService
      */
     protected $fileMaxSize = 1048576;
     /**
-     * @var MessageIcon
+     * @var string
      */
     protected $defaultImageIcon;
     /**
-     * @var MessageIcon
+     * @var string
      */
     protected $defaultVideoIcon;
     /**
@@ -63,18 +64,12 @@ class MediaService
     public function setOptions(ServiceOptions $options)
     {
         $this->options = $options;
-        if ($options->getDefaultImageIconFilepath()) {
-            $this->setDefaultImageIcon(new MessageIcon($options->getDefaultImageIconFilepath()));
-        }
-        if ($options->getDefaultVideoIconFilepath()) {
-            $this->setDefaultVideoIcon(new MessageIcon($options->getDefaultVideoIconFilepath()));
-        }
 
         return $this;
     }
 
     /**
-     * @return MessageIcon
+     * @return string
      */
     public function getDefaultImageIcon()
     {
@@ -82,18 +77,21 @@ class MediaService
     }
 
     /**
-     * @param  MessageIcon $defaultImageIcon
+     * @param  string $defaultImageIcon
      * @return $this
      */
-    public function setDefaultImageIcon(MessageIcon $defaultImageIcon)
+    public function setDefaultImageIcon($defaultImageIcon)
     {
+        if (!file_exists($defaultImageIcon) || !is_readable($defaultImageIcon)) {
+            throw new \InvalidArgumentException("Icon file doesn't exists or isn't readable");
+        }
         $this->defaultImageIcon = $defaultImageIcon;
 
         return $this;
     }
 
     /**
-     * @return MessageIcon
+     * @return string
      */
     public function getDefaultVideoIcon()
     {
@@ -101,11 +99,14 @@ class MediaService
     }
 
     /**
-     * @param  MessageIcon $defaultVideoIcon
+     * @param  string $defaultVideoIcon
      * @return $this
      */
-    public function setDefaultVideoIcon(MessageIcon $defaultVideoIcon)
+    public function setDefaultVideoIcon($defaultVideoIcon)
     {
+        if (!file_exists($defaultVideoIcon) || !is_readable($defaultVideoIcon)) {
+            throw new \InvalidArgumentException("Icon file doesn't exists or isn't readable");
+        }
         $this->defaultVideoIcon = $defaultVideoIcon;
 
         return $this;
@@ -277,10 +278,75 @@ class MediaService
         list($header, $body) = preg_split("/\R\R/", $data, 2);
 
         $json = json_decode($body, true);
-        if (!is_array($json)) {
+        if (is_array($json)) {
             return $json;
         }
 
         return false;
+    }
+
+    /**
+     * @param  string|resource $file Filepath or resource
+     * @param  int             $size
+     * @return string
+     */
+    public function createImageIcon($file, $size = 100)
+    {
+        if (!extension_loaded('gd')) {
+            return null;
+        }
+        if (is_resource($file)) {
+            $content = stream_get_contents($file);
+            list($width, $height) = getimagesizefromstring($content);
+            $image   = @imagecreatefromstring($content);
+        } else {
+            list($width, $height) = getimagesize($file);
+            $image   = @imagecreatefromstring(file_get_contents($file));
+        }
+        if (!$image) {
+            return null;
+        }
+        if ($width > $height) {
+            //landscape
+            $nheight = ($height / $width) * $size;
+            $nwidth  = $size;
+        } else {
+            $nwidth  = ($width / $height) * $size;
+            $nheight = $size;
+        }
+        $icon = imagecreatetruecolor($nwidth, $nheight);
+        imagecopyresampled($icon, $image, 0, 0, 0, 0, $nwidth, $nheight, $width, $height);
+        ob_start();
+        imagejpeg($icon);
+        $i = ob_get_contents();
+        ob_end_clean();
+        imagedestroy($icon);
+
+        return $i;
+    }
+
+    /**
+     * @param  string      $file
+     * @param  int         $size
+     * @return null|string
+     */
+    public function createVideoIcon($file, $size = 100)
+    {
+        if (!class_exists('FFMpeg\FFMpeg')) {
+            return null;
+        }
+        try {
+            $preview = tempnam(sys_get_temp_dir(), 'preview-');
+            $ffmpeg = FFMpeg::create();
+            $video = $ffmpeg->open($file);
+            $frame = $video->frame(TimeCode::fromString('0:0:0:0.0'));
+            $frame->save($preview);
+            $content = $this->createImageIcon($preview, $size);
+            @unlink($preview);
+
+            return $content;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }

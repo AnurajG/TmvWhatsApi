@@ -4,7 +4,6 @@ namespace Tmv\WhatsApi\Message\Action;
 
 use Tmv\WhatsApi\Entity\Identity;
 use Tmv\WhatsApi\Message\Node\Node;
-use Tmv\WhatsApi\Entity\MessageIcon;
 
 /**
  * Class MessageText
@@ -35,9 +34,9 @@ class DirectMediaMessage extends AbstractMessage
      */
     protected $hash;
     /**
-     * @var MessageIcon
+     * @var string
      */
-    protected $icon;
+    protected $iconData;
 
     /**
      * @return string
@@ -135,20 +134,20 @@ class DirectMediaMessage extends AbstractMessage
     }
 
     /**
-     * @return MessageIcon
+     * @return string
      */
-    public function getIcon()
+    public function getIconData()
     {
-        return $this->icon;
+        return $this->iconData;
     }
 
     /**
-     * @param  MessageIcon $icon
+     * @param  string $icon
      * @return $this
      */
-    public function setIcon(MessageIcon $icon)
+    public function setIconData($icon)
     {
-        $this->icon = $icon;
+        $this->iconData = $icon;
 
         return $this;
     }
@@ -158,6 +157,7 @@ class DirectMediaMessage extends AbstractMessage
      */
     public function createNode()
     {
+
         $server = new Node();
         $server->setName('server');
 
@@ -183,7 +183,7 @@ class DirectMediaMessage extends AbstractMessage
             ->setAttribute('file', $this->getFile())
             ->setAttribute('size', $this->getSize())
             ->setAttribute('hash', $this->getHash())
-            ->setData($this->getIcon() ? $this->getIcon()->getBase64() : '');
+            ->setData($this->getIconData() ?: '');
 
         $node = new Node();
         $node->setName('message')

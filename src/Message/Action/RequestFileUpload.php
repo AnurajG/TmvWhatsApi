@@ -22,6 +22,10 @@ class RequestFileUpload extends AbstractAction implements IdAwareInterface
      * @var string
      */
     protected $to;
+    /**
+     * @var string
+     */
+    protected $icon;
 
     /**
      * @return MediaFile
@@ -76,6 +80,28 @@ class RequestFileUpload extends AbstractAction implements IdAwareInterface
     public function setTo($to)
     {
         $this->to = $to;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+
+    /**
+     * @param  string $icon
+     * @return $this
+     */
+    public function setIcon($icon)
+    {
+        if (!file_exists($icon) || !is_readable($icon)) {
+            throw new \InvalidArgumentException("Icon file doesn't exist or isn't readable");
+        }
+        $this->icon = $icon;
 
         return $this;
     }

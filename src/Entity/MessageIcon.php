@@ -12,7 +12,7 @@ class MessageIcon
     /**
      * @param resource|string $resource
      */
-    public function __construct($resource)
+    public function __construct($resource, $isContent = false)
     {
         if (is_string($resource) && !file_exists($resource)) {
             throw new \InvalidArgumentException("File doesn't exist");
