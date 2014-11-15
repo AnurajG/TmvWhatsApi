@@ -25,12 +25,10 @@ class SuccessListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnReceivedNodeMethod()
     {
-        $event = m::mock('Zend\\EventManager\\Event');
+        $event = m::mock('Zend\\EventManager\\EventInterface');
         $node = m::mock('Tmv\\WhatsApi\\Message\\Node\\Success');
         $eventManagerMock = m::mock('Zend\\EventManager\\EventManagerInterface');
         $client = m::mock('Tmv\\WhatsApi\\Client');
-
-        $this->object->setClient($client);
 
         $nodeWriterMock = m::mock('Tmv\\WhatsApi\\Protocol\\BinTree\\NodeWriter');
         $keyStreamMock = m::mock('Tmv\\WhatsApi\\Protocol\\KeyStream');
@@ -40,6 +38,7 @@ class SuccessListenerTest extends \PHPUnit_Framework_TestCase
         $connectionMock->shouldReceive('getOutputKey')->once()->andReturn($keyStreamMock);
 
         $event->shouldReceive('getParam')->with('node')->once()->andReturn($node);
+        $event->shouldReceive('getTarget')->once()->andReturn($client);
 
         $node->shouldReceive('getData')->once()->andReturn('the data');
 
@@ -57,13 +56,7 @@ class SuccessListenerTest extends \PHPUnit_Framework_TestCase
 
         $eventManagerMock->shouldReceive('trigger')
             ->once()
-            ->with(
-                m::on(
-                    function ($arg) {
-                        return true;
-                    }
-                )
-            );
+            ->with('onConnected', $client, ['node' => $node]);
 
         $this->object->onReceivedNode($event);
     }

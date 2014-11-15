@@ -2,11 +2,11 @@
 
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
-use Tmv\WhatsApi\Event\LoginSuccessEvent;
 use Tmv\WhatsApi\Message\Action\Presence;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
-use Zend\EventManager\Event;
+use Zend\EventManager\EventInterface;
 use Zend\EventManager\EventManagerInterface;
+use Tmv\WhatsApi\Client;
 
 class SuccessListener extends AbstractListener
 {
@@ -25,11 +25,12 @@ class SuccessListener extends AbstractListener
         $this->listeners[] = $events->attach('received.node.success', array($this, 'onReceivedNode'));
     }
 
-    public function onReceivedNode(Event $e)
+    public function onReceivedNode(EventInterface $e)
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
-        $client = $this->getClient();
+        /** @var Client $client */
+        $client = $e->getTarget();
 
         $client->setConnected(true);
         $client->writeChallengeData($node->getData());
@@ -38,8 +39,6 @@ class SuccessListener extends AbstractListener
         $client->send(new Presence($client->getIdentity()->getNickname()));
 
         // triggering public event
-        $event = new LoginSuccessEvent('onConnected', $client, array('node' => $node));
-        $event->setClient($this->getClient());
-        $client->getEventManager()->trigger($event);
+        $client->getEventManager()->trigger('onConnected', $client, ['node' => $node]);
     }
 }

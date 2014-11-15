@@ -4,9 +4,10 @@ namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Message\Action\ClearDirty;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
-use Zend\EventManager\Event;
+use Zend\EventManager\EventInterface;
 use Zend\EventManager\EventManagerInterface;
 use RuntimeException;
+use Tmv\WhatsApi\Client;
 
 class IbListener extends AbstractListener
 {
@@ -25,15 +26,17 @@ class IbListener extends AbstractListener
         $this->listeners[] = $events->attach('received.node.ib', array($this, 'onReceivedNode'));
     }
 
-    public function onReceivedNode(Event $e)
+    public function onReceivedNode(EventInterface $e)
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
+        /** @var Client $client */
+        $client = $e->getTarget();
         foreach ($node->getChildren() as $child) {
             switch ($child->getName()) {
                 case "dirty":
                     $action = new ClearDirty(array($child->getAttribute("type")));
-                    $this->getClient()->send($action);
+                    $client->send($action);
                     break;
 
                 case "offline":

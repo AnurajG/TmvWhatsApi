@@ -23,18 +23,20 @@ class FailureListenerTest extends \PHPUnit_Framework_TestCase
         $this->object->attach($eventManagerMock);
     }
 
+    /**
+     * @expectedException \RuntimeException
+     */
     public function testOnReceivedNodeMethod()
     {
-        $event = m::mock('Zend\\EventManager\\Event');
+        $event = m::mock('Zend\\EventManager\\EventInterface');
         $node = m::mock('Tmv\\WhatsApi\\Message\\Node\\NodeInterface');
         $eventManagerMock = m::mock('Zend\\EventManager\\EventManagerInterface');
         $client = m::mock('Tmv\\WhatsApi\\Client');
 
-        $this->object->setClient($client);
-
         $event->shouldReceive('getParam')->with('node')->once()->andReturn($node);
+        $event->shouldReceive('getTarget')->once()->andReturn($client);
         $client->shouldReceive('getEventManager')->once()->andReturn($eventManagerMock);
-        $eventManagerMock->shouldReceive('trigger')->once();
+        $eventManagerMock->shouldReceive('trigger')->once()->with('onLoginFailed', $client, ['node' => $node]);
 
         $this->object->onReceivedNode($event);
     }

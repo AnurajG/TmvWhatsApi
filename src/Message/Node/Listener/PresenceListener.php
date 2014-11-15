@@ -3,11 +3,11 @@
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Entity\Identity;
-use Tmv\WhatsApi\Event\PresenceEvent;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Tmv\WhatsApi\Message\Received\PresenceFactory;
-use Zend\EventManager\Event;
+use Zend\EventManager\EventInterface;
 use Zend\EventManager\EventManagerInterface;
+use Tmv\WhatsApi\Client;
 
 class PresenceListener extends AbstractListener
 {
@@ -54,10 +54,12 @@ class PresenceListener extends AbstractListener
         $this->listeners[] = $events->attach('received.node.presence', array($this, 'onReceivedNode'));
     }
 
-    public function onReceivedNode(Event $e)
+    public function onReceivedNode(EventInterface $e)
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
+        /** @var Client $client */
+        $client = $e->getTarget();
 
         if ($node->getAttribute('status') == 'dirty') {
             // todo: send clear dirty
@@ -66,50 +68,35 @@ class PresenceListener extends AbstractListener
             // It's not my message
             if (!$this->isNodeFromGroup($node)) {
                 $presence = $this->getPresenceFactory()->createPresence($node);
-                $event = $this->createPresenceEvent('onPresenceReceived');
-                $event->setPresence($presence);
-                $event->setParam('presence', $presence);
-                $event->setParam('node', $node);
-                $this->getClient()->getEventManager()->trigger($event);
+                $client->getEventManager()
+                    ->trigger('onPresenceReceived', $client, ['presence' => $presence, 'node' => $node]);
             } else {
                 // Message from group
-                $this->parseGroupPresence($node);
+                $this->parseGroupPresence($client, $node);
             }
         }
     }
 
-    protected function parseGroupPresence(NodeInterface $node)
+    protected function parseGroupPresence(Client $client, NodeInterface $node)
     {
         $groupId = Identity::parseJID($node->getAttribute('from'));
         if (null != $node->getAttribute('add')) {
             $added = Identity::parseJID($node->getAttribute('add'));
-            $this->getClient()->getEventManager()->trigger('onGroupParticipantAdded',
-                $this,
-                array(
-                    'group' => $groupId,
-                    'participant' => $added,
-                )
+            $client->getEventManager()->trigger('onGroupParticipantAdded',
+                $client,
+                ['group' => $groupId, 'participant' => $added]
             );
         } elseif (null != $node->getAttribute('remove')) {
             $removed = Identity::parseJID($node->getAttribute('remove'));
             $author  = Identity::parseJID($node->getAttribute('author'));
-            $this->getClient()->getEventManager()->trigger('onGroupParticipantRemoved',
-                $this,
-                array(
+            $client->getEventManager()->trigger('onGroupParticipantRemoved',
+                $client,
+                [
                     'group' => $groupId,
                     'participant' => $removed,
                     'author' => $author,
-                )
+                ]
             );
         }
-    }
-
-    /**
-     * @param  string        $eventName
-     * @return PresenceEvent
-     */
-    protected function createPresenceEvent($eventName)
-    {
-        return new PresenceEvent($eventName, $this);
     }
 }

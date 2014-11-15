@@ -29,7 +29,7 @@ class StreamErrorListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnReceivedNode()
     {
-        $eventMock = m::mock('Zend\\EventManager\\Event');
+        $eventMock = m::mock('Zend\\EventManager\\EventInterface');
         $nodeMock = m::mock('Tmv\\WhatsApi\\Message\\Node\\NodeInterface');
 
         $nodeMock->shouldReceive('hasChild')->with('system-shutdown')->once()->andReturn(true);

@@ -6,7 +6,7 @@ use Tmv\WhatsApi\Client;
 use Tmv\WhatsApi\Entity\Group;
 use Tmv\WhatsApi\Message\Node\Node;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
-use Zend\EventManager\Event;
+use Zend\EventManager\EventInterface;
 use Zend\EventManager\EventManagerInterface;
 
 class IqListener extends AbstractListener
@@ -26,7 +26,7 @@ class IqListener extends AbstractListener
         $this->listeners[] = $events->attach('received.node.iq', array($this, 'onReceivedNode'));
     }
 
-    public function onReceivedNode(Event $e)
+    public function onReceivedNode(EventInterface $e)
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
@@ -83,11 +83,11 @@ class IqListener extends AbstractListener
                 break;
 
             case ($this->nodeIdContains($node, 'getgroups-')):
-                $this->processGetGroupsResult($node);
+                $this->processGetGroupsResult($client, $node);
                 break;
 
             case ($this->nodeIdContains($node, 'getgroupinfo-')):
-                $this->processGetGroupInfoResult($node);
+                $this->processGetGroupInfoResult($client, $node);
                 break;
         }
 
@@ -95,30 +95,27 @@ class IqListener extends AbstractListener
     }
 
     /**
-     * @param  NodeInterface $node
+     * @param Client $client
+     * @param NodeInterface $node
      * @return $this
      */
-    protected function processGetGroupsResult(NodeInterface $node)
+    protected function processGetGroupsResult(Client $client, NodeInterface $node)
     {
         $groupList = $this->getGroupsFromNode($node);
-        $this->getClient()->getEventManager()->trigger('onGetGroupsResult',
-            $this,
-            array(
-                'groups' => $groupList,
-            )
-        );
+        $client->getEventManager()->trigger('onGetGroupsResult', $client, ['groups' => $groupList]);
 
         return $this;
     }
 
     /**
-     * @param  NodeInterface $node
+     * @param Client $client
+     * @param NodeInterface $node
      * @return $this
      */
-    protected function processGetGroupInfoResult(NodeInterface $node)
+    protected function processGetGroupInfoResult(Client $client, NodeInterface $node)
     {
         $groupList = $this->getGroupsFromNode($node);
-        $this->getClient()->getEventManager()->trigger('onGetGroupInfoResult',
+        $client->getEventManager()->trigger('onGetGroupInfoResult',
             $this,
             array(
                 'groups' => $groupList,

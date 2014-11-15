@@ -36,15 +36,14 @@ class MessageListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->object->setMessageReceivedFactory($messageReceivedFactoryMock);
 
-        $event = m::mock('Zend\\EventManager\\Event');
+        $event = m::mock('Zend\\EventManager\\EventInterface');
         $eventManagerMock = m::mock('Zend\\EventManager\\EventManagerInterface');
         $eventManagerMock->shouldReceive('trigger')->twice();
 
         $client = m::mock('Tmv\\WhatsApi\\Client');
 
-        $this->object->setClient($client);
-
         $event->shouldReceive('getParam')->with('node')->once()->andReturn($node);
+        $event->shouldReceive('getTarget')->andReturn($client);
         $client->shouldReceive('getEventManager')->andReturn($eventManagerMock);
         $client->shouldReceive('send')->once();
 

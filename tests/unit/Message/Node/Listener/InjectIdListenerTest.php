@@ -25,7 +25,7 @@ class InjectIdListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnSendingNodeNodeMethod()
     {
-        $eventMock = m::mock('Zend\\EventManager\\Event');
+        $eventMock = m::mock('Zend\\EventManager\\EventInterface');
         $nodeMock = m::mock(
             'Tmv\\WhatsApi\\Message\\Node\\NodeInterface'
         );
@@ -54,16 +54,15 @@ class InjectIdListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnNodeSentMethod()
     {
-        $eventMock = m::mock('Zend\\EventManager\\Event');
+        $eventMock = m::mock('Zend\\EventManager\\EventInterface');
         $nodeMock = m::mock(
             'Tmv\\WhatsApi\\Message\\Node\\NodeInterface'
         );
         $client = m::mock('Tmv\\WhatsApi\\Client');
         $client->shouldReceive('pollMessages');
 
-        $this->object->setClient($client);
-
         $eventMock->shouldReceive('getParam')->with('node')->once()->andReturn($nodeMock);
+        $eventMock->shouldReceive('getTarget')->andReturn($client);
         $nodeMock->shouldReceive('hasAttribute')->with('id')->andReturn(true);
         $nodeMock->shouldReceive('getAttribute')->with('id')->once()->andReturn('testid');
 
@@ -75,7 +74,7 @@ class InjectIdListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnNodeReceivedNodeMethod()
     {
-        $eventMock = m::mock('Zend\\EventManager\\Event');
+        $eventMock = m::mock('Zend\\EventManager\\EventInterface');
         $nodeMock = m::mock('Tmv\\WhatsApi\\Message\\Node\\NodeInterface');
 
         $eventMock->shouldReceive('getParam')->with('node')->once()->andReturn($nodeMock);

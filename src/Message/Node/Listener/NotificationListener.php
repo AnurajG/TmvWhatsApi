@@ -4,9 +4,10 @@ namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Message\Node\Node;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
-use Zend\EventManager\Event;
+use Zend\EventManager\EventInterface;
 use Zend\EventManager\EventManagerInterface;
 use RuntimeException;
+use Tmv\WhatsApi\Client;
 
 class NotificationListener extends AbstractListener
 {
@@ -25,10 +26,12 @@ class NotificationListener extends AbstractListener
         $this->listeners[] = $events->attach('received.node.notification', array($this, 'onReceivedNode'));
     }
 
-    public function onReceivedNode(Event $e)
+    public function onReceivedNode(EventInterface $e)
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
+        /** @var Client $client */
+        $client = $e->getTarget();
 
         // @todo: handle notifications public events
 
@@ -53,13 +56,14 @@ class NotificationListener extends AbstractListener
                 throw new RuntimeException(sprintf("Notification '%s' not implemented", $type));
         }
 
-        $this->sendNotificationAck($node);
+        $this->sendNotificationAck($client, $node);
     }
 
     /**
+     * @param Client $client
      * @param NodeInterface $node
      */
-    protected function sendNotificationAck(NodeInterface $node)
+    protected function sendNotificationAck(Client $client, NodeInterface $node)
     {
         $ackNode = new Node();
 
@@ -74,6 +78,6 @@ class NotificationListener extends AbstractListener
         $ackNode->setAttribute('class', $node->getName());
         $ackNode->setAttribute('id', $node->getAttribute("id"));
         $ackNode->setAttribute('type', $node->getAttribute("type"));
-        $this->getClient()->sendNode($ackNode);
+        $client->sendNode($ackNode);
     }
 }

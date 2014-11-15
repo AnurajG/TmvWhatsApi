@@ -3,8 +3,9 @@
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Message\Node\NodeInterface;
-use Zend\EventManager\Event;
+use Zend\EventManager\EventInterface;
 use Zend\EventManager\EventManagerInterface;
+use Tmv\WhatsApi\Client;
 
 class ReceiptListener extends AbstractListener
 {
@@ -24,29 +25,34 @@ class ReceiptListener extends AbstractListener
         $this->listeners[] = $events->attach('received.node.receipt', array($this, 'onReceivedNodeReceipt'));
     }
 
-    public function onReceivedNodeVoid(Event $e)
+    public function onReceivedNodeVoid(EventInterface $e)
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
+        /** @var Client $client */
+        $client = $e->getTarget();
+
         if ($node->getAttribute("class") != "message") {
             return;
         }
 
-        $params = array(
+        $params =[
             'id' => $node->getAttribute('id'),
             'node' => $node,
-        );
-        $this->getClient()->getEventManager()->trigger('onReceiptServer', $this, $params);
+        ];
+        $client->getEventManager()->trigger('onReceiptServer', $client, $params);
     }
 
-    public function onReceivedNodeReceipt(Event $e)
+    public function onReceivedNodeReceipt(EventInterface $e)
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
-        $params = array(
+        /** @var Client $client */
+        $client = $e->getTarget();
+        $params = [
             'id' => $node->getAttribute('id'),
             'node' => $node,
-        );
-        $this->getClient()->getEventManager()->trigger('onReceiptClient', $this, $params);
+        ];
+        $client->getEventManager()->trigger('onReceiptClient', $client, $params);
     }
 }

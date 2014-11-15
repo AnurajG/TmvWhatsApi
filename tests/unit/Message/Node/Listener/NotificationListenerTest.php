@@ -25,12 +25,10 @@ class NotificationListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnReceivedNode()
     {
-        $eventMock = m::mock('Zend\\EventManager\\Event');
+        $eventMock = m::mock('Zend\\EventManager\\EventInterface');
         $nodeMock = m::mock('Tmv\\WhatsApi\\Message\\Node\\NodeInterface');
         $client = m::mock('Tmv\\WhatsApi\\Client');
         $client->shouldReceive('sendNode')->once();
-
-        $this->object->setClient($client);
 
         $nodeMock->shouldReceive('getAttribute')->with('type')->twice()->andReturn('status');
         $nodeMock->shouldReceive('hasAttribute')->with('to')->once()->andReturn(true);
@@ -43,6 +41,7 @@ class NotificationListenerTest extends \PHPUnit_Framework_TestCase
         $nodeMock->shouldReceive('getName')->once()->andReturn('notification');
 
         $eventMock->shouldReceive('getParam')->with('node')->once()->andReturn($nodeMock);
+        $eventMock->shouldReceive('getTarget')->andReturn($client);
 
         $this->object->onReceivedNode($eventMock);
     }

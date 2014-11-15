@@ -25,7 +25,7 @@ class ReceiptListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnReceivedNodeVoid()
     {
-        $eventMock = m::mock('Zend\\EventManager\\Event');
+        $eventMock = m::mock('Zend\\EventManager\\EventInterface');
         $nodeMock = m::mock('Tmv\\WhatsApi\\Message\\Node\\NodeInterface');
         $eventManagerMock = m::mock('Zend\\EventManager\\EventManagerInterface');
         $client = m::mock('Tmv\\WhatsApi\\Client');
@@ -35,15 +35,14 @@ class ReceiptListenerTest extends \PHPUnit_Framework_TestCase
         $nodeMock->shouldReceive('getAttribute')->with('class')->once()->andReturn('message');
         $nodeMock->shouldReceive('getAttribute')->with('id')->once()->andReturn('testid');
         $eventMock->shouldReceive('getParam')->with('node')->once()->andReturn($nodeMock);
-
-        $this->object->setClient($client);
+        $eventMock->shouldReceive('getTarget')->andReturn($client);
 
         $this->object->onReceivedNodeVoid($eventMock);
     }
 
     public function testOnReceivedNodeReceipt()
     {
-        $eventMock = m::mock('Zend\\EventManager\\Event');
+        $eventMock = m::mock('Zend\\EventManager\\EventInterface');
         $nodeMock = m::mock('Tmv\\WhatsApi\\Message\\Node\\NodeInterface');
         $nodeMock->shouldReceive('getAttribute')->with('id')->once()->andReturn('testid');
         $eventManagerMock = m::mock('Zend\\EventManager\\EventManagerInterface');
@@ -52,8 +51,7 @@ class ReceiptListenerTest extends \PHPUnit_Framework_TestCase
 
         $eventManagerMock->shouldReceive('trigger')->once();
         $eventMock->shouldReceive('getParam')->with('node')->once()->andReturn($nodeMock);
-
-        $this->object->setClient($client);
+        $eventMock->shouldReceive('getTarget')->andReturn($client);
 
         $this->object->onReceivedNodeReceipt($eventMock);
     }

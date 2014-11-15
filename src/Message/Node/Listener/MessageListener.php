@@ -3,13 +3,12 @@
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Client;
-use Tmv\WhatsApi\Event\MessageReceivedEvent;
 use Tmv\WhatsApi\Message\Action\Receipt;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Tmv\WhatsApi\Message\Received\MessageFactory;
 use Tmv\WhatsApi\Message\Received\MessageFactoryInterface;
 use Tmv\WhatsApi\Message\Received\MessageMedia;
-use Zend\EventManager\Event;
+use Zend\EventManager\EventInterface;
 use Zend\EventManager\EventManagerInterface;
 
 class MessageListener extends AbstractListener
@@ -80,20 +79,18 @@ class MessageListener extends AbstractListener
         $this->listeners[] = $events->attach('received.node.message', array($this, 'onReceivedNode'));
     }
 
-    public function onReceivedNode(Event $e)
+    public function onReceivedNode(EventInterface $e)
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
-        $client = $this->getClient();
+        /** @var Client $client */
+        $client = $e->getTarget();
 
         $factory = $this->getMessageReceivedFactory();
         $message = $factory->createMessage($node);
 
         // Generic event
-        $event = $this->createMessageReceivedEvent('onMessageReceived');
-        $event->setClient($client);
-        $event->setMessage($message);
-        $client->getEventManager()->trigger($event);
+        $client->getEventManager()->trigger('onMessageReceived', $client, ['message' => $message, 'node' => $node]);
 
         $type = 'Text';
         if ($message instanceof MessageMedia) {
@@ -101,10 +98,8 @@ class MessageListener extends AbstractListener
         }
 
         // Type event
-        $event = $this->createMessageReceivedEvent(sprintf('onMessage%sReceived', ucfirst($type)));
-        $event->setClient($client);
-        $event->setMessage($message);
-        $client->getEventManager()->trigger($event);
+        $client->getEventManager()
+            ->trigger(sprintf('onMessage%sReceived', ucfirst($type)), $client, ['message' => $message, 'node' => $node]);
 
         // check and send receipt
         if ($this->shouldSendAutoReceipt()) {
@@ -120,14 +115,5 @@ class MessageListener extends AbstractListener
         $client->send($receipt);
 
         return $this;
-    }
-
-    /**
-     * @param  string               $eventName
-     * @return MessageReceivedEvent
-     */
-    protected function createMessageReceivedEvent($eventName)
-    {
-        return new MessageReceivedEvent($eventName, $this);
     }
 }

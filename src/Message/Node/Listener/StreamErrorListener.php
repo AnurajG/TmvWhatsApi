@@ -3,7 +3,7 @@
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use Tmv\WhatsApi\Message\Node\NodeInterface;
-use Zend\EventManager\Event;
+use Zend\EventManager\EventInterface;
 use Zend\EventManager\EventManagerInterface;
 use RuntimeException;
 
@@ -24,7 +24,7 @@ class StreamErrorListener extends AbstractListener
         $this->listeners[] = $events->attach('received.node.stream:error', array($this, 'onReceivedNode'));
     }
 
-    public function onReceivedNode(Event $e)
+    public function onReceivedNode(EventInterface $e)
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');

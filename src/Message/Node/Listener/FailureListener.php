@@ -2,10 +2,10 @@
 
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
-use Tmv\WhatsApi\Event\LoginFailedEvent;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
-use Zend\EventManager\Event;
+use Zend\EventManager\EventInterface;
 use Zend\EventManager\EventManagerInterface;
+use Tmv\WhatsApi\Client;
 
 class FailureListener extends AbstractListener
 {
@@ -24,15 +24,19 @@ class FailureListener extends AbstractListener
         $this->listeners[] = $events->attach('received.node.failure', array($this, 'onReceivedNode'));
     }
 
-    public function onReceivedNode(Event $e)
+    /**
+     * @param EventInterface $e
+     */
+    public function onReceivedNode(EventInterface $e)
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
-        $client = $this->getClient();
+        /** @var Client $client */
+        $client = $e->getTarget();
 
         // triggering public event
-        $event = new LoginFailedEvent('onLoginFailed', $this, array('node' => $node));
-        $event->setClient($this->getClient());
-        $client->getEventManager()->trigger($event);
+        $client->getEventManager()->trigger('onLoginFailed', $client, ['node' => $node]);
+
+        throw new \RuntimeException("Login failed");
     }
 }

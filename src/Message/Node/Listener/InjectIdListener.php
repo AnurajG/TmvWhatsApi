@@ -7,7 +7,6 @@ use Tmv\WhatsApi\Message\Action\ActionInterface;
 use Tmv\WhatsApi\Message\Action\IdAwareInterface;
 use Tmv\WhatsApi\Message\Action\TimestampAwareInterface;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
-use Zend\EventManager\Event;
 use Zend\EventManager\EventInterface;
 use Zend\EventManager\EventManagerInterface;
 
@@ -91,7 +90,7 @@ class InjectIdListener extends AbstractListener
         return $this;
     }
 
-    public function onSendingNode(Event $e)
+    public function onSendingNode(EventInterface $e)
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
@@ -104,15 +103,17 @@ class InjectIdListener extends AbstractListener
         $e->setParam('node', $node);
     }
 
-    public function onNodeSent(Event $e)
+    public function onNodeSent(EventInterface $e)
     {
         $node = $e->getParam('node');
+        /** @var Client $client */
+        $client = $e->getTarget();
         if ($node->hasAttribute('id')) {
-            $this->waitForServer($this->getClient(), $node->getAttribute('id'));
+            $this->waitForServer($client, $node->getAttribute('id'));
         }
     }
 
-    public function onNodeReceived(Event $e)
+    public function onNodeReceived(EventInterface $e)
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');

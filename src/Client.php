@@ -83,6 +83,7 @@ class Client
         $this->getEventManager()->attachAggregate($listenerFactory->factory('Notification', $this), 100);
         $this->getEventManager()->attachAggregate($listenerFactory->factory('Challenge', $this), 100);
         $this->getEventManager()->attachAggregate($listenerFactory->factory('Success', $this), 100);
+        $this->getEventManager()->attachAggregate($listenerFactory->factory('Failure', $this), 100);
         $this->getEventManager()->attachAggregate($listenerFactory->factory('Message', $this), 100);
         $this->getEventManager()->attachAggregate($listenerFactory->factory('Receipt', $this), 100);
         $this->getEventManager()->attachAggregate($listenerFactory->factory('Presence', $this), 100);
@@ -248,22 +249,6 @@ class Client
             )
         ));
         $this->sendNode($auth);
-
-        $this->pollMessages();
-        $this->pollMessages();
-        $this->pollMessages();
-
-        if ($this->challengeData != null) {
-            $data = $this->createAuthResponseNode();
-            $this->sendNode($data);
-            $this->getConnection()->getNodeReader()->setKey($this->getConnection()->getInputKey());
-            $this->getConnection()->getNodeWriter()->setKey($this->getConnection()->getOutputKey());
-            $this->pollMessages();
-        }
-
-        if (!$this->isConnected()) {
-            throw new RuntimeException("Login failure");
-        }
     }
 
     /**
@@ -294,12 +279,6 @@ class Client
         }
 
         $node = $this->sendNode($node);
-        if ($node->hasAttribute('id') && $action instanceof Action\IdAwareInterface) {
-            $action->setId($node->getAttribute('id'));
-        }
-        if ($node->hasAttribute('t') && $action instanceof Action\TimestampAwareInterface) {
-            $action->setTimestamp($node->getAttribute('t'));
-        }
 
         $eventParams = array('action' => $action, 'node' => $node);
         $this->getEventManager()->trigger('action.send.post', $this, $eventParams);
@@ -472,44 +451,6 @@ class Client
         }
 
         return null;
-    }
-
-    /**
-     * Add the auth response
-     *
-     * @return NodeInterface
-     */
-    protected function createAuthResponseNode()
-    {
-        $resp = $this->authenticate();
-        $respHash = array();
-        $respHash["xmlns"] = "urn:ietf:params:xml:ns:xmpp-sasl";
-
-        $node = Node::fromArray(
-            array(
-                'name' => 'response',
-                'attributes' => $respHash,
-                'data' => $resp,
-            )
-        );
-
-        return $node;
-    }
-
-    /**
-     * Authenticate with the Whatsapp Server.
-     *
-     * @return string Returns binary string
-     */
-    protected function authenticate()
-    {
-        $keys = KeyStream::generateKeys(base64_decode($this->getIdentity()->getPassword()), $this->challengeData);
-        $this->getConnection()->setInputKey($this->createKeyStream($keys[2], $keys[3]));
-        $this->getConnection()->setOutputKey($this->createKeyStream($keys[0], $keys[1]));
-        $array = "\0\0\0\0".$this->getIdentity()->getPhone()->getPhoneNumber().$this->challengeData;// . time() . static::WHATSAPP_USER_AGENT . " MccMnc/" . str_pad($phone["mcc"], 3, "0", STR_PAD_LEFT) . "001";
-        $response = $this->getConnection()->getOutputKey()->encodeMessage($array, 0, 4, strlen($array) - 4);
-
-        return $response;
     }
 
     /**

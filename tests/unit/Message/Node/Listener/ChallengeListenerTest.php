@@ -25,14 +25,17 @@ class ChallengeListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnReceivedNodeMethod()
     {
-        $event = m::mock('Zend\\EventManager\\Event');
+        $event = m::mock('Zend\\EventManager\\EventInterface');
         $node = m::mock('Tmv\\WhatsApi\\Message\\Node\\Challenge');
-        $client = m::mock('Tmv\\WhatsApi\\Client');
+        $phone = m::mock('Tmv\\WhatsApi\\Entity\\Phone[]', [+39123456789]);
+        $identity = m::mock('Tmv\\WhatsApi\\Entity\\Identity[]');
+        $client = m::mock('Tmv\\WhatsApi\\Client[sendNode]', [$identity]);
 
-        $this->object->setClient($client);
+        $identity->setPhone($phone);
 
         $event->shouldReceive('getParam')->with('node')->once()->andReturn($node);
-        $client->shouldReceive('setChallengeData')->once()->andReturn('123');
+        $event->shouldReceive('getTarget')->once()->andReturn($client);
+        $client->shouldReceive('sendNode')->once()->with(m::type('Tmv\WhatsApi\Message\Node\Node'));
         $node->shouldReceive('getData')->once()->andReturn('123');
 
         $this->object->onReceivedNode($event);
