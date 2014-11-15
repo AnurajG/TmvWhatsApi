@@ -22,7 +22,7 @@ class ChatStateListener extends AbstractListener
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach('received.node.chatstate', array($this, 'onReceivedNode'));
+        $this->listeners[] = $events->attach('received.node.chatstate', [$this, 'onReceivedNode']);
     }
 
     /**

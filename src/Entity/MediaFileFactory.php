@@ -133,7 +133,7 @@ class MediaFileFactory
      */
     protected function getExtensionTypeMap()
     {
-        return array(
+        return [
             'jpg' => MediaFileInterface::TYPE_IMAGE,
             'jpeg' => MediaFileInterface::TYPE_IMAGE,
             'gif' => MediaFileInterface::TYPE_IMAGE,
@@ -150,6 +150,6 @@ class MediaFileFactory
             'mp4' => MediaFileInterface::TYPE_VIDEO,
             'mov' => MediaFileInterface::TYPE_VIDEO,
             'avi' => MediaFileInterface::TYPE_VIDEO,
-        );
+        ];
     }
 }

@@ -22,7 +22,7 @@ class SuccessListener extends AbstractListener
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach('received.node.success', array($this, 'onReceivedNode'));
+        $this->listeners[] = $events->attach('received.node.success', [$this, 'onReceivedNode']);
     }
 
     public function onReceivedNode(EventInterface $e)

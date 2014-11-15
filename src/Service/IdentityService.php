@@ -51,7 +51,7 @@ class IdentityService
 
         // Build the url.
         $host = 'https://'.Client::WHATSAPP_REQUEST_HOST;
-        $query = array(
+        $query = [
             'method' => $method,
             'in' => $phone->getPhone(),
             'cc' => $phone->getCc(),
@@ -61,7 +61,7 @@ class IdentityService
             'token' => urlencode($token),
             'sim_mcc' => '000', //$phone['mcc']
             'sim_mnc' => '000', // 001
-        );
+        ];
 
         $response = $this->getResponse($host, $query);
 
@@ -188,7 +188,7 @@ class IdentityService
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_USERAGENT, Client::WHATSAPP_USER_AGENT);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: text/json'));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: text/json']);
         // This makes CURL accept any peer!
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 

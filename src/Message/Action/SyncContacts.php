@@ -26,7 +26,7 @@ class SyncContacts extends AbstractAction implements IdAwareInterface
     /**
      * @var string[]
      */
-    protected $numbers = array();
+    protected $numbers = [];
     /**
      * @var string
      */
@@ -200,13 +200,13 @@ class SyncContacts extends AbstractAction implements IdAwareInterface
     {
         $syncNode = new Node();
         $syncNode->setName('sync');
-        $syncNode->setAttributes(array(
+        $syncNode->setAttributes([
             "mode" => $this->getMode(),
             "context" => $this->getContext(),
             "sid" => "".((time() + 11644477200) * 10000000),
             "index" => "".$this->getIndex(),
             "last" => $this->isLast() ? "true" : "false",
-        ));
+        ]);
 
         foreach ($this->getNumbers() as $number) {
             $userNode = new Node();
@@ -217,12 +217,12 @@ class SyncContacts extends AbstractAction implements IdAwareInterface
 
         $node = new Node();
         $node->setName('iq');
-        $node->setAttributes(array(
+        $node->setAttributes([
             "id" => 'sendsync-',
             "type" => "get",
             "xmlns" => "urn:xmpp:whatsapp:sync",
             "to" => Identity::createJID($this->getTo()),
-        ));
+        ]);
         $node->addChild($syncNode);
 
         return $node;

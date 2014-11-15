@@ -13,11 +13,11 @@ abstract class AbstractNode implements NodeInterface
     /**
      * @var array
      */
-    protected $attributes = array();
+    protected $attributes = [];
     /**
      * @var NodeInterface[]
      */
-    protected $children = array();
+    protected $children = [];
     /**
      * @var string
      */
@@ -31,7 +31,7 @@ abstract class AbstractNode implements NodeInterface
     {
         /** @var NodeInterface $node */
         $node = new static();
-        $children = array();
+        $children = [];
         if (isset($data['children']) && is_array($data['children'])) {
             foreach ($data['children'] as $child) {
                 if (is_array($child)) {
@@ -85,7 +85,7 @@ abstract class AbstractNode implements NodeInterface
      */
     public function setAttributes(array $attributes)
     {
-        $this->attributes = array();
+        $this->attributes = [];
         foreach ($attributes as $name => $value) {
             $this->setAttribute($name, $value);
         }
@@ -138,7 +138,7 @@ abstract class AbstractNode implements NodeInterface
      */
     public function setChildren(array $children)
     {
-        $this->children = array();
+        $this->children = [];
         foreach ($children as $child) {
             $this->addChild($child);
         }
@@ -244,16 +244,16 @@ abstract class AbstractNode implements NodeInterface
      */
     public function getArrayCopy()
     {
-        $children = array();
+        $children = [];
         foreach ($this->getChildren() as $child) {
             $children[] = $child->toArray();
         }
-        $array = array(
+        $array = [
             'name'       => $this->getName(),
             'attributes' => $this->getAttributes(),
             'data'       => $this->getData(),
             'children'   => $children,
-        );
+        ];
 
         return $array;
     }
@@ -302,7 +302,7 @@ abstract class AbstractNode implements NodeInterface
         }
         if (count($this->getChildren())) {
             $ret .= $nl;
-            $foo = array();
+            $foo = [];
             foreach ($this->getChildren() as $child) {
                 $childString = $child->toString();
                 $childString =

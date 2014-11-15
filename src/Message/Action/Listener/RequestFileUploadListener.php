@@ -15,7 +15,7 @@ class RequestFileUploadListener implements ListenerAggregateInterface
 {
     use ListenerAggregateTrait;
 
-    protected $mediaQueue = array();
+    protected $mediaQueue = [];
 
     /**
      * Attach one or more listeners
@@ -30,7 +30,7 @@ class RequestFileUploadListener implements ListenerAggregateInterface
     public function attach(EventManagerInterface $events)
     {
         $this->listeners[] = $events->attach('action.send.pre', [$this, 'onSendAction']);
-        $this->listeners[] = $events->attach('received.node.iq', array($this, 'onReceivedNode'));
+        $this->listeners[] = $events->attach('received.node.iq', [$this, 'onReceivedNode']);
     }
 
     public function onSendAction(EventInterface $e)
@@ -79,13 +79,13 @@ class RequestFileUploadListener implements ListenerAggregateInterface
             $exploded = explode("/", $url);
             $filename = array_pop($exploded);
 
-            $results = array(
+            $results = [
                 'type' => $duplicate->getAttribute("type"),
                 'url' => $url,
                 'name' => $filename,
                 'size' => $duplicate->getAttribute("size"),
                 'filehash' => $duplicate->getAttribute("filehash"),
-            );
+            ];
         } else {
             $url = $node->getChild("media")->getAttribute("url");
             $results = $client->getMediaService()->uploadMediaFile(

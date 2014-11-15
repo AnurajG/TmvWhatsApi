@@ -21,7 +21,7 @@ class FailureListener extends AbstractListener
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach('received.node.failure', array($this, 'onReceivedNode'));
+        $this->listeners[] = $events->attach('received.node.failure', [$this, 'onReceivedNode']);
     }
 
     /**

@@ -21,8 +21,8 @@ class ReceiptListener extends AbstractListener
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach('received.node.void', array($this, 'onReceivedNodeVoid'));
-        $this->listeners[] = $events->attach('received.node.receipt', array($this, 'onReceivedNodeReceipt'));
+        $this->listeners[] = $events->attach('received.node.void', [$this, 'onReceivedNodeVoid']);
+        $this->listeners[] = $events->attach('received.node.receipt', [$this, 'onReceivedNodeReceipt']);
     }
 
     public function onReceivedNodeVoid(EventInterface $e)

@@ -39,13 +39,13 @@ class KeyStream
      */
     public static function generateKeys($password, $nonce)
     {
-        $array = array(
+        $array = [
             "key", //placeholders
             "key",
             "key",
             "key",
-        );
-        $array2 = array(1, 2, 3, 4);
+        ];
+        $array2 = [1, 2, 3, 4];
         $nonce .= '0';
         $count = count($array);
         for ($j = 0; $j < $count; $j++) {

@@ -240,14 +240,14 @@ class Client
         $this->getConnection()->getNodeReader()->resetKey();
         $resource = static::WHATSAPP_DEVICE.'-'.static::WHATSAPP_VER.'-'.static::PORT;
         $data = $this->getConnection()->getNodeWriter()->startStream(static::WHATSAPP_SERVER, $resource);
-        $auth = $this->createAuthNode();
 
         $this->sendData($data);
+
         $this->sendNode(Node::fromArray(
-            array(
-                'name' => 'stream:features',
-            )
+            ['name' => 'stream:features']
         ));
+
+        $auth = $this->createAuthNode();
         $this->sendNode($auth);
     }
 
@@ -280,7 +280,7 @@ class Client
 
         $node = $this->sendNode($node);
 
-        $eventParams = array('action' => $action, 'node' => $node);
+        $eventParams = ['action' => $action, 'node' => $node];
         $this->getEventManager()->trigger('action.send.post', $this, $eventParams);
 
         return $this;
@@ -381,9 +381,9 @@ class Client
         if ($node) {
             $this->getEventManager()->trigger('node.received',
                 $this,
-                array('node' => $node, 'autoReceipt' => $autoReceipt)
+                ['node' => $node, 'autoReceipt' => $autoReceipt]
             );
-            $params = array('node' => $node);
+            $params = ['node' => $node];
             $this->getEventManager()->trigger('received.node.'.$node->getName(), $this, $params);
         }
 
@@ -398,18 +398,18 @@ class Client
      */
     protected function createAuthNode()
     {
-        $authHash = array();
+        $authHash = [];
         $authHash["xmlns"] = "urn:ietf:params:xml:ns:xmpp-sasl";
         $authHash["mechanism"] = "WAUTH-2";
         $authHash["user"] = $this->getIdentity()->getPhone()->getPhoneNumber();
         $data = $this->createAuthBlob();
 
         $node = Node::fromArray(
-            array(
+            [
                 'name' => 'auth',
                 'attributes' => $authHash,
                 'data' => $data,
-            )
+            ]
         );
 
         return $node;
@@ -558,10 +558,10 @@ class Client
     public function getConnection()
     {
         if (!$this->connection) {
-            $adapter = SocketAdapterFactory::factory(array(
+            $adapter = SocketAdapterFactory::factory([
                 'hostname' => static::WHATSAPP_HOST,
                 'port' => static::PORT,
-            ));
+            ]);
             $connection = new Connection($adapter);
             $this->connection = $connection;
         }

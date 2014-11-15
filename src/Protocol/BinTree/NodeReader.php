@@ -136,7 +136,7 @@ class NodeReader
      */
     protected function readAttributes($size)
     {
-        $attributes = array();
+        $attributes = [];
         $attribCount = ($size - 2 + $size % 2) / 2;
         for ($i = 0; $i < $attribCount; $i++) {
             $key = $this->readString($this->readInt8());

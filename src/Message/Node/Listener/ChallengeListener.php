@@ -25,7 +25,7 @@ class ChallengeListener extends AbstractListener
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach('received.node.challenge', array($this, 'onReceivedNode'));
+        $this->listeners[] = $events->attach('received.node.challenge', [$this, 'onReceivedNode']);
     }
 
     /**
@@ -65,15 +65,15 @@ class ChallengeListener extends AbstractListener
     protected function createAuthResponseNode(Connection $connection, Identity $identity, $challengeData)
     {
         $resp = $this->getAuthData($connection, $identity, $challengeData);
-        $respHash = array();
+        $respHash = [];
         $respHash["xmlns"] = "urn:ietf:params:xml:ns:xmpp-sasl";
 
         $node = Node::fromArray(
-            array(
+            [
                 'name' => 'response',
                 'attributes' => $respHash,
                 'data' => $resp,
-            )
+            ]
         );
 
         return $node;

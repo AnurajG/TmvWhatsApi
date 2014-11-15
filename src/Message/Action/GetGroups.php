@@ -70,12 +70,12 @@ class GetGroups extends AbstractAction implements IdAwareInterface
 
         $node = new Node();
         $node->setName('iq');
-        $node->setAttributes(array(
+        $node->setAttributes([
             "id" => 'getgroups-',
             "type" => "get",
             "xmlns" => "w:g",
             "to" => "g.us",
-        ));
+        ]);
         $node->addChild($listNode);
 
         return $node;

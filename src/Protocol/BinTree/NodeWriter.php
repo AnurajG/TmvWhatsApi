@@ -42,7 +42,7 @@ class NodeWriter
      */
     public function startStream($domain, $resource)
     {
-        $attributes = array();
+        $attributes = [];
         $header = "WA";
         $header .= $this->writeInt8(1);
         $header .= $this->writeInt8(4);

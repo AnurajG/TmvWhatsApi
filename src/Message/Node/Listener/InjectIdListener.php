@@ -41,12 +41,15 @@ class InjectIdListener extends AbstractListener
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach('action.send.pre', array($this, 'onSendingAction'));
-        $this->listeners[] = $events->attach('node.send.pre', array($this, 'onSendingNode'));
-        $this->listeners[] = $events->attach('node.send.post', array($this, 'onNodeSent'));
-        $this->listeners[] = $events->attach('node.received', array($this, 'onNodeReceived'));
+        $this->listeners[] = $events->attach('action.send.pre', [$this, 'onSendingAction']);
+        $this->listeners[] = $events->attach('node.send.pre', [$this, 'onSendingNode']);
+        $this->listeners[] = $events->attach('node.send.post', [$this, 'onNodeSent']);
+        $this->listeners[] = $events->attach('node.received', [$this, 'onNodeReceived']);
     }
 
+    /**
+     * @param EventInterface $e
+     */
     public function onSendingAction(EventInterface $e)
     {
         /** @var NodeInterface $node */

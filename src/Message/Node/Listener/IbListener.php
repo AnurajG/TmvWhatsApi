@@ -23,7 +23,7 @@ class IbListener extends AbstractListener
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach('received.node.ib', array($this, 'onReceivedNode'));
+        $this->listeners[] = $events->attach('received.node.ib', [$this, 'onReceivedNode']);
     }
 
     public function onReceivedNode(EventInterface $e)
@@ -35,7 +35,7 @@ class IbListener extends AbstractListener
         foreach ($node->getChildren() as $child) {
             switch ($child->getName()) {
                 case "dirty":
-                    $action = new ClearDirty(array($child->getAttribute("type")));
+                    $action = new ClearDirty([$child->getAttribute("type")]);
                     $client->send($action);
                     break;
 

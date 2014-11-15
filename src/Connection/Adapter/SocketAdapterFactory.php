@@ -12,12 +12,12 @@ class SocketAdapterFactory
      */
     public static function factory(array $config)
     {
-        $defaults = array(
+        $defaults = [
             'hostname' => 'c.whatsapp.net',
             'port' => 443,
             'timeout_sec' => 2,
             'timeout_usec' => 0,
-        );
+        ];
         $config = array_merge($defaults, $config);
         $adapter = new SocketAdapter();
         $adapter->setHostname($config['hostname']);

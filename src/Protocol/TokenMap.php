@@ -8,7 +8,7 @@ namespace Tmv\WhatsApi\Protocol;
  */
 class TokenMap
 {
-    protected static $primaryStrings = array(
+    protected static $primaryStrings = [
         "",
         "",
         "",
@@ -214,7 +214,7 @@ class TokenMap
         "promote",
         "demote",
         "creator",
-    );
+    ];
 
     protected static $secondaryStrings = array(
         "Bell.caf",

@@ -23,7 +23,7 @@ class NotificationListener extends AbstractListener
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach('received.node.notification', array($this, 'onReceivedNode'));
+        $this->listeners[] = $events->attach('received.node.notification', [$this, 'onReceivedNode']);
     }
 
     public function onReceivedNode(EventInterface $e)

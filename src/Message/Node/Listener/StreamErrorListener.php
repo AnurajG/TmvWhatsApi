@@ -21,7 +21,7 @@ class StreamErrorListener extends AbstractListener
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach('received.node.stream:error', array($this, 'onReceivedNode'));
+        $this->listeners[] = $events->attach('received.node.stream:error', [$this, 'onReceivedNode']);
     }
 
     public function onReceivedNode(EventInterface $e)

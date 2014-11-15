@@ -23,7 +23,7 @@ class IqListener extends AbstractListener
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach('received.node.iq', array($this, 'onReceivedNode'));
+        $this->listeners[] = $events->attach('received.node.iq', [$this, 'onReceivedNode']);
     }
 
     public function onReceivedNode(EventInterface $e)

@@ -51,7 +51,7 @@ class PresenceListener extends AbstractListener
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach('received.node.presence', array($this, 'onReceivedNode'));
+        $this->listeners[] = $events->attach('received.node.presence', [$this, 'onReceivedNode']);
     }
 
     public function onReceivedNode(EventInterface $e)

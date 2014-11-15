@@ -64,12 +64,12 @@ class GetGroupInfo extends AbstractAction implements IdAwareInterface
 
         $node = new Node();
         $node->setName('iq');
-        $node->setAttributes(array(
+        $node->setAttributes([
             "id" => 'getgroupinfo-',
             "type" => "get",
             "xmlns" => "w:g",
             "to" => Identity::createJID($this->getGroupId()),
-        ));
+        ]);
 
         $node->addChild($child);
 
