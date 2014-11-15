@@ -57,9 +57,9 @@ class ChallengeListener extends AbstractListener
     /**
      * Add the auth response
      *
-     * @param Connection $connection
-     * @param Identity $identity
-     * @param string $challengeData
+     * @param  Connection    $connection
+     * @param  Identity      $identity
+     * @param  string        $challengeData
      * @return NodeInterface
      */
     protected function createAuthResponseNode(Connection $connection, Identity $identity, $challengeData)
@@ -82,10 +82,10 @@ class ChallengeListener extends AbstractListener
     /**
      * Authenticate with the Whatsapp Server.
      *
-     * @param Connection $connection
-     * @param Identity $identity
-     * @param string $challengeData
-     * @return string Returns binary string
+     * @param  Connection $connection
+     * @param  Identity   $identity
+     * @param  string     $challengeData
+     * @return string     Returns binary string
      */
     protected function getAuthData(Connection $connection, Identity $identity, $challengeData)
     {

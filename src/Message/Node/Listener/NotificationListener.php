@@ -60,7 +60,7 @@ class NotificationListener extends AbstractListener
     }
 
     /**
-     * @param Client $client
+     * @param Client        $client
      * @param NodeInterface $node
      */
     protected function sendNotificationAck(Client $client, NodeInterface $node)

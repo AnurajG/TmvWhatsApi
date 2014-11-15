@@ -95,8 +95,8 @@ class IqListener extends AbstractListener
     }
 
     /**
-     * @param Client $client
-     * @param NodeInterface $node
+     * @param  Client        $client
+     * @param  NodeInterface $node
      * @return $this
      */
     protected function processGetGroupsResult(Client $client, NodeInterface $node)
@@ -108,8 +108,8 @@ class IqListener extends AbstractListener
     }
 
     /**
-     * @param Client $client
-     * @param NodeInterface $node
+     * @param  Client        $client
+     * @param  NodeInterface $node
      * @return $this
      */
     protected function processGetGroupInfoResult(Client $client, NodeInterface $node)
