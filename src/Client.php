@@ -140,12 +140,13 @@ class Client
     }
 
     /**
-     * @param EventManager $eventManager
+     * @param  EventManager $eventManager
      * @return $this
      */
     public function setEventManager(EventManager $eventManager)
     {
         $this->eventManager = $eventManager;
+
         return $this;
     }
 

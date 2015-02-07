@@ -21,16 +21,18 @@ class IdentityService
         if (!$this->networkInfoPath) {
             $this->networkInfoPath = __DIR__ . '/../../data/networkinfo.csv';
         }
+
         return $this->networkInfoPath;
     }
 
     /**
-     * @param string $networkInfoPath
+     * @param  string $networkInfoPath
      * @return $this
      */
     public function setNetworkInfoPath($networkInfoPath)
     {
         $this->networkInfoPath = $networkInfoPath;
+
         return $this;
     }
 
@@ -38,10 +40,10 @@ class IdentityService
      * Request a registration code from WhatsApp.
      *
      * @param Identity $identity
-     * @param string   $method Accepts only 'sms' or 'voice' as a value.
-     * @param string   $carrier Carrier name
+     * @param string   $method      Accepts only 'sms' or 'voice' as a value.
+     * @param string   $carrier     Carrier name
      * @param string   $countryCode ISO Country Code, 2 Digit.
-     * @param string   $langCode ISO 639-1 Language Code: two-letter codes.
+     * @param string   $langCode    ISO 639-1 Language Code: two-letter codes.
      *
      * @return object
      *                An object with server response.
@@ -111,7 +113,7 @@ class IdentityService
      * Register account on WhatsApp using the provided code.
      *
      * @param Identity $identity
-     * @param integer  $code Numeric code value provided on requestCode().
+     * @param integer  $code     Numeric code value provided on requestCode().
      *
      * @return object
      *                An object with server response.
@@ -262,11 +264,12 @@ class IdentityService
     }
 
     /**
-     * @param string $lc LangCode
-     * @param string $carrierName Name of the carrier
+     * @param  string      $lc          LangCode
+     * @param  string      $carrierName Name of the carrier
      * @return null|string
      */
-    protected function detectMnc($lc, $carrierName) {
+    protected function detectMnc($lc, $carrierName)
+    {
         $fp = fopen($this->getNetworkInfoPath(), 'r');
         $mnc = null;
 
@@ -277,7 +280,7 @@ class IdentityService
             }
         }
 
-        if($mnc == null) {
+        if ($mnc == null) {
             $mnc = '000';
         }
 
@@ -292,6 +295,7 @@ class IdentityService
     public static function generateIdentity()
     {
         $bytes = strtolower(openssl_random_pseudo_bytes(20));
+
         return $bytes;
     }
 }

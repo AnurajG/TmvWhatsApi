@@ -76,14 +76,16 @@ class AbstractListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $class
-     * @param string $name
+     * @param  string            $class
+     * @param  string            $name
      * @return \ReflectionMethod
      */
-    protected static function getMethod($class, $name) {
+    protected static function getMethod($class, $name)
+    {
         $class = new \ReflectionClass($class);
         $method = $class->getMethod($name);
         $method->setAccessible(true);
+
         return $method;
     }
 }

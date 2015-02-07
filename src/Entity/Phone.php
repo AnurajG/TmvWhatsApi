@@ -187,12 +187,13 @@ class Phone
     }
 
     /**
-     * @param string $mnc
+     * @param  string $mnc
      * @return $this
      */
     public function setMnc($mnc)
     {
         $this->mnc = $mnc;
+
         return $this;
     }
 }
