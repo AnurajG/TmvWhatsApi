@@ -43,7 +43,7 @@ use Tmv\WhatsApi\Service\IdentityService;
 $identityId = IdentityService::generateIdentity();
 ```
 
-You need it everytime to connect to the service, so you should save it to identify your device you can use ```urlencode``` and ```urldecode``` to save it).
+You need it everytime to connect to the service, so you should save it to identify your device (you can use ```urlencode``` and ```urldecode``` to save it).
 
 Now, you can request a code to verify your number:
 
