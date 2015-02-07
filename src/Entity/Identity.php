@@ -130,7 +130,7 @@ class Identity
     {
         if (!$this->identityString) {
             if (!$this->checkIdentity($this->getIdentityToken())) {
-                $this->identityString = strtolower(urlencode(sha1($this->getIdentityToken(), true)));
+                $this->identityString = urlencode(strtolower(sha1($this->getIdentityToken(), true)));
             } else {
                 $this->identityString = $this->getIdentityToken();
             }

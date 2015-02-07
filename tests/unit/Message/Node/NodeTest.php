@@ -26,7 +26,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Tmv\WhatsApi\Exception\InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testSetNameMethodException()
     {

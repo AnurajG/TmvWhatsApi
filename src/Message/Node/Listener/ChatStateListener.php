@@ -34,7 +34,9 @@ class ChatStateListener extends AbstractListener
         $node = $e->getParam('node');
         /** @var Client $client */
         $client = $e->getTarget();
-        if ($this->isNodeFromMyNumber($node) || $this->isNodeFromGroup($node)) {
+        $identity = $client->getIdentity();
+
+        if ($this->isNodeFromMyNumber($identity, $node) || $this->isNodeFromGroup($node)) {
             return;
         }
 

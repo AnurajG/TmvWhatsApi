@@ -2,7 +2,7 @@
 namespace Tmv\WhatsApi\Service;
 
 use Tmv\WhatsApi\Entity\Phone;
-use Tmv\WhatsApi\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 
 class ProtocolService
 {

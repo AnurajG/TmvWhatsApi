@@ -64,7 +64,7 @@ class PresenceListener extends AbstractListener
         if ($node->getAttribute('status') == 'dirty') {
             // todo: send clear dirty
         }
-        if (!$this->isNodeFromMyNumber($node)) {
+        if (!$this->isNodeFromMyNumber($client->getIdentity(), $node)) {
             // It's not my message
             if (!$this->isNodeFromGroup($node)) {
                 $presence = $this->getPresenceFactory()->createPresence($node);

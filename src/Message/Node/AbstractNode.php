@@ -2,7 +2,7 @@
 
 namespace Tmv\WhatsApi\Message\Node;
 
-use Tmv\WhatsApi\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 
 abstract class AbstractNode implements NodeInterface
 {
@@ -31,16 +31,6 @@ abstract class AbstractNode implements NodeInterface
     {
         /** @var NodeInterface $node */
         $node = new static();
-        $children = [];
-        if (isset($data['children']) && is_array($data['children'])) {
-            foreach ($data['children'] as $child) {
-                if (is_array($child)) {
-                    $child = Node::fromArray($child);
-                }
-                $children[] = $child;
-            }
-        }
-        $data['children'] = $children;
         $node->exchangeArray($data);
 
         return $node;
@@ -60,6 +50,14 @@ abstract class AbstractNode implements NodeInterface
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**

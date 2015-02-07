@@ -32,6 +32,10 @@ class Phone
      * @var string
      */
     protected $iso639;
+    /**
+     * @var string
+     */
+    protected $mnc;
 
     /**
      * @param string $phoneNumber
@@ -172,5 +176,23 @@ class Phone
     public function getPhoneNumber()
     {
         return $this->phoneNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMnc()
+    {
+        return $this->mnc;
+    }
+
+    /**
+     * @param string $mnc
+     * @return $this
+     */
+    public function setMnc($mnc)
+    {
+        $this->mnc = $mnc;
+        return $this;
     }
 }

@@ -3,7 +3,7 @@
 namespace Tmv\WhatsApi\Service;
 
 use Tmv\WhatsApi\Entity\Phone;
-use Tmv\WhatsApi\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 use Tmv\WhatsApi\Exception\RuntimeException;
 
 class LocalizationService
@@ -74,7 +74,8 @@ class LocalizationService
                         )
                         ->setMcc($mcc)
                         ->setIso3166(isset($data[3]) ? $data[3] : null)
-                        ->setIso639(isset($data[4]) ? $data[4] : null);
+                        ->setIso639(isset($data[4]) ? $data[4] : null)
+                        ->setMnc(isset($data[5]) ? $data[5] : null);
 
                     return $this;
                 }

@@ -31,9 +31,9 @@ class Client
     const WHATSAPP_REQUEST_HOST = 'v.whatsapp.net/v2/code'; // The request code host.
     const WHATSAPP_SERVER = 's.whatsapp.net'; // The hostname used to login/send messages.
     const WHATSAPP_UPLOAD_HOST = 'https://mms.whatsapp.net/client/iphone/upload.php'; // The upload host.
-    const WHATSAPP_DEVICE = 'Android'; // The device name.
-    const WHATSAPP_VER = '2.11.378';                // The WhatsApp version.
-    const WHATSAPP_USER_AGENT = 'WhatsApp/2.11.378 Android/4.3 Device/GalaxyS3';// User agent used in request/registration code.
+    const WHATSAPP_DEVICE = 'iPhone'; // The device name.
+    const WHATSAPP_VER = '2.11.14';                // The WhatsApp version.
+    const WHATSAPP_USER_AGENT = 'WhatsApp/2.12.61 S40Version/14.26 Device/Nokia302';// User agent used in request/registration code.
 
     /**
      * @var bool
@@ -137,6 +137,16 @@ class Client
         }
 
         return $this->eventManager;
+    }
+
+    /**
+     * @param EventManager $eventManager
+     * @return $this
+     */
+    public function setEventManager(EventManager $eventManager)
+    {
+        $this->eventManager = $eventManager;
+        return $this;
     }
 
     /**

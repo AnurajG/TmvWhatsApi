@@ -2,20 +2,19 @@
 
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
-use Tmv\WhatsApi\Client;
 use InvalidArgumentException;
 use RuntimeException;
+use Zend\EventManager\ListenerAggregateInterface;
 
 class ListenerFactory
 {
     /**
-     * @param  string                   $name
-     * @param  Client                   $client
-     * @return ListenerInterface
+     * @param  string                     $name
+     * @return ListenerAggregateInterface
      * @throws InvalidArgumentException
      * @throws RuntimeException
      */
-    public function factory($name, Client $client)
+    public function factory($name)
     {
         $name = ucfirst($name);
         $className = __NAMESPACE__.'\\'.$name.'Listener';
@@ -25,10 +24,9 @@ class ListenerFactory
         }
 
         $instance = new $className();
-        if (!$instance instanceof ListenerInterface) {
+        if (!$instance instanceof ListenerAggregateInterface) {
             throw new RuntimeException(sprintf("Listener '%s' is not valid", $name));
         }
-        $instance->setClient($client);
 
         return $instance;
     }

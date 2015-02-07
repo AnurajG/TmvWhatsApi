@@ -7,13 +7,13 @@ use \Mockery as m;
 class AbstractNodeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var AbstractNodeMock
+     * @var AbstractNode
      */
     protected $object;
 
     public function setUp()
     {
-        $this->object = new AbstractNodeMock();
+        $this->object = $this->getMockForAbstractClass('Tmv\WhatsApi\Message\Node\AbstractNode');
     }
 
     public function testFromArrayMethod()
@@ -28,7 +28,8 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         );
-        $object = AbstractNodeMock::fromArray($data);
+        $object = $this->object;
+        $object->exchangeArray($data);
         $this->assertEquals($data['name'], $object->getName());
         $this->assertEquals($data['data'], $object->getData());
         $this->assertEquals($data['attributes'], $object->getAttributes());
@@ -48,11 +49,10 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Tmv\WhatsApi\Exception\InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testFromArrayMethodException()
     {
-        $nodeFactoryMock = m::mock('\Tmv\WhatsApi\Message\Node\NodeFactory');
 
         $data = array(
             'name' => 'mynode',
@@ -61,7 +61,8 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        AbstractNodeMock::fromArray($data, $nodeFactoryMock);
+        $object = $this->object;
+        $object->exchangeArray($data);
     }
 
     public function testSettersAndGetters()
@@ -99,7 +100,7 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Tmv\WhatsApi\Exception\InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testSetNameException()
     {
@@ -109,7 +110,7 @@ class AbstractNodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Tmv\WhatsApi\Exception\InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testAddChildException()
     {

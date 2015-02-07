@@ -9,15 +9,39 @@ use RuntimeException;
 class IdentityService
 {
     /**
+     * @var string
+     */
+    protected $networkInfoPath;
+
+    /**
+     * @return string
+     */
+    public function getNetworkInfoPath()
+    {
+        if (!$this->networkInfoPath) {
+            $this->networkInfoPath = __DIR__ . '/../../data/networkinfo.csv';
+        }
+        return $this->networkInfoPath;
+    }
+
+    /**
+     * @param string $networkInfoPath
+     * @return $this
+     */
+    public function setNetworkInfoPath($networkInfoPath)
+    {
+        $this->networkInfoPath = $networkInfoPath;
+        return $this;
+    }
+
+    /**
      * Request a registration code from WhatsApp.
      *
      * @param Identity $identity
-     * @param string   $method
-     *                              Accepts only 'sms' or 'voice' as a value.
-     * @param string   $countryCode
-     *                              ISO Country Code, 2 Digit.
-     * @param string   $langCode
-     *                              ISO 639-1 Language Code: two-letter codes.
+     * @param string   $method Accepts only 'sms' or 'voice' as a value.
+     * @param string   $carrier Carrier name
+     * @param string   $countryCode ISO Country Code, 2 Digit.
+     * @param string   $langCode ISO 639-1 Language Code: two-letter codes.
      *
      * @return object
      *                An object with server response.
@@ -30,7 +54,7 @@ class IdentityService
      *
      * @throws RuntimeException
      */
-    public function codeRequest(Identity $identity, $method = 'sms', $countryCode = null, $langCode = null)
+    public function codeRequest(Identity $identity, $method = 'sms', $carrier = "T-Mobile5", $countryCode = null, $langCode = null)
     {
         $phone = $identity->getPhone();
         if ($countryCode == null && $phone->getIso3166() != '') {
@@ -46,21 +70,27 @@ class IdentityService
             $langCode = 'en';
         }
 
+        if (null !== $carrier) {
+            $mnc = $this->detectMnc(strtolower($countryCode), $carrier);
+        } else {
+            $mnc = $phone->getMcc();
+        }
+
         // Build the token.
         $token = $this->generateRequestToken($phone->getPhone());
 
         // Build the url.
         $host = 'https://'.Client::WHATSAPP_REQUEST_HOST;
         $query = [
-            'method' => $method,
             'in' => $phone->getPhone(),
             'cc' => $phone->getCc(),
-            'id' => $identity->getIdentityString(),
+            'id' => $identity->getIdentityToken(),
             'lg' => $langCode,
             'lc' => $countryCode,
-            'token' => urlencode($token),
-            'sim_mcc' => '000', //$phone['mcc']
-            'sim_mnc' => '000', // 001
+            'sim_mcc' => $phone->getMcc(),
+            'sim_mnc' => $mnc,
+            'method' => $method,
+            'token' => $token,
         ];
 
         $response = $this->getResponse($host, $query);
@@ -81,8 +111,7 @@ class IdentityService
      * Register account on WhatsApp using the provided code.
      *
      * @param Identity $identity
-     * @param integer  $code
-     *                           Numeric code value provided on requestCode().
+     * @param integer  $code Numeric code value provided on requestCode().
      *
      * @return object
      *                An object with server response.
@@ -103,13 +132,15 @@ class IdentityService
     {
         // Build the url.
         $host = 'https://'.Client::WHATSAPP_REGISTER_HOST;
-        $query = array(
+
+        $query = [
             'cc' => $identity->getPhone()->getCc(),
-            'in' => $identity->getPhone()->getPhoneNumber(),
+            'in' => $identity->getPhone()->getPhone(),
             'id' => $identity->getIdentityString(),
             'code' => $code,
-            'c' => 'cookie',
-        );
+            'lg' => $identity->getPhone()->getIso639() ?: 'en',
+            'lc' => $identity->getPhone()->getIso3166() ?: 'US',
+        ];
 
         $response = $this->getResponse($host, $query);
 
@@ -147,12 +178,14 @@ class IdentityService
     public function checkCredentials(Identity $identity)
     {
         $host = 'https://'.Client::WHATSAPP_CHECK_HOST;
-        $query = array(
+        $query = [
             'cc' => $identity->getPhone()->getCc(),
             'in' => $identity->getPhone()->getPhoneNumber(),
             'id' => $identity->getIdentityString(),
-            'c' => 'cookie',
-        );
+            'lg' => $identity->getPhone()->getIso639() ?: 'en',
+            'lc' => $identity->getPhone()->getIso3166() ?: 'US',
+            'network_radio_type' => "1"
+        ];
 
         $response = $this->getResponse($host, $query);
 
@@ -207,6 +240,8 @@ class IdentityService
      */
     protected function generateRequestToken($phone)
     {
+        return $token = md5("PdA2DJyKoUrwLw1Bg6EIhzh502dF9noR9uFCllGk1419900749520" . $phone);
+        /*
         $signature = "MIIDMjCCAvCgAwIBAgIETCU2pDALBgcqhkjOOAQDBQAwfDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFDASBgNVBAcTC1NhbnRhIENsYXJhMRYwFAYDVQQKEw1XaGF0c0FwcCBJbmMuMRQwEgYDVQQLEwtFbmdpbmVlcmluZzEUMBIGA1UEAxMLQnJpYW4gQWN0b24wHhcNMTAwNjI1MjMwNzE2WhcNNDQwMjE1MjMwNzE2WjB8MQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEUMBIGA1UEBxMLU2FudGEgQ2xhcmExFjAUBgNVBAoTDVdoYXRzQXBwIEluYy4xFDASBgNVBAsTC0VuZ2luZWVyaW5nMRQwEgYDVQQDEwtCcmlhbiBBY3RvbjCCAbgwggEsBgcqhkjOOAQBMIIBHwKBgQD9f1OBHXUSKVLfSpwu7OTn9hG3UjzvRADDHj+AtlEmaUVdQCJR+1k9jVj6v8X1ujD2y5tVbNeBO4AdNG/yZmC3a5lQpaSfn+gEexAiwk+7qdf+t8Yb+DtX58aophUPBPuD9tPFHsMCNVQTWhaRMvZ1864rYdcq7/IiAxmd0UgBxwIVAJdgUI8VIwvMspK5gqLrhAvwWBz1AoGBAPfhoIXWmz3ey7yrXDa4V7l5lK+7+jrqgvlXTAs9B4JnUVlXjrrUWU/mcQcQgYC0SRZxI+hMKBYTt88JMozIpuE8FnqLVHyNKOCjrh4rs6Z1kW6jfwv6ITVi8ftiegEkO8yk8b6oUZCJqIPf4VrlnwaSi2ZegHtVJWQBTDv+z0kqA4GFAAKBgQDRGYtLgWh7zyRtQainJfCpiaUbzjJuhMgo4fVWZIvXHaSHBU1t5w//S0lDK2hiqkj8KpMWGywVov9eZxZy37V26dEqr/c2m5qZ0E+ynSu7sqUD7kGx/zeIcGT0H+KAVgkGNQCo5Uc0koLRWYHNtYoIvt5R3X6YZylbPftF/8ayWTALBgcqhkjOOAQDBQADLwAwLAIUAKYCp0d6z4QQdyN74JDfQ2WCyi8CFDUM4CaNB+ceVXdKtOrNTQcc0e+t";
         $classesMd5 = "oCtjlSonS+4H16h9HW6nNA=="; // 2.11.378 [*]
 
@@ -223,5 +258,40 @@ class IdentityService
         $output = hash("sha1", $opad.hash("sha1", $ipad.$data, true), true);
 
         return base64_encode($output);
+        */
+    }
+
+    /**
+     * @param string $lc LangCode
+     * @param string $carrierName Name of the carrier
+     * @return null|string
+     */
+    protected function detectMnc($lc, $carrierName) {
+        $fp = fopen($this->getNetworkInfoPath(), 'r');
+        $mnc = null;
+
+        while ($data = fgetcsv($fp, 0, ',')) {
+            if (($data[4] === $lc) && ($data[7] === $carrierName)) {
+                $mnc = $data[2];
+                break;
+            }
+        }
+
+        if($mnc == null) {
+            $mnc = '000';
+        }
+
+        fclose($fp);
+
+        return $mnc;
+    }
+
+    /**
+     * @return string
+     */
+    public static function generateIdentity()
+    {
+        $bytes = strtolower(openssl_random_pseudo_bytes(20));
+        return $bytes;
     }
 }

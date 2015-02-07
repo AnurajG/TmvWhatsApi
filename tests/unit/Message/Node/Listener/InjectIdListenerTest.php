@@ -31,8 +31,6 @@ class InjectIdListenerTest extends \PHPUnit_Framework_TestCase
         );
         $client = m::mock('Tmv\\WhatsApi\\Client');
 
-        $this->object->setClient($client);
-
         $nodeMock->shouldReceive('hasAttribute')->with('id')->andReturn(true);
         $nodeMock->shouldReceive('hasAttribute')->with('t')->andReturn(true);
         $nodeMock->shouldReceive('getAttribute')->with('id')->andReturn(null);
@@ -46,7 +44,7 @@ class InjectIdListenerTest extends \PHPUnit_Framework_TestCase
         $nodeMock->shouldReceive('getName')->once()->andReturn('testname');
 
         $eventMock->shouldReceive('getParam')->with('node')->once()->andReturn($nodeMock);
-
+        $eventMock->shouldReceive('getTarget')->andReturn($client);
         $eventMock->shouldReceive('setParam')->with('node', $nodeMock);
 
         $this->object->onSendingNode($eventMock);
