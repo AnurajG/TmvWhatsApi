@@ -34,6 +34,102 @@ If you want to help, just do it :)
 
 (Everything can be changed in the future)
 
+### Number registration ###
+
+First, you need an Identity. This string identify a device. You can generate one like this:
+```php
+use Tmv\WhatsApi\Service\IdentityService;
+
+$identityId = IdentityService::generateIdentity();
+```
+
+You need it everytime to connect to the service, so you should save it to identify your device you can use ```urlencode``` and ```urldecode``` to save it).
+
+Now, you can request a code to verify your number:
+
+```php
+use Tmv\WhatsApi\Service\LocalizationService;
+use Tmv\WhatsApi\Service\IdentityService;
+use Tmv\WhatsApi\Service\PcntlListener;
+use Tmv\WhatsApi\Service\MediaService;
+use Tmv\WhatsApi\Entity\Phone;
+use Tmv\WhatsApi\Entity\Identity;
+use Tmv\WhatsApi\Client;
+use Tmv\WhatsApi\Options;
+use Zend\EventManager\EventInterface;
+
+// Initializing client
+// Creating a service to retrieve phone info
+$localizationService = new LocalizationService();
+$localizationService->setCountriesPath(__DIR__ . '/data/countries.csv');
+$identityService = new IdentityService();
+$identityService->setNetworkInfoPath(__DIR__ . '/data/networkinfo.csv');
+
+// Creating a phone object...
+$phone = new Phone(''); // Your number with international prefix (without ```+``` or ```00```)
+// Injecting phone properties
+$localizationService->injectPhoneProperties($phone);
+
+$identity = new Identity();
+$identity->setNickname($nickname); // Nickname to use for notifications
+$identity->setIdentityToken($identityId); // Previously generated identity
+$identity->setPhone($phone);
+
+$res = $identityService->codeRequest($identity);
+/*
+var_dump() of $res:
+array(4) {
+  'status' =>
+  string(4) "sent"
+  'length' =>
+  int(6)
+  'method' =>
+  string(3) "sms"
+  'retry_after' =>
+  int(25205)
+}
+*/
+```
+
+If an error occurred, an exception will be thrown. If ok, an sms with a verify code will be sended to your number.
+The second parameter of ```IdentityService::codeRequest()```can accept two strings:
+- ```sms```: an SMS will be sent to your number with a code
+- ```voice```: you will be called and a voice will tell you the code
+
+Now you need to insert the code:
+
+```php
+// ...
+$res = $identityService->codeRegister($identity, $code);
+/*var_dump() of $res:
+array(10) {
+  'status' =>
+  string(2) "ok"
+  'login' =>
+  string(12) "39123456789"
+  'pw' =>
+  string(28) "xxxxxxxxxxxxxxx="
+  'type' =>
+  string(3) "new"
+  'expiration' =>
+  int(1454786892)
+  'kind' =>
+  string(4) "free"
+  'price' =>
+  string(8) "€ 0,89"
+  'cost' =>
+  string(4) "0.89"
+  'currency' =>
+  string(3) "EUR"
+  'price_expiration' =>
+  int(1426348327)
+}
+*/
+```
+
+The result is simple, you can understand it. The most important key is ```pw```. This is your password, save it!
+
+
 ### Initializing client ###
 
 ```php
