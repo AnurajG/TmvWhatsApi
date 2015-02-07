@@ -43,7 +43,7 @@ use Tmv\WhatsApi\Service\IdentityService;
 $identityId = IdentityService::generateIdentity();
 ```
 
-You need it everytime to connect to the service, so you should save it to identify your device (you can use ```urlencode``` and ```urldecode``` to save it).
+You need it everytime to connect to the service, so you should save it to identify your device (you can use ``urlencode``` and ```urldecode``` to save it).
 
 Now, you can request a code to verify your number:
 
@@ -185,6 +185,27 @@ $client->getEventManager()->attach('onConnected', function(EventInterface $e) {
 
     // Actions
     // ...
+});
+
+// Connect, login and process messages
+// Automatically send presence every 10 seconds
+$client->run();
+```
+
+### Sync numbers ###
+
+Before to send a message to a number, you have to sync your contacts.
+
+```php
+use Tmv\WhatsApi\Message\Action;
+
+$client->getEventManager()->attach('onConnected', function(EventInterface $e) {
+    /** @var Client $client */
+    $client = $e->getTarget();
+    
+    $action = new Action\SyncContacts($client->getIdentity()->getPhone()->getPhoneNumber());
+    $action->addNumber('+39123456789');
+    $client->send($action);
 });
 
 // Connect, login and process messages
