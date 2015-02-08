@@ -109,7 +109,6 @@ class RequestFileUploadListener implements ListenerAggregateInterface
             ->setHash($results['filehash'])
             ->setType($results['type']);
 
-        $icon = null;
         if (!$mediaAction->getIconData()) {
             $icon = null;
             switch ($results['type']) {

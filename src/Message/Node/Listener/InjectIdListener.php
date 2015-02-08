@@ -64,7 +64,7 @@ class InjectIdListener extends AbstractListener
         }
         if ($node->hasAttribute('t') && null == $node->getAttribute('t')) {
             $this->injectNodeTimestamp($node);
-            if ($node instanceof TimestampAwareInterface) {
+            if ($action instanceof TimestampAwareInterface) {
                 $action->setTimestamp($node->getAttribute('t'));
             }
         }

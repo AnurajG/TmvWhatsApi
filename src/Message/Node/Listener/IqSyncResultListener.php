@@ -41,22 +41,8 @@ class IqSyncResultListener extends AbstractListener
 
         $syncNode = $node->getChild('sync');
 
-        $existing = $syncNode->getChild('in');
-        $notExisting = $syncNode->getChild('out');
-
-        $existingUsers = [];
-        if ($existing) {
-            foreach ($existing->getChildren() as $child) {
-                $existingUsers[$child->getData()] = $child->getAttribute("jid");
-            }
-        }
-
-        $notExistingUsers = [];
-        if ($notExisting) {
-            foreach ($notExisting->getChildren() as $child) {
-                $notExistingUsers[$child->getData()] = $child->getAttribute("jid");
-            }
-        }
+        $existingUsers = $syncNode->hasChild('in') ? $this->getUsers($syncNode->getChild('in')) : [];
+        $notExistingUsers = $syncNode->hasChild('out') ? $this->getUsers($syncNode->getChild('out')) : [];
 
         $index = (int)$syncNode->getAttribute("index");
         $sid = (int)$syncNode->getAttribute("sid");
@@ -66,5 +52,21 @@ class IqSyncResultListener extends AbstractListener
             'result' => $result
         ];
         $client->getEventManager()->trigger('onSyncContactResult', $client, $params);
+    }
+
+    /**
+     * @param NodeInterface $node
+     * @return array
+     */
+    protected function getUsers(NodeInterface $node)
+    {
+        if (!$node) {
+            return [];
+        }
+        $users = [];
+        foreach ($node->getChildren() as $child) {
+            $existingUsers[$child->getData()] = $child->getAttribute("jid");
+        }
+        return $users;
     }
 }

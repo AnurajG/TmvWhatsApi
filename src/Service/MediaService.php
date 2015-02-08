@@ -183,6 +183,13 @@ class MediaService
         return $mediaFile;
     }
 
+    /**
+     * @param MediaFile $mediaFile
+     * @param Identity  $identity
+     * @param string    $uploadUrl
+     * @param string    $to
+     * @return array|bool
+     */
     public function uploadMediaFile(MediaFile $mediaFile, Identity $identity, $uploadUrl, $to)
     {
         return $this->sendMediaFile(
@@ -203,6 +210,9 @@ class MediaService
     protected function sendMediaFile(MediaFile $mediafile, $uploadUrl, $to, $from)
     {
         $host = parse_url($uploadUrl, PHP_URL_HOST);
+        if (!$host) {
+            throw new \RuntimeException("Upload URL not valid");
+        }
 
         //filename to md5 digest
         $cryptoname = md5($mediafile->getFilepath()).".".$mediafile->getExtension();

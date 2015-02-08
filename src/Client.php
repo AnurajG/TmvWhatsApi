@@ -131,7 +131,7 @@ class Client
      * Connect (create a socket) to the WhatsApp network.
      *
      * @param  bool $login Automatically login
-     * @return $this;
+     * @return $this
      */
     public function connect($login = true)
     {

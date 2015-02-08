@@ -254,7 +254,7 @@ class IdentityService
      */
     protected function generateRequestToken($phone)
     {
-        return $token = md5("PdA2DJyKoUrwLw1Bg6EIhzh502dF9noR9uFCllGk1419900749520" . $phone);
+        return md5("PdA2DJyKoUrwLw1Bg6EIhzh502dF9noR9uFCllGk1419900749520" . $phone);
     }
 
     /**

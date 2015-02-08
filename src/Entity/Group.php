@@ -43,19 +43,39 @@ class Group
         $group->setCreation($creation);
         $group->setSubject($data['subject']);
 
-        if (isset($data['children'])) {
-            foreach ($data['children'] as $child) {
-                if ($child['name'] != 'participant') {
-                    continue;
-                }
-                $group->addParticipant(
-                    Identity::parseJID($child['jid']),
-                    isset($child['type']) ? $child['type'] : Participant::TYPE_PARTICIPANT
-                );
-            }
+        if (!isset($data['children'])) {
+            return $group;
+        }
+
+        foreach ($data['children'] as $child) {
+            static::addParticipantFromArray($group, $child);
         }
 
         return $group;
+    }
+
+    /**
+     * @param Group $group
+     * @param array $child
+     */
+    protected static function addParticipantFromArray(Group $group, array $child)
+    {
+        if ($child['name'] != 'participant') {
+            return;
+        }
+        $group->addParticipant(
+            Identity::parseJID($child['jid']),
+            static::getTypeFromParticipantArray($child)
+        );
+    }
+
+    /**
+     * @param array $participant
+     * @return string
+     */
+    protected static function getTypeFromParticipantArray(array $participant)
+    {
+        return isset($participant['type']) ? $participant['type'] : Participant::TYPE_PARTICIPANT;
     }
 
     /**

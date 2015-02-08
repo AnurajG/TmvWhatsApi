@@ -28,29 +28,17 @@ class IqListener extends AbstractListener
     {
         /** @var NodeInterface $node */
         $node = $e->getParam('node');
-        /** @var Client $client */
-        $client = $e->getTarget();
         switch ($node->getAttribute('type')) {
             case 'error':
                 // todo: handle iq error
                 break;
             case 'result':
                 // todo: handle iq result
-
-                // group responses
-                $this->processGroupsResult($client, $node);
                 break;
-        }
-        if ($node->hasChild('sync')) {
-            // todo: handle sync result
         }
     }
 
-    /**
-     * @param  Client        $client
-     * @param  NodeInterface $node
-     * @return $this
-     */
+    /*
     protected function processGroupsResult(Client $client, NodeInterface $node)
     {
         switch (true) {
@@ -77,4 +65,5 @@ class IqListener extends AbstractListener
 
         return $this;
     }
+    */
 }

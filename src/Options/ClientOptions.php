@@ -153,12 +153,12 @@ class ClientOptions extends AbstractOptions
      */
     public function setMediaService($mediaService)
     {
+        if ($mediaService instanceof MediaServiceOptions) {
+            $mediaService = new MediaService($mediaService);
+        }
         if (!$mediaService instanceof MediaService) {
             $mediaServiceOptions = new MediaServiceOptions($mediaService);
             $mediaService = new MediaService($mediaServiceOptions);
-        }
-        if (!$mediaService instanceof MediaService) {
-            throw new \InvalidArgumentException("Invalid argument for media_service");
         }
         $this->mediaService = $mediaService;
         return $this;

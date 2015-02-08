@@ -43,7 +43,7 @@ class GetServerPricing extends AbstractAction implements IdAwareInterface
     public function __construct($language, $country)
     {
         $this->setLanguage($language);
-        $this->getCountry($country);
+        $this->setCountry($country);
     }
 
     /**
