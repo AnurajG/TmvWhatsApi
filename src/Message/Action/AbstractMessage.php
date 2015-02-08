@@ -37,6 +37,7 @@ abstract class AbstractMessage extends AbstractAction implements MessageInterfac
     }
 
     /**
+     * @internal
      * @param  string $id
      * @return $this
      */
@@ -48,6 +49,7 @@ abstract class AbstractMessage extends AbstractAction implements MessageInterfac
     }
 
     /**
+     * @internal
      * @return string
      */
     public function getId()

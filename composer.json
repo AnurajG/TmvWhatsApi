@@ -25,7 +25,8 @@
         "php": ">=5.4",
         "ext-curl": "*",
         "zendframework/zend-eventmanager": "~2.3",
-        "zendframework/zend-stdlib": "~2.3"
+        "zendframework/zend-stdlib": "~2.3",
+        "zendframework/zend-servicemanager": "~2.3"
     },
     "suggest": {
         "ext-gd": "Allows icon generation for images",

@@ -11,6 +11,7 @@ use Tmv\WhatsApi\Message\Node\Node;
 class GetGroups extends AbstractAction implements IdAwareInterface
 {
     const TYPE_PARTICIPATING = 'participating';
+    const TYPE_OWNING = 'owning';
 
     /**
      * @var string
@@ -22,6 +23,7 @@ class GetGroups extends AbstractAction implements IdAwareInterface
     protected $type = 'participating';
 
     /**
+     * @internal
      * @param  string $id
      * @return $this
      */
@@ -33,6 +35,7 @@ class GetGroups extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @return string
      */
     public function getId()
@@ -60,20 +63,20 @@ class GetGroups extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @return Node
      */
     public function createNode()
     {
         $listNode = new Node();
-        $listNode->setName('list');
-        $listNode->setAttribute('type', $this->getType());
+        $listNode->setName($this->getType());
 
         $node = new Node();
         $node->setName('iq');
         $node->setAttributes([
             "id" => 'getgroups-',
             "type" => "get",
-            "xmlns" => "w:g",
+            "xmlns" => "w:g2",
             "to" => "g.us",
         ]);
         $node->addChild($listNode);
@@ -82,6 +85,7 @@ class GetGroups extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @return bool
      */
     public function isValid()

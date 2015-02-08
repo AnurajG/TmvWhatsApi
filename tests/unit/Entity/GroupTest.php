@@ -21,8 +21,8 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $this->object->setId('testprop');
         $this->assertEquals('testprop', $this->object->getId());
 
-        $this->object->setOwner('testprop');
-        $this->assertEquals('testprop', $this->object->getOwner());
+        $this->object->setCreator('testprop');
+        $this->assertEquals('testprop', $this->object->getCreator());
 
         $this->object->setSubject('testprop');
         $this->assertEquals('testprop', $this->object->getSubject());
@@ -37,13 +37,13 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $timestamp = time();
         $data = array(
             'id' => 'testid',
-            'owner' => 'testowner',
             'subject' => 'testsubject',
             'creation' => $timestamp,
+            'creator' => 'testcreator'
         );
         $ret = Group::factory($data);
         $this->assertEquals($data['id'], $ret->getId());
-        $this->assertEquals($data['owner'], $ret->getOwner());
+        $this->assertEquals($data['creator'], $ret->getCreator());
         $this->assertEquals($data['subject'], $ret->getSubject());
         $datetime = new DateTime();
         $datetime->setTimestamp($data['creation']);

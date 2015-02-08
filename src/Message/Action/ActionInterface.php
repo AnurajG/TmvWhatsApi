@@ -7,6 +7,7 @@ use Tmv\WhatsApi\Message\Node\Node;
 interface ActionInterface
 {
     /**
+     * @internal
      * @return Node
      */
     public function createNode();
@@ -14,6 +15,7 @@ interface ActionInterface
     /**
      * Validate the action parameters
      *
+     * @internal
      * @return bool
      */
     public function isValid();

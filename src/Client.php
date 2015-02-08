@@ -5,25 +5,22 @@ namespace Tmv\WhatsApi;
 use Tmv\WhatsApi\Connection\Adapter\SocketAdapterFactory;
 use Tmv\WhatsApi\Connection\Connection;
 use Tmv\WhatsApi\Entity\Identity;
-use Tmv\WhatsApi\Exception\RuntimeException;
 use Tmv\WhatsApi\Message\Action;
-use Tmv\WhatsApi\Message\Node\Listener\ListenerFactory;
 use Tmv\WhatsApi\Message\Node\Node;
 use Tmv\WhatsApi\Message\Node\NodeInterface;
 use Tmv\WhatsApi\Protocol\KeyStream;
-use Tmv\WhatsApi\Service\MediaService;
 use Tmv\WhatsApi\Service\ProtocolService;
 use Zend\EventManager\EventManager;
+use Tmv\WhatsApi\Options\ClientOptions as ClientOptions;
 
 /**
  * Class Client
+ *
  * @package Tmv\WhatsApi
  */
 class Client
 {
     const PORT = 443; // The port of the WhatsApp server.
-    const TIMEOUT_SEC = 2; // The timeout for the connection with the WhatsApp servers.
-    const TIMEOUT_USEC = 0; //
     const WHATSAPP_CHECK_HOST = 'v.whatsapp.net/v2/exist'; // The check credentials host.
     const WHATSAPP_GROUP_SERVER = 'g.us'; // The Group server hostname
     const WHATSAPP_HOST = 'c.whatsapp.net'; // The hostname of the WhatsApp server.
@@ -32,31 +29,17 @@ class Client
     const WHATSAPP_SERVER = 's.whatsapp.net'; // The hostname used to login/send messages.
     const WHATSAPP_UPLOAD_HOST = 'https://mms.whatsapp.net/client/iphone/upload.php'; // The upload host.
     const WHATSAPP_DEVICE = 'iPhone'; // The device name.
-    const WHATSAPP_VER = '2.11.14';                // The WhatsApp version.
+    const WHATSAPP_VER = '2.11.14'; // The WhatsApp version.
     const WHATSAPP_USER_AGENT = 'WhatsApp/2.12.61 S40Version/14.26 Device/Nokia302';// User agent used in request/registration code.
 
-    /**
-     * @var bool
-     */
-    protected $connected = false;
     /**
      * @var EventManager
      */
     protected $eventManager;
     /**
-     * @var ProtocolService
-     */
-    protected $protocolService;
-    /**
      * @var string
      */
     protected $challengeData;
-
-    /**
-     * @var string
-     */
-    protected $challengeDataFilepath;
-
     /**
      * @var Identity
      */
@@ -65,58 +48,52 @@ class Client
      * @var Connection
      */
     protected $connection;
-
     /**
-     * @var MediaService
+     * @var ClientOptions
      */
-    protected $mediaService;
+    protected $options;
 
     /**
      * Default class constructor.
      *
      * @param Identity $identity
+     * @param array|\Traversable|ClientOptions $options
      */
-    public function __construct(Identity $identity)
+    public function __construct(Identity $identity, $options = null)
     {
-        $listenerFactory = new ListenerFactory();
-        $this->getEventManager()->attachAggregate($listenerFactory->factory('StreamError', $this), 100);
-        $this->getEventManager()->attachAggregate($listenerFactory->factory('Notification', $this), 100);
-        $this->getEventManager()->attachAggregate($listenerFactory->factory('Challenge', $this), 100);
-        $this->getEventManager()->attachAggregate($listenerFactory->factory('Success', $this), 100);
-        $this->getEventManager()->attachAggregate($listenerFactory->factory('Failure', $this), 100);
-        $this->getEventManager()->attachAggregate($listenerFactory->factory('Message', $this), 100);
-        $this->getEventManager()->attachAggregate($listenerFactory->factory('Receipt', $this), 100);
-        $this->getEventManager()->attachAggregate($listenerFactory->factory('Presence', $this), 100);
-        $this->getEventManager()->attachAggregate($listenerFactory->factory('ChatState', $this), 100);
-        $this->getEventManager()->attachAggregate($listenerFactory->factory('Iq', $this), 100);
-        $this->getEventManager()->attachAggregate($listenerFactory->factory('Ib', $this), 100);
-        $this->getEventManager()->attachAggregate($listenerFactory->factory('InjectId', $this), 100);
-
-        $this->getEventManager()->attachAggregate(new Action\Listener\RequestFileUploadListener(), 100);
-
-        $this->setIdentity($identity);
-        $this->setConnected(false);
-    }
-
-    /**
-     * @return MediaService
-     */
-    public function getMediaService()
-    {
-        if (!$this->mediaService) {
-            $this->mediaService = new MediaService();
+        if ($options) {
+            $this->setOptions($options);
         }
 
-        return $this->mediaService;
+        foreach ($this->getOptions()->getListeners() as $listenerName) {
+            $this->getEventManager()->attachAggregate(new $listenerName, 100);
+        }
+
+        $this->setIdentity($identity);
     }
 
     /**
-     * @param  MediaService $mediaService
+     * @return ClientOptions
+     */
+    public function getOptions()
+    {
+        if (null === $this->options) {
+            $this->options = new ClientOptions();
+        }
+
+        return $this->options;
+    }
+
+    /**
+     * @param  array|\Traversable|ClientOptions $options
      * @return $this
      */
-    public function setMediaService(MediaService $mediaService)
+    protected function setOptions($options)
     {
-        $this->mediaService = $mediaService;
+        if (!$options instanceof ClientOptions) {
+            $options = new ClientOptions($options);
+        }
+        $this->options = $options;
 
         return $this;
     }
@@ -152,7 +129,8 @@ class Client
 
     /**
      * Connect (create a socket) to the WhatsApp network.
-     * @param  bool   $login Automatically login
+     *
+     * @param  bool $login Automatically login
      * @return $this;
      */
     public function connect($login = true)
@@ -178,62 +156,16 @@ class Client
     }
 
     /**
-     * Set the connection status with the WhatsApp server
-     *
-     * @param  boolean $connected
-     * @return $this
-     */
-    public function setConnected($connected)
-    {
-        $this->connected = $connected;
-
-        return $this;
-    }
-
-    /**
-     * Get the connection status with the WhatsApp server
-     *
-     * @return boolean
-     */
-    public function isConnected()
-    {
-        return $this->connected;
-    }
-
-    /**
-     * @param  ProtocolService $protocolService
-     * @return $this
-     */
-    public function setProtocolService($protocolService)
-    {
-        $this->protocolService = $protocolService;
-
-        return $this;
-    }
-
-    /**
-     * @return ProtocolService
-     */
-    public function getProtocolService()
-    {
-        if (!$this->protocolService) {
-            $this->protocolService = new ProtocolService();
-        }
-
-        return $this->protocolService;
-    }
-
-    /**
      * Login to the Whatsapp server with your password
      *
      * If you already know your password you can log into the Whatsapp server
      * using this method.
      *
-     * @throws RuntimeException
+     * @return $this
      */
     public function login()
     {
-        $challengeData = $this->readChallengeData();
+        $challengeData = $this->getChallengeData();
         if (!empty($challengeData)) {
             $this->challengeData = $challengeData;
         }
@@ -249,13 +181,21 @@ class Client
     {
         $this->getConnection()->getNodeWriter()->resetKey();
         $this->getConnection()->getNodeReader()->resetKey();
-        $resource = static::WHATSAPP_DEVICE.'-'.static::WHATSAPP_VER.'-'.static::PORT;
+        $resource = static::WHATSAPP_DEVICE . '-' . static::WHATSAPP_VER . '-' . static::PORT;
         $data = $this->getConnection()->getNodeWriter()->startStream(static::WHATSAPP_SERVER, $resource);
 
         $this->sendData($data);
 
         $this->sendNode(Node::fromArray(
-            ['name' => 'stream:features']
+            [
+                'name' => 'stream:features',
+                'children' => [
+                    ['name' => 'readreceipts'],
+                    ['name' => 'groups_v2'],
+                    ['name' => 'privacy'],
+                    ['name' => 'presence'],
+                ]
+            ]
         ));
 
         $auth = $this->createAuthNode();
@@ -299,6 +239,8 @@ class Client
 
     /**
      * Send node to the WhatsApp server.
+     *
+     * @internal
      * @param  NodeInterface $node
      * @param  bool          $encrypt
      * @return NodeInterface
@@ -320,6 +262,7 @@ class Client
 
     /**
      * Send data to the whatsapp server.
+     *
      * @param  string $data
      * @return $this
      */
@@ -338,14 +281,14 @@ class Client
      */
     public function pollMessages($autoReceipt = true)
     {
-        $this->getEventManager()->trigger(__FUNCTION__.'.pre', $this);
+        $this->getEventManager()->trigger(__FUNCTION__ . '.pre', $this);
 
         $data = $this->getConnection()->readData();
         if ($data) {
             $this->processInboundData($data, $autoReceipt);
         }
 
-        $this->getEventManager()->trigger(__FUNCTION__.'.post', $this);
+        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this);
 
         return !empty($data);
     }
@@ -353,12 +296,12 @@ class Client
     /**
      * Connect, Login and start loop for reading data
      *
-     * @param  bool  $sendPresence Automatically send presence
+     * @param  bool $sendPresence Automatically send presence
      * @return $this
      */
     public function run($sendPresence = true)
     {
-        $this->getEventManager()->trigger(__FUNCTION__.'.start', $this);
+        $this->getEventManager()->trigger(__FUNCTION__ . '.start', $this);
         $this->connect(true);
         $time = time();
         $stopped = false;
@@ -373,7 +316,7 @@ class Client
             usleep(1000);
         }
 
-        $this->getEventManager()->trigger(__FUNCTION__.'.stop', $this);
+        $this->getEventManager()->trigger(__FUNCTION__ . '.stop', $this);
 
         $this->getConnection()->disconnect();
 
@@ -382,8 +325,9 @@ class Client
 
     /**
      * Process inbound data.
+     *
      * @param  bool   $autoReceipt
-     * @param  string $data        The data to process.
+     * @param  string $data The data to process.
      * @return $this
      */
     protected function processInboundData($data, $autoReceipt = true)
@@ -395,7 +339,7 @@ class Client
                 ['node' => $node, 'autoReceipt' => $autoReceipt]
             );
             $params = ['node' => $node];
-            $this->getEventManager()->trigger('received.node.'.$node->getName(), $this, $params);
+            $this->getEventManager()->trigger('received.node.' . $node->getName(), $this, $params);
         }
 
         return $this;
@@ -429,8 +373,8 @@ class Client
     /**
      * Create a keystream
      *
-     * @param  string    $key
-     * @param  string    $macKey
+     * @param  string $key
+     * @param  string $macKey
      * @return KeyStream
      */
     protected function createKeyStream($key, $macKey)
@@ -447,13 +391,13 @@ class Client
             $this->getConnection()->getNodeReader()->setKey($this->getConnection()->getInputKey());
             //$this->getConnection()->getNodeWriter()->setKey($this->getConnection()->getOutputKey());
             $phone = $this->getIdentity()->getPhone();
-            $array = "\0\0\0\0".
-                $phone->getPhoneNumber().
-                $this->challengeData.
-                time().
-                static::WHATSAPP_USER_AGENT.
-                " MccMnc/".
-                str_pad($phone->getMcc(), 3, "0", STR_PAD_LEFT).
+            $array = "\0\0\0\0" .
+                $phone->getPhoneNumber() .
+                $this->challengeData .
+                time() .
+                static::WHATSAPP_USER_AGENT .
+                " MccMnc/" .
+                str_pad($phone->getMcc(), 3, "0", STR_PAD_LEFT) .
                 "001";
 
             $this->challengeData = null;
@@ -472,6 +416,11 @@ class Client
     {
         $this->challengeData = $challengeData;
 
+        $this->getOptions()->getChallengePersistenceAdapter()->set($challengeData);
+
+        $params = ['data' => $challengeData];
+        $this->getEventManager()->trigger(__FUNCTION__, $this, $params);
+
         return $this;
     }
 
@@ -480,76 +429,10 @@ class Client
      */
     public function getChallengeData()
     {
+        if (!$this->challengeData) {
+            $this->challengeData = $this->getOptions()->getChallengePersistenceAdapter()->get();
+        }
         return $this->challengeData;
-    }
-
-    /**
-     * @param  string $filePath
-     * @return $this
-     */
-    public function setChallengeDataFilepath($filePath)
-    {
-        $this->challengeDataFilepath = $filePath;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getChallengeDataFilepath()
-    {
-        return $this->challengeDataFilepath;
-    }
-
-    /**
-     * @param  string $data
-     * @return $this
-     */
-    public function writeChallengeData($data)
-    {
-        $this->checkChallengeDataFilePermission();
-        $filepath = $this->getChallengeDataFilepath();
-        file_put_contents($filepath, $data);
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function readChallengeData()
-    {
-        $this->checkChallengeDataFilePermission();
-        $filepath = $this->getChallengeDataFilepath();
-
-        return file_get_contents($filepath);
-    }
-
-    /**
-     * @return bool
-     * @throws \Tmv\WhatsApi\Exception\RuntimeException
-     */
-    public function checkChallengeDataFilePermission()
-    {
-        $filePath = $this->getChallengeDataFilepath();
-        if (!$filePath) {
-            throw new RuntimeException("Filename for challenge data is not setted");
-        }
-        $baseDir = dirname($filePath);
-        if (!file_exists($baseDir)) {
-            throw new RuntimeException(sprintf("Directory '%s' doesn't exists", $baseDir));
-        } elseif (!file_exists($filePath) && !is_writable($baseDir)) {
-            throw new RuntimeException(sprintf("Directory '%s' is not writable", $baseDir));
-        } elseif (!file_exists($filePath)) {
-            touch($filePath);
-        }
-
-        if (!is_writable($filePath)) {
-            throw new RuntimeException(sprintf("File '%s' is not writable", $filePath));
-        }
-
-        return true;
     }
 
     /**
@@ -581,10 +464,10 @@ class Client
     }
 
     /**
-     * @param  \Tmv\WhatsApi\Entity\Identity $identity
+     * @param  Identity $identity
      * @return $this
      */
-    public function setIdentity($identity)
+    public function setIdentity(Identity $identity)
     {
         $this->identity = $identity;
 
@@ -592,7 +475,7 @@ class Client
     }
 
     /**
-     * @return \Tmv\WhatsApi\Entity\Identity
+     * @return Identity
      */
     public function getIdentity()
     {

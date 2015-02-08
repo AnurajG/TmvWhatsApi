@@ -40,18 +40,16 @@ class GetGroupsTest extends \PHPUnit_Framework_TestCase
                 array(
                     'id'    => 'getgroups-',
                     'type'  => 'get',
-                    'xmlns' => 'w:g',
+                    'xmlns' => 'w:g2',
                     'to'    => 'g.us',
                 ),
             'data'       => NULL,
             'children'   =>
                 array(
                     array(
-                        'name'       => 'list',
+                        'name'       => 'test-type',
                         'attributes' =>
-                            array(
-                                'type' => 'test-type',
-                            ),
+                            array(),
                         'data'       => NULL,
                         'children'   =>
                             array(),

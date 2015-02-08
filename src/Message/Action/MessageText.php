@@ -38,6 +38,7 @@ class MessageText extends AbstractMessage
     }
 
     /**
+     * @internal
      * @return Node
      */
     public function createNode()
@@ -78,6 +79,7 @@ class MessageText extends AbstractMessage
     }
 
     /**
+     * @internal
      * @return bool
      */
     public function isValid()

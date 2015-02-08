@@ -73,6 +73,7 @@ class ChatState extends AbstractAction
     }
 
     /**
+     * @internal
      * @return Node
      */
     public function createNode()
@@ -89,6 +90,7 @@ class ChatState extends AbstractAction
     }
 
     /**
+     * @internal
      * @return bool
      */
     public function isValid()

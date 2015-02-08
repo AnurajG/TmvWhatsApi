@@ -12,7 +12,7 @@ use Tmv\WhatsApi\Message\Node\Node;
 class Presence extends AbstractAction
 {
     const TYPE_ACTIVE = 'active';
-    const TYPE_INACTIVE = 'inactive';
+    const TYPE_OFFLINE = 'inactive';
     const TYPE_UNAVAILABLE = 'unavailable';
 
     /**
@@ -94,6 +94,7 @@ class Presence extends AbstractAction
     }
 
     /**
+     * @internal
      * @return Node
      */
     public function createNode()
@@ -114,6 +115,7 @@ class Presence extends AbstractAction
     }
 
     /**
+     * @internal
      * @return bool
      */
     public function isValid()

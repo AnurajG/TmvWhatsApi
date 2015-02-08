@@ -4,6 +4,7 @@ namespace Tmv\WhatsApi\Message\Action\Listener;
 
 use Tmv\WhatsApi\Message\Action\DirectMediaMessage;
 use Mockery as m;
+use Tmv\WhatsApi\Options\ClientOptions;
 
 class RequestFileUploadListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -85,9 +86,9 @@ class RequestFileUploadListenerTest extends \PHPUnit_Framework_TestCase
         $mediaService->shouldReceive('createVideoIcon')->andReturn(null);
         $identity = m::mock('Tmv\WhatsApi\Entity\Identity');
         $identity->shouldReceive('getNickname')->andReturn('test-nickname');
-        $client = m::mock('Tmv\WhatsApi\Client');
-        $client->shouldReceive('getMediaService')->andReturn($mediaService);
-        $client->shouldReceive('getIdentity')->andReturn($identity);
+        $clientOptions = new ClientOptions();
+        $clientOptions->setMediaService($mediaService);
+        $client = m::mock('Tmv\WhatsApi\Client[send]', [$identity, $clientOptions]);
         /** @var \Tmv\WhatsApi\Message\Action\RequestFileUpload $action */
         $action = m::mock('Tmv\WhatsApi\Message\Action\RequestFileUpload[]');
         $eventMock = m::mock('Zend\EventManager\EventInterface');
@@ -163,9 +164,9 @@ class RequestFileUploadListenerTest extends \PHPUnit_Framework_TestCase
         $mediaService->shouldReceive('createVideoIcon')->andReturn(null);
         $identity = m::mock('Tmv\WhatsApi\Entity\Identity');
         $identity->shouldReceive('getNickname')->andReturn('test-nickname');
-        $client = m::mock('Tmv\WhatsApi\Client');
-        $client->shouldReceive('getMediaService')->andReturn($mediaService);
-        $client->shouldReceive('getIdentity')->andReturn($identity);
+        $clientOptions = new ClientOptions();
+        $clientOptions->setMediaService($mediaService);
+        $client = m::mock('Tmv\WhatsApi\Client[send]', [$identity, $clientOptions]);
         /** @var \Tmv\WhatsApi\Message\Action\RequestFileUpload $action */
         $action = m::mock('Tmv\WhatsApi\Message\Action\RequestFileUpload[]');
         $eventMock = m::mock('Zend\EventManager\EventInterface');

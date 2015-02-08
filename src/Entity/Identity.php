@@ -9,7 +9,7 @@ class Identity
     /**
      * @var string
      */
-    protected $nickname;
+    protected $nickname = 'TmvWhatsApiUser';
     /**
      * @var string
      */
@@ -26,6 +26,15 @@ class Identity
      * @var string
      */
     protected $identityString;
+
+    /**
+     * @param Phone $phone
+     */
+    public function __construct(Phone $phone)
+    {
+        $this->setPhone($phone);
+    }
+
 
     /**
      * @param  string $nickname

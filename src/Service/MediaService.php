@@ -9,7 +9,7 @@ use Tmv\WhatsApi\Entity\Identity;
 use Tmv\WhatsApi\Entity\MediaFile;
 use Tmv\WhatsApi\Entity\RemoteMediaFile;
 use Tmv\WhatsApi\Entity\MediaFileFactory;
-use Tmv\WhatsApi\Options\MediaService as ServiceOptions;
+use Tmv\WhatsApi\Options\MediaServiceOptions as ServiceOptions;
 
 class MediaService
 {

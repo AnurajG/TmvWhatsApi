@@ -53,6 +53,7 @@ class SyncContacts extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @param  string $id
      * @return $this
      */
@@ -64,6 +65,7 @@ class SyncContacts extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @return string
      */
     public function getId()
@@ -194,6 +196,7 @@ class SyncContacts extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @return Node
      */
     public function createNode()
@@ -229,6 +232,7 @@ class SyncContacts extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @return bool
      */
     public function isValid()

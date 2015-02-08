@@ -153,6 +153,7 @@ class DirectMediaMessage extends AbstractMessage
     }
 
     /**
+     * @internal
      * @return Node
      */
     public function createNode()
@@ -200,6 +201,7 @@ class DirectMediaMessage extends AbstractMessage
     }
 
     /**
+     * @internal
      * @return bool
      */
     public function isValid()

@@ -13,7 +13,7 @@ class GetGroupInfoTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->object = new GetGroupInfo();
+        $this->object = new GetGroupInfo('393921234567-12345689');
     }
 
     protected function tearDown()
@@ -40,7 +40,7 @@ class GetGroupInfoTest extends \PHPUnit_Framework_TestCase
                 array(
                     'id'    => 'getgroupinfo-',
                     'type'  => 'get',
-                    'xmlns' => 'w:g',
+                    'xmlns' => 'w:g2',
                     'to'    => '393921234567-12345689@g.us',
                 ),
             'data'       => NULL,
@@ -49,7 +49,9 @@ class GetGroupInfoTest extends \PHPUnit_Framework_TestCase
                     array(
                         'name'       => 'query',
                         'attributes' =>
-                            array(),
+                            array(
+                                'request' => 'interactive'
+                            ),
                         'data'       => NULL,
                         'children'   =>
                             array(),
@@ -62,9 +64,6 @@ class GetGroupInfoTest extends \PHPUnit_Framework_TestCase
 
     public function testIsValid()
     {
-        $this->assertFalse($this->object->isValid());
-
-        $this->object->setGroupId(['group-id']);
         $this->assertTrue($this->object->isValid());
     }
 }

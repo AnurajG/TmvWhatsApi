@@ -47,6 +47,7 @@ class RequestFileUpload extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @param  string $id
      * @return $this
      */
@@ -58,6 +59,7 @@ class RequestFileUpload extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @return string
      */
     public function getId()
@@ -107,6 +109,7 @@ class RequestFileUpload extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @return Node
      */
     public function createNode()
@@ -131,6 +134,7 @@ class RequestFileUpload extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @return bool
      */
     public function isValid()

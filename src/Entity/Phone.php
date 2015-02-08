@@ -2,6 +2,11 @@
 
 namespace Tmv\WhatsApi\Entity;
 
+/**
+ * Class Phone
+ *
+ * @package Tmv\WhatsApi\Entity
+ */
 class Phone
 {
     /**
@@ -38,10 +43,15 @@ class Phone
     protected $mnc;
 
     /**
-     * @param string $phoneNumber
+     * @param string $phoneNumber The phone number with international prefix without '+' or '00' prefix
      */
     public function __construct($phoneNumber)
     {
+        if (!preg_match('/^[1-9][1-9]\d+$/', $phoneNumber)) {
+            throw new \InvalidArgumentException(
+                "Invalid number. The number can contain only digits and can't start with '00'"
+            );
+        }
         $this->setPhoneNumber($phoneNumber);
     }
 
@@ -84,6 +94,8 @@ class Phone
     }
 
     /**
+     * Set the country code
+     *
      * @param  string $iso3166
      * @return $this
      */
@@ -95,6 +107,8 @@ class Phone
     }
 
     /**
+     * Get the country code
+     *
      * @return string
      */
     public function getIso3166()
@@ -103,6 +117,8 @@ class Phone
     }
 
     /**
+     * Set the language code
+     *
      * @param  string $iso639
      * @return $this
      */
@@ -114,6 +130,8 @@ class Phone
     }
 
     /**
+     * Get the language code
+     *
      * @return string
      */
     public function getIso639()
@@ -141,6 +159,8 @@ class Phone
     }
 
     /**
+     * Set the phone number without international prefix
+     *
      * @param  string $phone
      * @return $this
      */
@@ -152,6 +172,8 @@ class Phone
     }
 
     /**
+     * Get the phone number without international prefix
+     *
      * @return string
      */
     public function getPhone()
@@ -160,6 +182,8 @@ class Phone
     }
 
     /**
+     * Set the phone number with international prefix
+     *
      * @param  string $phoneNumber
      * @return $this
      */
@@ -171,6 +195,8 @@ class Phone
     }
 
     /**
+     * Get the phone number with international prefix
+     *
      * @return string
      */
     public function getPhoneNumber()

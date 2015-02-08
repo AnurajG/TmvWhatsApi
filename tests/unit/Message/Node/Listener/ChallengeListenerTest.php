@@ -3,6 +3,7 @@
 namespace Tmv\WhatsApi\Message\Node\Listener;
 
 use \Mockery as m;
+use Tmv\WhatsApi\Options\ClientOptions;
 
 class ChallengeListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,12 +28,14 @@ class ChallengeListenerTest extends \PHPUnit_Framework_TestCase
     {
         $event = m::mock('Zend\\EventManager\\EventInterface');
         $node = m::mock('Tmv\\WhatsApi\\Message\\Node\\Challenge');
-        $phone = m::mock('Tmv\\WhatsApi\\Entity\\Phone[]', [+39123456789]);
-        $identity = m::mock('Tmv\\WhatsApi\\Entity\\Identity[]');
-        $client = m::mock('Tmv\\WhatsApi\\Client[sendNode]', [$identity]);
+        $phone = m::mock('Tmv\\WhatsApi\\Entity\\Phone[]', ['39123456789']);
+        $identity = m::mock('Tmv\\WhatsApi\\Entity\\Identity[]', [$phone]);
+        $persistenceAdapter = m::mock('Tmv\\WhatsApi\\Persistence\\Adapter\\AdapterInterface');
+        $clientOptions = new ClientOptions();
+        $clientOptions->setChallengePersistenceAdapter($persistenceAdapter);
+        $client = m::mock('Tmv\\WhatsApi\\Client[sendNode]', [$identity, $clientOptions]);
 
-        $identity->setPhone($phone);
-
+        $persistenceAdapter->shouldReceive('set')->once();
         $event->shouldReceive('getParam')->with('node')->once()->andReturn($node);
         $event->shouldReceive('getTarget')->once()->andReturn($client);
         $client->shouldReceive('sendNode')->once()->with(m::type('Tmv\WhatsApi\Message\Node\Node'));

@@ -52,6 +52,18 @@ class NotificationListener extends AbstractListener
             case "subject":
                 break;
 
+            case "encrypt":
+                break;
+
+            case "w:gp2":
+                break;
+
+            case "account":
+                break;
+
+            case "features":
+                break;
+
             default:
                 throw new RuntimeException(sprintf("Notification '%s' not implemented", $type));
         }

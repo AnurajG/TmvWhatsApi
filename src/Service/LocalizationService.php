@@ -14,6 +14,16 @@ class LocalizationService
     protected $countriesPath;
 
     /**
+     * @param string $countriesPath
+     */
+    public function __construct($countriesPath = null)
+    {
+        if ($countriesPath) {
+            $this->setCountriesPath($countriesPath);
+        }
+    }
+
+    /**
      * @param  string $countriesPath
      * @return $this
      */

@@ -17,6 +17,15 @@ class GetGroupInfo extends AbstractAction implements IdAwareInterface
     protected $groupId;
 
     /**
+     * @param $groupId
+     */
+    public function __construct($groupId)
+    {
+        $this->groupId = $groupId;
+    }
+
+    /**
+     * @internal
      * @param  string $id
      * @return $this
      */
@@ -28,6 +37,7 @@ class GetGroupInfo extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @return string
      */
     public function getId()
@@ -55,19 +65,21 @@ class GetGroupInfo extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @return Node
      */
     public function createNode()
     {
         $child = new Node();
-        $child->setName('query');
+        $child->setName('query')
+            ->setAttribute('request', 'interactive');
 
         $node = new Node();
         $node->setName('iq');
         $node->setAttributes([
             "id" => 'getgroupinfo-',
             "type" => "get",
-            "xmlns" => "w:g",
+            "xmlns" => "w:g2",
             "to" => Identity::createJID($this->getGroupId()),
         ]);
 
@@ -77,6 +89,7 @@ class GetGroupInfo extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @return bool
      */
     public function isValid()

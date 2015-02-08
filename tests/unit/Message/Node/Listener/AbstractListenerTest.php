@@ -13,11 +13,10 @@ class AbstractListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testIsNodeFromMyNumber()
     {
-        $number1 = '+391234567890';
-        $number2 = '+391234567890';
+        $number1 = '391234567890';
+        $number2 = '391234567890';
         $phone = m::mock('Tmv\WhatsApi\Entity\Phone[]', [$number1]);
-        $identity = m::mock('Tmv\WhatsApi\Entity\Identity[]');
-        $identity->setPhone($phone);
+        $identity = m::mock('Tmv\WhatsApi\Entity\Identity[]', [$phone]);
         $node = m::mock('Tmv\WhatsApi\Message\Node\NodeInterface');
 
         $node->shouldReceive('getAttribute')->once()->with('from')->andReturn($number2);
@@ -31,11 +30,10 @@ class AbstractListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testIsNodeFromMyNumberWithDifferentNumber()
     {
-        $number1 = '+391234567890';
-        $number2 = '+391234567891';
+        $number1 = '391234567890';
+        $number2 = '391234567891';
         $phone = m::mock('Tmv\WhatsApi\Entity\Phone[]', [$number1]);
-        $identity = m::mock('Tmv\WhatsApi\Entity\Identity[]');
-        $identity->setPhone($phone);
+        $identity = m::mock('Tmv\WhatsApi\Entity\Identity[]', [$phone]);
         $node = m::mock('Tmv\WhatsApi\Message\Node\NodeInterface');
 
         $node->shouldReceive('getAttribute')->once()->with('from')->andReturn($number2);

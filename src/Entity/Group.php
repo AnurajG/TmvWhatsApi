@@ -3,6 +3,7 @@
 namespace Tmv\WhatsApi\Entity;
 
 use DateTime;
+use Tmv\WhatsApi\Entity\Group\Participant;
 
 class Group
 {
@@ -13,7 +14,7 @@ class Group
     /**
      * @var string
      */
-    protected $owner;
+    protected $creator;
     /**
      * @var DateTime
      */
@@ -22,6 +23,10 @@ class Group
      * @var string
      */
     protected $subject;
+    /**
+     * @var Group\Participant[]
+     */
+    protected $participants = [];
 
     /**
      * @param  array $data
@@ -32,13 +37,43 @@ class Group
         $group = new self();
 
         $group->setId($data['id']);
-        $group->setOwner(Identity::parseJID($data['owner']));
+        $group->setCreator(Identity::parseJID($data['creator']));
         $creation = new DateTime();
         $creation->setTimestamp((int) $data['creation']);
         $group->setCreation($creation);
         $group->setSubject($data['subject']);
 
+        if (isset($data['children'])) {
+            foreach ($data['children'] as $child) {
+                if ($child['name'] != 'participant') {
+                    continue;
+                }
+                $group->addParticipant(
+                    Identity::parseJID($child['jid']),
+                    isset($child['type']) ? $child['type'] : Participant::TYPE_PARTICIPANT
+                );
+            }
+        }
+
         return $group;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreator()
+    {
+        return $this->creator;
+    }
+
+    /**
+     * @param string $creator
+     * @return $this
+     */
+    public function setCreator($creator)
+    {
+        $this->creator = $creator;
+        return $this;
     }
 
     /**
@@ -80,25 +115,6 @@ class Group
     }
 
     /**
-     * @param  string $owner
-     * @return $this
-     */
-    public function setOwner($owner)
-    {
-        $this->owner = $owner;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOwner()
-    {
-        return $this->owner;
-    }
-
-    /**
      * @param  string $subject
      * @return $this
      */
@@ -115,5 +131,34 @@ class Group
     public function getSubject()
     {
         return $this->subject;
+    }
+
+    /**
+     * @return Group\Participant[]
+     */
+    public function getParticipants()
+    {
+        return $this->participants;
+    }
+
+    /**
+     * @param Group\Participant[] $participants
+     * @return $this
+     */
+    public function setParticipants($participants)
+    {
+        $this->participants = $participants;
+        return $this;
+    }
+
+    /**
+     * @param Group\Participant $participant
+     * @return $this
+     */
+    public function addParticipant(Group\Participant $participant)
+    {
+        $this->participants[] = $participant;
+
+        return $this;
     }
 }

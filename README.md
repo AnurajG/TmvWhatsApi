@@ -11,7 +11,7 @@
 
 **Status: development**
 
-**Last update: 13/11/2014 (See changelist below)**
+**Last update: 08/02/2015 (See changelist below)**
 
 **Do not use it in production environment!**
 
@@ -60,15 +60,12 @@ use Zend\EventManager\EventInterface;
 
 // Initializing client
 // Creating a service to retrieve phone info
-$localizationService = new LocalizationService();
-$localizationService->setCountriesPath(__DIR__ . '/data/countries.csv');
-$identityService = new IdentityService();
-$identityService->setNetworkInfoPath(__DIR__ . '/data/networkinfo.csv');
+$localizationService = new LocalizationService(__DIR__ . '/data/countries.csv');
+$identityService = new IdentityService(__DIR__ . '/data/networkinfo.csv');
 
 // Creating a phone object...
-$phone = new Phone(''); // Your number with international prefix (without ```+``` or ```00```)
-// Injecting phone properties
-$localizationService->injectPhoneProperties($phone);
+$phoneFactory = new PhoneFactory($localizationService);
+$phone = $phoneFactory->createPhone($number); // your phone number without '+' or '00'
 
 $identity = new Identity();
 $identity->setNickname($nickname); // Nickname to use for notifications
@@ -133,8 +130,9 @@ The result is simple, you can understand it. The most important key is ```pw```.
 ### Initializing client ###
 
 ```php
+<?php
 use Tmv\WhatsApi\Service\LocalizationService;
-use Tmv\WhatsApi\Entity\Phone;
+use Tmv\WhatsApi\Entity\PhoneFactory;
 use Tmv\WhatsApi\Entity\Identity;
 use Tmv\WhatsApi\Client;
 use Tmv\WhatsApi\Service\PcntlListener;
@@ -142,39 +140,60 @@ use Tmv\WhatsApi\Service\MediaService;
 use Tmv\WhatsApi\Options;
 use Zend\EventManager\EventInterface;
 
-// Initializing client
 // Creating a service to retrieve phone info
-$localizationService = new LocalizationService();
-$localizationService->setCountriesPath(__DIR__ . '/data/countries.csv');
+$localizationService = new LocalizationService(__DIR__ . '/data/countries.csv');
 
 // Creating a phone object...
-$phone = new Phone(''); // your phone number with international prefix
-// Injecting phone properties
-$localizationService->injectPhoneProperties($phone);
+$phoneFactory = new PhoneFactory($localizationService);
+$phone = $phoneFactory->createPhone($number);
 
 // Creating identity
-$identity = new Identity();
+$identity = new Identity($phone);
 $identity->setNickname(''); // your name
 $identity->setIdentityToken('');    // your token
 $identity->setPassword(''); // your password
-$identity->setPhone($phone);
+
+// Initializing client options
+$clientOptions = new Options\ClientOptions();
+
+// Creating MediaService for media messages
+// We need to configure it in order to send and receive media files
+$mediaServiceOptions = new Options\MediaServiceOptions();
+$mediaServiceOptions->setMediaFolder(sys_get_temp_dir());
+$mediaServiceOptions->setDefaultImageIconFilepath(__DIR__ . '/data/ImageIcon.jpg');
+$mediaServiceOptions->setDefaultVideoIconFilepath(__DIR__ . '/data/VideoIcon.jpg');
+$mediaService = new MediaService($mediaServiceOptions);
+
+// Creating the persistence adapter
+// We need it to persist the challenge data
+// We can use a file adapter with a phone number based unique name
+$filepath = sprintf(__DIR__ . '/data/%schallenge.dat', $phone->getPhoneNumber());
+$persistenceAdapter = new \Tmv\WhatsApi\Persistence\Adapter\FileAdapter($filepath);
+
+// Or... if you want a custom adapter, you can create a new class, or use a callback adapter:
+$persistenceAdapter = new \Tmv\WhatsApi\Persistence\Adapter\CallbackAdapter(
+    function ($data) {
+        // we can save it in db or somewhere else
+    },
+    function () {
+        // we can read it from a db or somewhere else
+        return 'data';
+    }
+);
+
+// Now we can inject depenencies in client options
+$clientOptions->setChallengePersistenceAdapter($persistenceAdapter);
+$clientOptions->setMediaService($mediaService);
 
 // Initializing client
-$client = new Client($identity);
-$client->setChallengeDataFilepath(__DIR__ . '/data/nextChallenge.dat');
+$client = new Client($identity, $clientOptions);
 
 // Attach PCNTL listener to handle signals (if you have PCNTL extension)
 // This allow to kill process softly
 $pcntlListener = new PcntlListener();
 $client->getEventManager()->attach($pcntlListener);
 
-// Creating MediaService for media messages
-$mediaServiceOptions = new Options\MediaService();
-$mediaServiceOptions->setMediaFolder(sys_get_temp_dir());
-$mediaServiceOptions->setDefaultImageIconFilepath(__DIR__ . '/data/ImageIcon.jpg');
-$mediaServiceOptions->setDefaultVideoIconFilepath(__DIR__ . '/data/VideoIcon.jpg');
-$mediaService = new MediaService($mediaServiceOptions);
-$client->setMediaService($mediaService);
+
 
 // Attaching events...
 // ...
@@ -187,8 +206,7 @@ $client->getEventManager()->attach('onConnected', function(EventInterface $e) {
     // ...
 });
 
-// Connect, login and process messages
-// Automatically send presence every 10 seconds
+// Connect, login and process messages. Automatically send presence
 $client->run();
 ```
 
@@ -208,8 +226,6 @@ $client->getEventManager()->attach('onConnected', function(EventInterface $e) {
     $client->send($action);
 });
 
-// Connect, login and process messages
-// Automatically send presence every 10 seconds
 $client->run();
 ```
 
@@ -226,11 +242,12 @@ $client->send(new Action\ChatState($number, Action\ChatState::STATE_COMPOSING));
 $client->send(new Action\ChatState($number, Action\ChatState::STATE_PAUSED));
 
 // Creating text message action
-$message = new Action\MessageText($identity->getNickname(), $number);
+$message = new Action\MessageText($client->getIdentity()->getNickname(), $number);
 $message->setBody('Hello');
 
 // OR: creating media (image, video, audio) message (beta)
-$mediaFile = $client->getMediaService()
+$mediaFile = $client->getOptions()
+    ->getMediaService()
     ->getMediaFileFactory()
     ->factory('/path/to/image.png', MediaFileInterface::TYPE_IMAGE);
 $message = new Action\MessageMedia();
@@ -244,17 +261,21 @@ $client->send($message);
 ### Receiving message ###
 
 ```php
-use Tmv\WhatsApi\Event\MessageReceivedEvent;
 use Tmv\WhatsApi\Message\Received;
+use Zend\EventManager\EventInterface;
 
 // onMessageReceived event
 $client->getEventManager()->attach(
     'onMessageReceived',
-    function (MessageReceivedEvent $e) {
-        $message = $e->getMessage();
+    function (EventInterface $e) {
+        // Printing some informations
+        /** @var Received\MessageInterface $message */
+        $message = $e->getParam('message');
+        
         echo str_repeat('-', 80) . PHP_EOL;
         echo '** MESSAGE RECEIVED **' . PHP_EOL;
         echo sprintf('From: %s', $message->getFrom()) . PHP_EOL;
+        
         if ($message->isFromGroup()) {
             echo sprintf('Group: %s', $message->getGroupId()) . PHP_EOL;
         }
@@ -266,6 +287,7 @@ $client->getEventManager()->attach(
         } elseif ($message instanceof Received\MessageMedia) {
             echo sprintf('Type: %s', $message->getMedia()->getType()) . PHP_EOL;
         }
+        
         echo str_repeat('-', 80) . PHP_EOL;
     }
 );
@@ -313,8 +335,29 @@ $client->getEventManager()->attach(
 - onGroupParticipantRemoved
 - onGetGroupsResult
 - onGetGroupInfoResult
+- onCreateGroupResult
+- onGetProfilePictureResult
+- onGetServerPropertiesResult
+- onGetServerPricingResult
+- onSyncContactResult
 
 ## Changelist ##
+
+### 8 February 2015 (>= 0.4.0) ###
+
+New actions:
+- ```ChangeNumber```: to change your phone number
+- ```ClientConfig```: send client config to whatsapp server
+- ```GetProfilePicture```: get a profile's picture
+- ```GetServerProperties```: get server properties
+- ```GetServerPricing```: get the current server pricing
+- ```CreateGroup```: create a new group
+- ```AddGroupParticipants```: add participants to a group
+- ```RemoveGroupParticipants```: remove participants from a group
+
+### 6 February 2015 ###
+
+- Updated methods for number registration
 
 ### 13 November 2014 ###
 

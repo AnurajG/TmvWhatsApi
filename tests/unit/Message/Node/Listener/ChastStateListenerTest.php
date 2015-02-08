@@ -31,10 +31,9 @@ class ChastStateListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnReceivedNodeComposing()
     {
-        $from = '+3909876521';
-        $phone = m::mock('Tmv\\WhatsApi\\Entity\\Phone[]', ['+39123456789']);
-        $identity = m::mock('Tmv\\WhatsApi\\Entity\\Identity[]');
-        $identity->setPhone($phone);
+        $from = '3909876521';
+        $phone = m::mock('Tmv\\WhatsApi\\Entity\\Phone[]', ['39123456789']);
+        $identity = m::mock('Tmv\\WhatsApi\\Entity\\Identity[]', [$phone]);
         $client = m::mock('Tmv\\WhatsApi\\Client[]', [$identity]);
         $eventManager = m::mock('Zend\\EventManager\\EventManager');
         $client->setEventManager($eventManager);
@@ -55,10 +54,9 @@ class ChastStateListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnReceivedNodePaused()
     {
-        $from = '+3909876521';
-        $phone = m::mock('Tmv\\WhatsApi\\Entity\\Phone[]', ['+39123456789']);
-        $identity = m::mock('Tmv\\WhatsApi\\Entity\\Identity[]');
-        $identity->setPhone($phone);
+        $from = '3909876521';
+        $phone = m::mock('Tmv\\WhatsApi\\Entity\\Phone[]', ['39123456789']);
+        $identity = m::mock('Tmv\\WhatsApi\\Entity\\Identity[]', [$phone]);
         $client = m::mock('Tmv\\WhatsApi\\Client[]', [$identity]);
         $eventManager = m::mock('Zend\\EventManager\\EventManager');
         $client->setEventManager($eventManager);

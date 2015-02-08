@@ -13,17 +13,18 @@ class Connection
      * @var AdapterInterface
      */
     protected $adapter;
-
+    /**
+     * @var bool
+     */
+    protected $connected = false;
     /**
      * @var NodeWriter
      */
     protected $nodeWriter;
-
     /**
      * @var NodeReader
      */
     protected $nodeReader;
-
     /**
      * @var KeyStream
      */
@@ -39,6 +40,24 @@ class Connection
     public function __construct(AdapterInterface $adapter)
     {
         $this->adapter = $adapter;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isConnected()
+    {
+        return $this->connected;
+    }
+
+    /**
+     * @param boolean $connected
+     * @return $this
+     */
+    public function setConnected($connected)
+    {
+        $this->connected = $connected;
+        return $this;
     }
 
     /**
@@ -159,6 +178,7 @@ class Connection
      */
     public function disconnect()
     {
+        $this->setConnected(false);
         $this->getAdapter()->disconnect();
 
         return $this;

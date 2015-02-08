@@ -4,7 +4,7 @@ namespace Tmv\WhatsApi\Options;
 
 use Zend\Stdlib\AbstractOptions;
 
-class MediaService extends AbstractOptions
+class MediaServiceOptions extends AbstractOptions
 {
     /**
      * @var string
@@ -22,6 +22,23 @@ class MediaService extends AbstractOptions
      * @var string
      */
     protected $defaultVideoIconFilepath;
+    /**
+     * @var array
+     */
+    protected $defaults = [
+        'media_folder' => null, // Temporary directory where to download media files
+        'default_image_icon_filepath' => null, // Default icon for images
+        'default_video_icon_filepath' => null, // Default icon for videos
+    ];
+
+    /**
+     * @param array|\Traversable|null $options
+     */
+    public function __construct($options = null)
+    {
+        $this->setFromArray($this->defaults);
+        parent::__construct($options);
+    }
 
     /**
      * @return string
@@ -41,7 +58,7 @@ class MediaService extends AbstractOptions
      */
     public function setMediaFolder($mediaFolder)
     {
-        if (!file_exists($mediaFolder) || !is_writable($mediaFolder)) {
+        if ($mediaFolder && (!file_exists($mediaFolder) || !is_writable($mediaFolder))) {
             throw new \InvalidArgumentException("Media folder must exists and writable");
         }
         $this->mediaFolder = $mediaFolder;
@@ -86,7 +103,7 @@ class MediaService extends AbstractOptions
      */
     public function setDefaultImageIconFilepath($defaultImageIconPath)
     {
-        if (!file_exists($defaultImageIconPath)) {
+        if ($defaultImageIconPath && !file_exists($defaultImageIconPath)) {
             throw new \InvalidArgumentException("Image icon doesn't exist");
         }
         $this->defaultImageIconFilepath = $defaultImageIconPath;
@@ -112,7 +129,7 @@ class MediaService extends AbstractOptions
      */
     public function setDefaultVideoIconFilepath($defaultVideoIconPath)
     {
-        if (!file_exists($defaultVideoIconPath)) {
+        if ($defaultVideoIconPath && !file_exists($defaultVideoIconPath)) {
             throw new \InvalidArgumentException("Video icon doesn't exist");
         }
         $this->defaultVideoIconFilepath = $defaultVideoIconPath;

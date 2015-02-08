@@ -88,7 +88,7 @@ class RequestFileUploadListener implements ListenerAggregateInterface
             ];
         } else {
             $url = $node->getChild("media")->getAttribute("url");
-            $results = $client->getMediaService()->uploadMediaFile(
+            $results = $client->getOptions()->getMediaService()->uploadMediaFile(
                 $action->getMediaFile(),
                 $client->getIdentity(),
                 $url,
@@ -115,17 +115,17 @@ class RequestFileUploadListener implements ListenerAggregateInterface
             switch ($results['type']) {
                 case 'image':
                     if ($action->getIcon()) {
-                        $icon = base64_encode($client->getMediaService()->createImageIcon($action->getIcon()));
+                        $icon = base64_encode($client->getOptions()->getMediaService()->createImageIcon($action->getIcon()));
                     } else {
                         $icon = base64_encode(
-                            $client->getMediaService()->createImageIcon($action->getMediaFile()->getFilepath())
+                            $client->getOptions()->getMediaService()->createImageIcon($action->getMediaFile()->getFilepath())
                         );
                     }
 
                     if (!$icon) {
                         $icon = base64_encode(
                             file_get_contents(
-                                $client->getMediaService()->getOptions()->getDefaultImageIconFilepath()
+                                $client->getOptions()->getMediaService()->getOptions()->getDefaultImageIconFilepath()
                             )
                         );
                     }
@@ -133,17 +133,17 @@ class RequestFileUploadListener implements ListenerAggregateInterface
 
                 case 'video':
                     if ($action->getIcon()) {
-                        $icon = base64_encode($client->getMediaService()->createImageIcon($action->getIcon()));
+                        $icon = base64_encode($client->getOptions()->getMediaService()->createImageIcon($action->getIcon()));
                     } else {
                         $icon = base64_encode(
-                            $client->getMediaService()->createVideoIcon($action->getMediaFile()->getFilepath())
+                            $client->getOptions()->getMediaService()->createVideoIcon($action->getMediaFile()->getFilepath())
                         );
                     }
 
                     if (!$icon) {
                         $icon = base64_encode(
                             file_get_contents(
-                                $client->getMediaService()->getOptions()->getDefaultVideoIconFilepath()
+                                $client->getOptions()->getMediaService()->getOptions()->getDefaultVideoIconFilepath()
                             )
                         );
                     }

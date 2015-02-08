@@ -31,6 +31,7 @@ class Receipt extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @param  string $id
      * @return $this
      */
@@ -42,6 +43,7 @@ class Receipt extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @return string
      */
     public function getId()
@@ -69,6 +71,7 @@ class Receipt extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @return Node
      */
     public function createNode()
@@ -82,6 +85,7 @@ class Receipt extends AbstractAction implements IdAwareInterface
     }
 
     /**
+     * @internal
      * @return bool
      */
     public function isValid()

@@ -32,8 +32,8 @@ class SuccessListener extends AbstractListener
         /** @var Client $client */
         $client = $e->getTarget();
 
-        $client->setConnected(true);
-        $client->writeChallengeData($node->getData());
+        $client->getConnection()->setConnected(true);
+        $client->setChallengeData($node->getData());
         $client->getConnection()->getNodeWriter()->setKey($client->getConnection()->getOutputKey());
 
         $client->send(new Presence($client->getIdentity()->getNickname()));

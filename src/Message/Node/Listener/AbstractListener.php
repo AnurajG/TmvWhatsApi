@@ -30,4 +30,14 @@ abstract class AbstractListener implements ListenerAggregateInterface
     {
         return false !== strpos($node->getAttribute('from'), "-");
     }
+
+    /**
+     * @param  NodeInterface $node
+     * @param  string        $needle
+     * @return bool
+     */
+    protected function nodeIdContains(NodeInterface $node, $needle)
+    {
+        return false !== strpos($node->getAttribute("id"), $needle);
+    }
 }

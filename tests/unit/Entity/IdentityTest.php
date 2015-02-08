@@ -6,15 +6,6 @@ use Mockery as m;
 
 class IdentityTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Identity
-     */
-    protected $object;
-
-    public function setUp()
-    {
-        $this->object = new Identity();
-    }
 
     protected function tearDown()
     {
@@ -23,23 +14,24 @@ class IdentityTest extends \PHPUnit_Framework_TestCase
 
     public function testSettersAndGettersMethods()
     {
-        $data = array(
+        $data = [
             'nickname' => 'my-nickname',
             'password' => 'my-password',
             'token' => 'my-token',
-        );
+        ];
 
         $phoneMock = m::mock(__NAMESPACE__.'\\Phone');
 
-        $this->object->setNickname($data['nickname']);
-        $this->object->setPassword($data['password']);
-        $this->object->setToken($data['token']);
-        $this->object->setPhone($phoneMock);
+        $identity = new Identity($phoneMock);
+        $identity->setNickname($data['nickname']);
+        $identity->setPassword($data['password']);
+        $identity->setIdentityToken($data['token']);
+        $identity->setPhone($phoneMock);
 
-        $this->assertEquals($data['nickname'], $this->object->getNickname());
-        $this->assertEquals($data['password'], $this->object->getPassword());
-        $this->assertEquals($data['token'], $this->object->getToken());
-        $this->assertEquals($phoneMock, $this->object->getPhone());
+        $this->assertEquals($data['nickname'], $identity->getNickname());
+        $this->assertEquals($data['password'], $identity->getPassword());
+        $this->assertEquals($data['token'], $identity->getIdentityToken());
+        $this->assertEquals($phoneMock, $identity->getPhone());
     }
 
     public function testCreateJID()

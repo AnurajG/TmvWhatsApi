@@ -36,6 +36,7 @@ class SuccessListenerTest extends \PHPUnit_Framework_TestCase
         $connectionMock = m::mock('Tmv\\WhatsApi\\Connection\\Connection');
         $connectionMock->shouldReceive('getNodeWriter')->andReturn($nodeWriterMock);
         $connectionMock->shouldReceive('getOutputKey')->once()->andReturn($keyStreamMock);
+        $connectionMock->shouldReceive('setConnected')->once()->with(true);
 
         $event->shouldReceive('getParam')->with('node')->once()->andReturn($node);
         $event->shouldReceive('getTarget')->once()->andReturn($client);
@@ -49,8 +50,7 @@ class SuccessListenerTest extends \PHPUnit_Framework_TestCase
 
         $client->shouldReceive('getEventManager')->once()->andReturn($eventManagerMock);
         $client->shouldReceive('getConnection')->andReturn($connectionMock);
-        $client->shouldReceive('setConnected')->once()->with(true);
-        $client->shouldReceive('writeChallengeData')->once()->with('the data');
+        $client->shouldReceive('setChallengeData')->once()->with('the data');
         $client->shouldReceive('getIdentity')->once()->andReturn($identityMock);
         $client->shouldReceive('send')->once();
 
