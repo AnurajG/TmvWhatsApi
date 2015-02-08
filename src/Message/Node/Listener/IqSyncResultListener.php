@@ -65,7 +65,7 @@ class IqSyncResultListener extends AbstractListener
         }
         $users = [];
         foreach ($node->getChildren() as $child) {
-            $existingUsers[$child->getData()] = $child->getAttribute("jid");
+            $users[$child->getData()] = $child->getAttribute("jid");
         }
         return $users;
     }
