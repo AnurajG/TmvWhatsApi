@@ -63,10 +63,11 @@ class Group
         if ($child['name'] != 'participant') {
             return;
         }
-        $group->addParticipant(
+        $participant = new Participant(
             Identity::parseJID($child['jid']),
             static::getTypeFromParticipantArray($child)
         );
+        $group->addParticipant($participant);
     }
 
     /**

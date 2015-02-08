@@ -67,10 +67,9 @@ $identityService = new IdentityService(__DIR__ . '/data/networkinfo.csv');
 $phoneFactory = new PhoneFactory($localizationService);
 $phone = $phoneFactory->createPhone($number); // your phone number without '+' or '00'
 
-$identity = new Identity();
+$identity = new Identity($phone);
 $identity->setNickname($nickname); // Nickname to use for notifications
 $identity->setIdentityToken($identityId); // Previously generated identity
-$identity->setPhone($phone);
 
 $res = $identityService->codeRequest($identity);
 /*
