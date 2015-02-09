@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Whatsapi : A client library to use whatsapp messenger">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Whatsapi</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/thomasvargiu/TmvWhatsApi">View on GitHub</a>
+
+          <h1 id="project_title">Whatsapi</h1>
+          <h2 id="project_tagline">A client library to use whatsapp messenger</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/thomasvargiu/TmvWhatsApi/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/thomasvargiu/TmvWhatsApi/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p><a href="https://scrutinizer-ci.com/g/thomasvargiu/TmvWhatsApi/build-status/master"><img src="https://scrutinizer-ci.com/g/thomasvargiu/TmvWhatsApi/badges/build.png?b=master" alt="Build Status"></a>
+<a href="https://scrutinizer-ci.com/g/thomasvargiu/TmvWhatsApi/?branch=master"><img src="https://scrutinizer-ci.com/g/thomasvargiu/TmvWhatsApi/badges/coverage.png?b=master" alt="Code Coverage"></a>
+<a href="https://scrutinizer-ci.com/g/thomasvargiu/TmvWhatsApi/"><img src="https://scrutinizer-ci.com/g/thomasvargiu/TmvWhatsApi/badges/quality-score.png?s=c66994bc72499c4771de0e22fb8f257b75685552" alt="Scrutinizer Code Quality"></a>
+<a href="https://www.versioneye.com/user/projects/545f82008683321bc8000036"><img src="https://www.versioneye.com/user/projects/545f82008683321bc8000036/badge.svg?style=flat" alt="Dependency Status"></a>
+<a href="https://packagist.org/packages/thomasvargiu/tmv-whatsapi"><img src="https://poser.pugx.org/thomasvargiu/tmv-whatsapi/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/thomasvargiu/tmv-whatsapi"><img src="https://poser.pugx.org/thomasvargiu/tmv-whatsapi/downloads.svg" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/thomasvargiu/tmv-whatsapi"><img src="https://poser.pugx.org/thomasvargiu/tmv-whatsapi/v/unstable.svg" alt="Latest Unstable Version"></a>
+<a href="https://packagist.org/packages/thomasvargiu/tmv-whatsapi"><img src="https://poser.pugx.org/thomasvargiu/tmv-whatsapi/license.svg" alt="License"></a></p>
+
+<h1>
+<a id="whatsapi" class="anchor" href="#whatsapi" aria-hidden="true"><span class="octicon octicon-link"></span></a>WhatsAPI</h1>
+
+<p><strong>Status: development</strong></p>
+
+<p><strong>Last update: 13/11/2014 (See changelist below)</strong></p>
+
+<p><strong>Do not use it in production environment!</strong></p>
+
+<h2>
+<a id="about-whatsapi" class="anchor" href="#about-whatsapi" aria-hidden="true"><span class="octicon octicon-link"></span></a>About WhatsAPI</h2>
+
+<p>WhatsAPI is a client library to use Whatsapp services.</p>
+
+<p>This is a new project based on the original WhatsAPI:
+Please see <a href="https://github.com/venomous0x/WhatsAPI">the original project</a>
+or the new <a href="https://github.com/mgp25/WhatsAPI-Official">WhatsApi Official</a></p>
+
+<h2>
+<a id="why-a-new-project" class="anchor" href="#why-a-new-project" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why a new project?</h2>
+
+<p>The original WhatsAPI library is not compatible with composer, no PSR compatible, and it's very old.
+I want to develop this new library in order to make it more usable.
+If you want to help, just do it :)</p>
+
+<h2>
+<a id="how-to-start-using-this-library" class="anchor" href="#how-to-start-using-this-library" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to start using this library</h2>
+
+<p>(Everything can be changed in the future)</p>
+
+<h3>
+<a id="number-registration" class="anchor" href="#number-registration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Number registration</h3>
+
+<p>First, you need an Identity. This string identify a device. You can generate one like this:</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Service\IdentityService</span>;</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-vo">$identityId</span> <span class="pl-k">=</span> <span class="pl-s3">IdentityService</span><span class="pl-k">::</span>generateIdentity();</span></pre></div>
+
+<p>You need it everytime to connect to the service, so you should save it to identify your device (you can use <code>urlencode</code><code>and</code><code>urldecode</code>` to save it).</p>
+
+<p>Now, you can request a code to verify your number:</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Service\LocalizationService</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Service\IdentityService</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Service\PcntlListener</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Service\MediaService</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Entity\Phone</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Entity\Identity</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Client</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Options</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Zend\EventManager\EventInterface</span>;</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// Initializing client</span></span>
+<span class="pl-s2"><span class="pl-c">// Creating a service to retrieve phone info</span></span>
+<span class="pl-s2"><span class="pl-vo">$localizationService</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">LocalizationService</span>();</span>
+<span class="pl-s2"><span class="pl-vo">$localizationService</span><span class="pl-k">-&gt;</span>setCountriesPath(<span class="pl-c1">__DIR__</span> <span class="pl-k">.</span> <span class="pl-s1"><span class="pl-pds">'</span>/data/countries.csv<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2"><span class="pl-vo">$identityService</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">IdentityService</span>();</span>
+<span class="pl-s2"><span class="pl-vo">$identityService</span><span class="pl-k">-&gt;</span>setNetworkInfoPath(<span class="pl-c1">__DIR__</span> <span class="pl-k">.</span> <span class="pl-s1"><span class="pl-pds">'</span>/data/networkinfo.csv<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// Creating a phone object...</span></span>
+<span class="pl-s2"><span class="pl-vo">$phone</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">Phone</span>(<span class="pl-s1"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>); <span class="pl-c">// Your number with international prefix (without ```+``` or ```00```)</span></span>
+<span class="pl-s2"><span class="pl-c">// Injecting phone properties</span></span>
+<span class="pl-s2"><span class="pl-vo">$localizationService</span><span class="pl-k">-&gt;</span>injectPhoneProperties(<span class="pl-vo">$phone</span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-vo">$identity</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">Identity</span>();</span>
+<span class="pl-s2"><span class="pl-vo">$identity</span><span class="pl-k">-&gt;</span>setNickname(<span class="pl-vo">$nickname</span>); <span class="pl-c">// Nickname to use for notifications</span></span>
+<span class="pl-s2"><span class="pl-vo">$identity</span><span class="pl-k">-&gt;</span>setIdentityToken(<span class="pl-vo">$identityId</span>); <span class="pl-c">// Previously generated identity</span></span>
+<span class="pl-s2"><span class="pl-vo">$identity</span><span class="pl-k">-&gt;</span>setPhone(<span class="pl-vo">$phone</span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-vo">$res</span> <span class="pl-k">=</span> <span class="pl-vo">$identityService</span><span class="pl-k">-&gt;</span>codeRequest(<span class="pl-vo">$identity</span>);</span>
+<span class="pl-s2"><span class="pl-c">/*</span></span>
+<span class="pl-s2"><span class="pl-c">var_dump() of $res:</span></span>
+<span class="pl-s2"><span class="pl-c">array(4) {</span></span>
+<span class="pl-s2"><span class="pl-c">  'status' =&gt;</span></span>
+<span class="pl-s2"><span class="pl-c">  string(4) "sent"</span></span>
+<span class="pl-s2"><span class="pl-c">  'length' =&gt;</span></span>
+<span class="pl-s2"><span class="pl-c">  int(6)</span></span>
+<span class="pl-s2"><span class="pl-c">  'method' =&gt;</span></span>
+<span class="pl-s2"><span class="pl-c">  string(3) "sms"</span></span>
+<span class="pl-s2"><span class="pl-c">  'retry_after' =&gt;</span></span>
+<span class="pl-s2"><span class="pl-c">  int(25205)</span></span>
+<span class="pl-s2"><span class="pl-c">}</span></span>
+<span class="pl-s2"><span class="pl-c">*/</span></span></pre></div>
+
+<p>If an error occurred, an exception will be thrown. If ok, an sms with a verify code will be sended to your number.
+The second parameter of <code>IdentityService::codeRequest()</code>can accept two strings:</p>
+
+<ul>
+<li>
+<code>sms</code>: an SMS will be sent to your number with a code</li>
+<li>
+<code>voice</code>: you will be called and a voice will tell you the code</li>
+</ul>
+
+<p>Now you need to insert the code:</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-c">// ...</span></span>
+<span class="pl-s2"><span class="pl-vo">$res</span> <span class="pl-k">=</span> <span class="pl-vo">$identityService</span><span class="pl-k">-&gt;</span>codeRegister(<span class="pl-vo">$identity</span>, <span class="pl-vo">$code</span>);</span>
+<span class="pl-s2"><span class="pl-c">/*var_dump() of $res:</span></span>
+<span class="pl-s2"><span class="pl-c">array(10) {</span></span>
+<span class="pl-s2"><span class="pl-c">  'status' =&gt;</span></span>
+<span class="pl-s2"><span class="pl-c">  string(2) "ok"</span></span>
+<span class="pl-s2"><span class="pl-c">  'login' =&gt;</span></span>
+<span class="pl-s2"><span class="pl-c">  string(12) "39123456789"</span></span>
+<span class="pl-s2"><span class="pl-c">  'pw' =&gt;</span></span>
+<span class="pl-s2"><span class="pl-c">  string(28) "xxxxxxxxxxxxxxx="</span></span>
+<span class="pl-s2"><span class="pl-c">  'type' =&gt;</span></span>
+<span class="pl-s2"><span class="pl-c">  string(3) "new"</span></span>
+<span class="pl-s2"><span class="pl-c">  'expiration' =&gt;</span></span>
+<span class="pl-s2"><span class="pl-c">  int(1454786892)</span></span>
+<span class="pl-s2"><span class="pl-c">  'kind' =&gt;</span></span>
+<span class="pl-s2"><span class="pl-c">  string(4) "free"</span></span>
+<span class="pl-s2"><span class="pl-c">  'price' =&gt;</span></span>
+<span class="pl-s2"><span class="pl-c">  string(8) "€ 0,89"</span></span>
+<span class="pl-s2"><span class="pl-c">  'cost' =&gt;</span></span>
+<span class="pl-s2"><span class="pl-c">  string(4) "0.89"</span></span>
+<span class="pl-s2"><span class="pl-c">  'currency' =&gt;</span></span>
+<span class="pl-s2"><span class="pl-c">  string(3) "EUR"</span></span>
+<span class="pl-s2"><span class="pl-c">  'price_expiration' =&gt;</span></span>
+<span class="pl-s2"><span class="pl-c">  int(1426348327)</span></span>
+<span class="pl-s2"><span class="pl-c">}</span></span>
+<span class="pl-s2"><span class="pl-c">*/</span></span></pre></div>
+
+<p>The result is simple, you can understand it. The most important key is <code>pw</code>. This is your password, save it!</p>
+
+<h3>
+<a id="initializing-client" class="anchor" href="#initializing-client" aria-hidden="true"><span class="octicon octicon-link"></span></a>Initializing client</h3>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Service\LocalizationService</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Entity\Phone</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Entity\Identity</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Client</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Service\PcntlListener</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Service\MediaService</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Options</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Zend\EventManager\EventInterface</span>;</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// Initializing client</span></span>
+<span class="pl-s2"><span class="pl-c">// Creating a service to retrieve phone info</span></span>
+<span class="pl-s2"><span class="pl-vo">$localizationService</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">LocalizationService</span>();</span>
+<span class="pl-s2"><span class="pl-vo">$localizationService</span><span class="pl-k">-&gt;</span>setCountriesPath(<span class="pl-c1">__DIR__</span> <span class="pl-k">.</span> <span class="pl-s1"><span class="pl-pds">'</span>/data/countries.csv<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// Creating a phone object...</span></span>
+<span class="pl-s2"><span class="pl-vo">$phone</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">Phone</span>(<span class="pl-s1"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>); <span class="pl-c">// your phone number with international prefix</span></span>
+<span class="pl-s2"><span class="pl-c">// Injecting phone properties</span></span>
+<span class="pl-s2"><span class="pl-vo">$localizationService</span><span class="pl-k">-&gt;</span>injectPhoneProperties(<span class="pl-vo">$phone</span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// Creating identity</span></span>
+<span class="pl-s2"><span class="pl-vo">$identity</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">Identity</span>();</span>
+<span class="pl-s2"><span class="pl-vo">$identity</span><span class="pl-k">-&gt;</span>setNickname(<span class="pl-s1"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>); <span class="pl-c">// your name</span></span>
+<span class="pl-s2"><span class="pl-vo">$identity</span><span class="pl-k">-&gt;</span>setIdentityToken(<span class="pl-s1"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>);    <span class="pl-c">// your token</span></span>
+<span class="pl-s2"><span class="pl-vo">$identity</span><span class="pl-k">-&gt;</span>setPassword(<span class="pl-s1"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>); <span class="pl-c">// your password</span></span>
+<span class="pl-s2"><span class="pl-vo">$identity</span><span class="pl-k">-&gt;</span>setPhone(<span class="pl-vo">$phone</span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// Initializing client</span></span>
+<span class="pl-s2"><span class="pl-vo">$client</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">Client</span>(<span class="pl-vo">$identity</span>);</span>
+<span class="pl-s2"><span class="pl-vo">$client</span><span class="pl-k">-&gt;</span>setChallengeDataFilepath(<span class="pl-c1">__DIR__</span> <span class="pl-k">.</span> <span class="pl-s1"><span class="pl-pds">'</span>/data/nextChallenge.dat<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// Attach PCNTL listener to handle signals (if you have PCNTL extension)</span></span>
+<span class="pl-s2"><span class="pl-c">// This allow to kill process softly</span></span>
+<span class="pl-s2"><span class="pl-vo">$pcntlListener</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">PcntlListener</span>();</span>
+<span class="pl-s2"><span class="pl-vo">$client</span><span class="pl-k">-&gt;</span>getEventManager()<span class="pl-k">-&gt;</span>attach(<span class="pl-vo">$pcntlListener</span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// Creating MediaService for media messages</span></span>
+<span class="pl-s2"><span class="pl-vo">$mediaServiceOptions</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">Options\</span><span class="pl-s3">MediaService</span>();</span>
+<span class="pl-s2"><span class="pl-vo">$mediaServiceOptions</span><span class="pl-k">-&gt;</span>setMediaFolder(<span class="pl-s3">sys_get_temp_dir</span>());</span>
+<span class="pl-s2"><span class="pl-vo">$mediaServiceOptions</span><span class="pl-k">-&gt;</span>setDefaultImageIconFilepath(<span class="pl-c1">__DIR__</span> <span class="pl-k">.</span> <span class="pl-s1"><span class="pl-pds">'</span>/data/ImageIcon.jpg<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2"><span class="pl-vo">$mediaServiceOptions</span><span class="pl-k">-&gt;</span>setDefaultVideoIconFilepath(<span class="pl-c1">__DIR__</span> <span class="pl-k">.</span> <span class="pl-s1"><span class="pl-pds">'</span>/data/VideoIcon.jpg<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2"><span class="pl-vo">$mediaService</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">MediaService</span>(<span class="pl-vo">$mediaServiceOptions</span>);</span>
+<span class="pl-s2"><span class="pl-vo">$client</span><span class="pl-k">-&gt;</span>setMediaService(<span class="pl-vo">$mediaService</span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// Attaching events...</span></span>
+<span class="pl-s2"><span class="pl-c">// ...</span></span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-vo">$client</span><span class="pl-k">-&gt;</span>getEventManager()<span class="pl-k">-&gt;</span>attach(<span class="pl-s1"><span class="pl-pds">'</span>onConnected<span class="pl-pds">'</span></span>, <span class="pl-st">function</span>(<span class="pl-s3">EventInterface</span> <span class="pl-vo">$e</span>) {</span>
+<span class="pl-s2">    <span class="pl-c">/** @var Client $client */</span></span>
+<span class="pl-s2">    <span class="pl-vo">$client</span> <span class="pl-k">=</span> <span class="pl-vo">$e</span><span class="pl-k">-&gt;</span>getTarget();</span>
+<span class="pl-s2"></span>
+<span class="pl-s2">    <span class="pl-c">// Actions</span></span>
+<span class="pl-s2">    <span class="pl-c">// ...</span></span>
+<span class="pl-s2">});</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// Connect, login and process messages</span></span>
+<span class="pl-s2"><span class="pl-c">// Automatically send presence every 10 seconds</span></span>
+<span class="pl-s2"><span class="pl-vo">$client</span><span class="pl-k">-&gt;</span>run();</span></pre></div>
+
+<h3>
+<a id="sync-numbers" class="anchor" href="#sync-numbers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sync numbers</h3>
+
+<p>Before to send a message to a number, you have to sync your contacts.</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Message\Action</span>;</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-vo">$client</span><span class="pl-k">-&gt;</span>getEventManager()<span class="pl-k">-&gt;</span>attach(<span class="pl-s1"><span class="pl-pds">'</span>onConnected<span class="pl-pds">'</span></span>, <span class="pl-st">function</span>(<span class="pl-s3">EventInterface</span> <span class="pl-vo">$e</span>) {</span>
+<span class="pl-s2">    <span class="pl-c">/** @var Client $client */</span></span>
+<span class="pl-s2">    <span class="pl-vo">$client</span> <span class="pl-k">=</span> <span class="pl-vo">$e</span><span class="pl-k">-&gt;</span>getTarget();</span>
+<span class="pl-s2"></span>
+<span class="pl-s2">    <span class="pl-vo">$action</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">Action\</span><span class="pl-s3">SyncContacts</span>(<span class="pl-vo">$client</span><span class="pl-k">-&gt;</span>getIdentity()<span class="pl-k">-&gt;</span>getPhone()<span class="pl-k">-&gt;</span>getPhoneNumber());</span>
+<span class="pl-s2">    <span class="pl-vo">$action</span><span class="pl-k">-&gt;</span>addNumber(<span class="pl-s1"><span class="pl-pds">'</span>+39123456789<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2">    <span class="pl-vo">$client</span><span class="pl-k">-&gt;</span>send(<span class="pl-vo">$action</span>);</span>
+<span class="pl-s2">});</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// Connect, login and process messages</span></span>
+<span class="pl-s2"><span class="pl-c">// Automatically send presence every 10 seconds</span></span>
+<span class="pl-s2"><span class="pl-vo">$client</span><span class="pl-k">-&gt;</span>run();</span></pre></div>
+
+<h3>
+<a id="sending-a-message" class="anchor" href="#sending-a-message" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sending a message</h3>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Message\Action</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Entity\MediaFileInterface</span>;</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-vo">$number</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>; <span class="pl-c">// number to send message</span></span>
+<span class="pl-s2"><span class="pl-c">// Sending composing notification (simulating typing)</span></span>
+<span class="pl-s2"><span class="pl-vo">$client</span><span class="pl-k">-&gt;</span>send(<span class="pl-k">new</span> <span class="pl-s3">Action\</span><span class="pl-s3">ChatState</span>(<span class="pl-vo">$number</span>, <span class="pl-s3">Action\</span><span class="pl-s3">ChatState</span><span class="pl-k">::</span><span class="pl-c1">STATE_COMPOSING</span>));</span>
+<span class="pl-s2"><span class="pl-c">// Sending paused notification (typing end)</span></span>
+<span class="pl-s2"><span class="pl-vo">$client</span><span class="pl-k">-&gt;</span>send(<span class="pl-k">new</span> <span class="pl-s3">Action\</span><span class="pl-s3">ChatState</span>(<span class="pl-vo">$number</span>, <span class="pl-s3">Action\</span><span class="pl-s3">ChatState</span><span class="pl-k">::</span><span class="pl-c1">STATE_PAUSED</span>));</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// Creating text message action</span></span>
+<span class="pl-s2"><span class="pl-vo">$message</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">Action\</span><span class="pl-s3">MessageText</span>(<span class="pl-vo">$identity</span><span class="pl-k">-&gt;</span>getNickname(), <span class="pl-vo">$number</span>);</span>
+<span class="pl-s2"><span class="pl-vo">$message</span><span class="pl-k">-&gt;</span>setBody(<span class="pl-s1"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// OR: creating media (image, video, audio) message (beta)</span></span>
+<span class="pl-s2"><span class="pl-vo">$mediaFile</span> <span class="pl-k">=</span> <span class="pl-vo">$client</span><span class="pl-k">-&gt;</span>getMediaService()</span>
+<span class="pl-s2">    <span class="pl-k">-&gt;</span>getMediaFileFactory()</span>
+<span class="pl-s2">    <span class="pl-k">-&gt;</span>factory(<span class="pl-s1"><span class="pl-pds">'</span>/path/to/image.png<span class="pl-pds">'</span></span>, <span class="pl-s3">MediaFileInterface</span><span class="pl-k">::</span><span class="pl-c1">TYPE_IMAGE</span>);</span>
+<span class="pl-s2"><span class="pl-vo">$message</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">Action\</span><span class="pl-s3">MessageMedia</span>();</span>
+<span class="pl-s2"><span class="pl-vo">$message</span><span class="pl-k">-&gt;</span>setTo(<span class="pl-vo">$number</span>)</span>
+<span class="pl-s2">    <span class="pl-k">-&gt;</span>setMediaFile(<span class="pl-vo">$mediaFile</span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// Sending message...</span></span>
+<span class="pl-s2"><span class="pl-vo">$client</span><span class="pl-k">-&gt;</span>send(<span class="pl-vo">$message</span>);</span></pre></div>
+
+<h3>
+<a id="receiving-message" class="anchor" href="#receiving-message" aria-hidden="true"><span class="octicon octicon-link"></span></a>Receiving message</h3>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Event\MessageReceivedEvent</span>;</span>
+<span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Tmv\WhatsApi\Message\Received</span>;</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// onMessageReceived event</span></span>
+<span class="pl-s2"><span class="pl-vo">$client</span><span class="pl-k">-&gt;</span>getEventManager()<span class="pl-k">-&gt;</span>attach(</span>
+<span class="pl-s2">    <span class="pl-s1"><span class="pl-pds">'</span>onMessageReceived<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">    <span class="pl-st">function</span> (<span class="pl-s3">MessageReceivedEvent</span> <span class="pl-vo">$e</span>) {</span>
+<span class="pl-s2">        <span class="pl-vo">$message</span> <span class="pl-k">=</span> <span class="pl-vo">$e</span><span class="pl-k">-&gt;</span>getMessage();</span>
+<span class="pl-s2">        <span class="pl-s3">echo</span> <span class="pl-s3">str_repeat</span>(<span class="pl-s1"><span class="pl-pds">'</span>-<span class="pl-pds">'</span></span>, <span class="pl-c1">80</span>) <span class="pl-k">.</span> <span class="pl-sc">PHP_EOL</span>;</span>
+<span class="pl-s2">        <span class="pl-s3">echo</span> <span class="pl-s1"><span class="pl-pds">'</span>** MESSAGE RECEIVED **<span class="pl-pds">'</span></span> <span class="pl-k">.</span> <span class="pl-sc">PHP_EOL</span>;</span>
+<span class="pl-s2">        <span class="pl-s3">echo</span> <span class="pl-s3">sprintf</span>(<span class="pl-s1"><span class="pl-pds">'</span>From: %s<span class="pl-pds">'</span></span>, <span class="pl-vo">$message</span><span class="pl-k">-&gt;</span>getFrom()) <span class="pl-k">.</span> <span class="pl-sc">PHP_EOL</span>;</span>
+<span class="pl-s2">        <span class="pl-k">if</span> (<span class="pl-vo">$message</span><span class="pl-k">-&gt;</span>isFromGroup()) {</span>
+<span class="pl-s2">            <span class="pl-s3">echo</span> <span class="pl-s3">sprintf</span>(<span class="pl-s1"><span class="pl-pds">'</span>Group: %s<span class="pl-pds">'</span></span>, <span class="pl-vo">$message</span><span class="pl-k">-&gt;</span>getGroupId()) <span class="pl-k">.</span> <span class="pl-sc">PHP_EOL</span>;</span>
+<span class="pl-s2">        }</span>
+<span class="pl-s2">        <span class="pl-s3">echo</span> <span class="pl-s3">sprintf</span>(<span class="pl-s1"><span class="pl-pds">'</span>Date: %s<span class="pl-pds">'</span></span>, <span class="pl-vo">$message</span><span class="pl-k">-&gt;</span>getDateTime()<span class="pl-k">-&gt;</span>format(<span class="pl-s1"><span class="pl-pds">'</span>Y-m-d H:i:s<span class="pl-pds">'</span></span>)) <span class="pl-k">.</span> <span class="pl-sc">PHP_EOL</span>;</span>
+<span class="pl-s2"></span>
+<span class="pl-s2">        <span class="pl-k">if</span> (<span class="pl-vo">$message</span> <span class="pl-k">instanceof</span> <span class="pl-s3">Received\</span><span class="pl-s3">MessageText</span>) {</span>
+<span class="pl-s2">            <span class="pl-s3">echo</span> <span class="pl-sc">PHP_EOL</span>;</span>
+<span class="pl-s2">            <span class="pl-s3">echo</span> <span class="pl-s3">sprintf</span>(<span class="pl-s1"><span class="pl-pds">'</span>%s<span class="pl-pds">'</span></span>, <span class="pl-vo">$message</span><span class="pl-k">-&gt;</span>getBody()) <span class="pl-k">.</span> <span class="pl-sc">PHP_EOL</span>;</span>
+<span class="pl-s2">        } <span class="pl-k">elseif</span> (<span class="pl-vo">$message</span> <span class="pl-k">instanceof</span> <span class="pl-s3">Received\</span><span class="pl-s3">MessageMedia</span>) {</span>
+<span class="pl-s2">            <span class="pl-s3">echo</span> <span class="pl-s3">sprintf</span>(<span class="pl-s1"><span class="pl-pds">'</span>Type: %s<span class="pl-pds">'</span></span>, <span class="pl-vo">$message</span><span class="pl-k">-&gt;</span>getMedia()<span class="pl-k">-&gt;</span>getType()) <span class="pl-k">.</span> <span class="pl-sc">PHP_EOL</span>;</span>
+<span class="pl-s2">        }</span>
+<span class="pl-s2">        <span class="pl-s3">echo</span> <span class="pl-s3">str_repeat</span>(<span class="pl-s1"><span class="pl-pds">'</span>-<span class="pl-pds">'</span></span>, <span class="pl-c1">80</span>) <span class="pl-k">.</span> <span class="pl-sc">PHP_EOL</span>;</span>
+<span class="pl-s2">    }</span>
+<span class="pl-s2">);</span></pre></div>
+
+<h3>
+<a id="debugging" class="anchor" href="#debugging" aria-hidden="true"><span class="octicon octicon-link"></span></a>Debugging</h3>
+
+<p>It's possible to debug attaching events. It's possible to listen all events attaching to '*' event.</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">Zend\EventManager\EventInterface</span>;</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// Debug events</span></span>
+<span class="pl-s2"><span class="pl-vo">$client</span><span class="pl-k">-&gt;</span>getEventManager()<span class="pl-k">-&gt;</span>attach(</span>
+<span class="pl-s2">    <span class="pl-s1"><span class="pl-pds">'</span>node.received<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">    <span class="pl-st">function</span> (<span class="pl-s3">EventInterface</span> <span class="pl-vo">$e</span>) {</span>
+<span class="pl-s2">        <span class="pl-vo">$node</span> <span class="pl-k">=</span> <span class="pl-vo">$e</span><span class="pl-k">-&gt;</span>getParam(<span class="pl-s1"><span class="pl-pds">'</span>node<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2">        <span class="pl-s3">echo</span> <span class="pl-s3">sprintf</span>(<span class="pl-s1"><span class="pl-pds">"</span><span class="pl-cce">\n</span>--- Node received:<span class="pl-cce">\n</span>%s<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, <span class="pl-vo">$node</span>);</span>
+<span class="pl-s2">    }</span>
+<span class="pl-s2">);</span>
+<span class="pl-s2"><span class="pl-vo">$client</span><span class="pl-k">-&gt;</span>getEventManager()<span class="pl-k">-&gt;</span>attach(</span>
+<span class="pl-s2">    <span class="pl-s1"><span class="pl-pds">'</span>node.send.pre<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">    <span class="pl-st">function</span> (<span class="pl-s3">EventInterface</span> <span class="pl-vo">$e</span>) {</span>
+<span class="pl-s2">        <span class="pl-vo">$node</span> <span class="pl-k">=</span> <span class="pl-vo">$e</span><span class="pl-k">-&gt;</span>getParam(<span class="pl-s1"><span class="pl-pds">'</span>node<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2">        <span class="pl-s3">echo</span> <span class="pl-s3">sprintf</span>(<span class="pl-s1"><span class="pl-pds">"</span><span class="pl-cce">\n</span>--- Sending Node:<span class="pl-cce">\n</span>%s<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, <span class="pl-vo">$node</span>);</span>
+<span class="pl-s2">    }</span>
+<span class="pl-s2">);</span></pre></div>
+
+<h2>
+<a id="public-events" class="anchor" href="#public-events" aria-hidden="true"><span class="octicon octicon-link"></span></a>Public Events</h2>
+
+<ul>
+<li>onMessageReceived (generic event for all messages)</li>
+<li>onMessageTextReceived</li>
+<li>onMessageMediaImageReceived</li>
+<li>onMessageMediaAudioReceived</li>
+<li>onMessageMediaVideoReceived</li>
+<li>onMessageMediaVcardReceived</li>
+<li>onMessageMediaLocationReceived</li>
+<li>onConnected</li>
+<li>onLoginFailed</li>
+<li>onReceiptServer</li>
+<li>onReceiptClient</li>
+<li>onPresenceReceived</li>
+<li>onGroupParticipantAdded</li>
+<li>onGroupParticipantRemoved</li>
+<li>onGetGroupsResult</li>
+<li>onGetGroupInfoResult</li>
+</ul>
+
+<h2>
+<a id="changelist" class="anchor" href="#changelist" aria-hidden="true"><span class="octicon octicon-link"></span></a>Changelist</h2>
+
+<h3>
+<a id="13-november-2014" class="anchor" href="#13-november-2014" aria-hidden="true"><span class="octicon octicon-link"></span></a>13 November 2014</h3>
+
+<ul>
+<li>Icons generation for images and videos</li>
+<li>Optional dependency suggested in composer for video icons generation</li>
+</ul>
+
+<h3>
+<a id="9-november-2014" class="anchor" href="#9-november-2014" aria-hidden="true"><span class="octicon octicon-link"></span></a>9 November 2014</h3>
+
+<ul>
+<li>Added MessageMedia action to send image, video and audio messages (generated icons are not supported yet)</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Whatsapi maintained by <a href="https://github.com/thomasvargiu">thomasvargiu</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
