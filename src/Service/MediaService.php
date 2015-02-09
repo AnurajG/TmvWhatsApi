@@ -285,7 +285,7 @@ class MediaService
         $data .= fgets($sock, 8192);
         fclose($sock);
 
-        list($header, $body) = preg_split("/\R\R/", $data, 2);
+        list(, $body) = preg_split('/\R\R/', $data, 2);
 
         $json = json_decode($body, true);
         if (is_array($json)) {
